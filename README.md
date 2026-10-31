@@ -8,16 +8,16 @@ permalink: /
 
 # hf-dynamixel-driver
 
-[![Host tests](https://github.com/N3b3x/hf-dynamixel-driver/actions/workflows/host-tests.yml/badge.svg)](https://github.com/N3b3x/hf-dynamixel-driver/actions/workflows/host-tests.yml)
-[![ESP32 examples](https://github.com/N3b3x/hf-dynamixel-driver/actions/workflows/esp32-examples-build-ci.yml/badge.svg)](https://github.com/N3b3x/hf-dynamixel-driver/actions/workflows/esp32-examples-build-ci.yml)
-[![Docs](https://github.com/N3b3x/hf-dynamixel-driver/actions/workflows/ci-docs-publish.yml/badge.svg)](https://n3b3x.github.io/hf-dynamixel-driver/)
+[![Host tests](https://github.com/hardfoc/hf-dynamixel-driver/actions/workflows/host-tests.yml/badge.svg)](https://github.com/hardfoc/hf-dynamixel-driver/actions/workflows/host-tests.yml)
+[![ESP32 examples](https://github.com/hardfoc/hf-dynamixel-driver/actions/workflows/esp32-examples-build-ci.yml/badge.svg)](https://github.com/hardfoc/hf-dynamixel-driver/actions/workflows/esp32-examples-build-ci.yml)
+[![Docs](https://github.com/hardfoc/hf-dynamixel-driver/actions/workflows/ci-docs-publish.yml/badge.svg)](https://hardfoc.github.io/hf-dynamixel-driver/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 Protocol 2.0 Dynamixel driver for HardFOC. The official ROBOTIS Dynamixel SDK
 is the packet engine. HF owns the transport contract, result model, X-series
 descriptors, and tests.
 
-**Docs:** [https://n3b3x.github.io/hf-dynamixel-driver/](https://n3b3x.github.io/hf-dynamixel-driver/)
+**Docs:** [https://hardfoc.github.io/hf-dynamixel-driver/](https://hardfoc.github.io/hf-dynamixel-driver/)
 
 ```cmake
 add_subdirectory(hf-dynamixel-driver)

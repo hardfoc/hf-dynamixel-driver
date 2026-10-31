@@ -10,7 +10,7 @@ permalink: /docs/esp32_examples/
 # ESP32 examples
 
 The examples live in `examples/esp32/` and **must** be built with the
-[hf-espidf-project-tools](https://github.com/N3b3x/hf-espidf-project-tools)
+[hf-espidf-project-tools](https://github.com/hardfoc/hf-espidf-project-tools)
 scripts checked out as `examples/esp32/scripts`. Direct `idf.py` from the
 repo root is not the supported path.
 

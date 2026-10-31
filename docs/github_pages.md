@@ -11,7 +11,7 @@ permalink: /docs/github_pages/
 
 Documentation is built by `.github/workflows/ci-docs-publish.yml`, which
 calls
-[`N3b3x/hf-general-ci-tools` `ru-docs-publish.yml`](https://github.com/N3b3x/hf-general-ci-tools).
+[`hardfoc/hf-general-ci-tools` `ru-docs-publish.yml`](https://github.com/hardfoc/hf-general-ci-tools).
 That reusable workflow:
 
 1. Checks out this repo **recursively** (DynamixelSDK + ESP32 scripts).
@@ -30,9 +30,9 @@ In **GitHub → Settings → Pages**:
 3. Wait for the first green `📚 Docs Publish CI` run on `main`.
 
 The published URL is
-`https://n3b3x.github.io/hf-dynamixel-driver/`
+`https://hardfoc.github.io/hf-dynamixel-driver/`
 (`baseurl: /hf-dynamixel-driver`). Doxygen is linked as
-`https://n3b3x.github.io/hf-dynamixel-driver/html/`.
+`https://hardfoc.github.io/hf-dynamixel-driver/html/`.
 
 Pull requests run the same workflow with `deploy_pages: false` so the
 theme, Doxygen, and link check fail in CI before merge.

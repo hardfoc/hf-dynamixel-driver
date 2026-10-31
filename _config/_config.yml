@@ -85,17 +85,17 @@ toggle_auto_mode: true
 
 aux_links:
   "GitHub Repository":
-    - "https://github.com/N3b3x/hf-dynamixel-driver"
+    - "https://github.com/hardfoc/hf-dynamixel-driver"
   "Report Issues":
-    - "https://github.com/N3b3x/hf-dynamixel-driver/issues"
+    - "https://github.com/hardfoc/hf-dynamixel-driver/issues"
   "API (Doxygen)":
-    - "https://n3b3x.github.io/hf-dynamixel-driver/html/"
+    - "https://hardfoc.github.io/hf-dynamixel-driver/html/"
 
 footer_content: >
   Built with Just the Docs •
-  <a href='https://github.com/N3b3x/hf-dynamixel-driver/blob/main/LICENSE'>MIT License</a> •
+  <a href='https://github.com/hardfoc/hf-dynamixel-driver/blob/main/LICENSE'>MIT License</a> •
   Dynamixel SDK is Apache-2.0 •
-  <a href='https://github.com/N3b3x/hf-dynamixel-driver'>View on GitHub</a>
+  <a href='https://github.com/hardfoc/hf-dynamixel-driver'>View on GitHub</a>
 
 exclude:
   - Gemfile
@@ -128,7 +128,7 @@ seo:
   name: "HardFOC Dynamixel Driver"
   description: >
     Protocol 2.0 Dynamixel wrapper around ROBOTIS SDK 4.1.0 with ESP32-C6/S3 examples
-  url: "https://n3b3x.github.io/hf-dynamixel-driver"
+  url: "https://hardfoc.github.io/hf-dynamixel-driver"
   twitter:
     card: "summary_large_image"
     site: "@n3b3x"
@@ -139,7 +139,7 @@ seo:
 social:
   name: "HardFOC Dynamixel Driver"
   links:
-    - "https://github.com/N3b3x/hf-dynamixel-driver"
+    - "https://github.com/hardfoc/hf-dynamixel-driver"
     - "https://github.com/n3b3x"
 
 compress_html:
@@ -152,9 +152,9 @@ just_the_docs:
   nav_fold: true
   nav_external_links:
     - title: "GitHub Repository"
-      url: "https://github.com/N3b3x/hf-dynamixel-driver"
+      url: "https://github.com/hardfoc/hf-dynamixel-driver"
     - title: "Issues"
-      url: "https://github.com/N3b3x/hf-dynamixel-driver/issues"
+      url: "https://github.com/hardfoc/hf-dynamixel-driver/issues"
   head_custom: _includes/head_custom.html
   custom_css:
     - assets/css/custom.css

@@ -13,7 +13,7 @@ C++17, CMake 3.16+. The library is **static** (SDK sources + HF wrapper).
 This repository does **not** depend on hf-core.
 
 ```bash
-git clone --recurse-submodules https://github.com/N3b3x/hf-dynamixel-driver.git
+git clone --recurse-submodules https://github.com/hardfoc/hf-dynamixel-driver.git
 cd hf-dynamixel-driver
 # or, if already cloned:
 git submodule update --init --recursive
@@ -28,7 +28,7 @@ Required submodules:
 | Path | Remote | Role |
 |------|--------|------|
 | `external/DynamixelSDK` | ROBOTIS-GIT/DynamixelSDK | Protocol 2.0 engine, pin **4.1.0** |
-| `examples/esp32/scripts` | N3b3x/hf-espidf-project-tools | `build_app.sh`, matrix, flash helpers |
+| `examples/esp32/scripts` | hardfoc/hf-espidf-project-tools | `build_app.sh`, matrix, flash helpers |
 
 ## Consume from another CMake project
 
