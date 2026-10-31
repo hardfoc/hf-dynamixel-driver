@@ -18,8 +18,8 @@ The first bench servo is **XC430-W150** (model 1070). A later larger X-series
 servo can use the same examples via the catalog (XM430/XH430) or
 `BindXSeriesFallback()` after a successful ping.
 
-> Browse on GitHub: [repository](https://github.com/N3b3x/hf-dynamixel-driver) ·
-> [issues](https://github.com/N3b3x/hf-dynamixel-driver/issues) ·
+> Browse on GitHub: [repository](https://github.com/hardfoc/hf-dynamixel-driver) ·
+> [issues](https://github.com/hardfoc/hf-dynamixel-driver/issues) ·
 > [Doxygen API]({{ '/html/' | relative_url }})
 
 ## Start here
