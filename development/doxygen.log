@@ -1,3 +1,3 @@
-warning: ignoring unsupported tag 'PAGE_OUTLINE_PANEL' at line 1764, file /tmp/doxyfile.Yxj95O
-warning: Tag 'DOT_TRANSPARENT' at line 2787 of file '/tmp/doxyfile.Yxj95O' has become obsolete.
+warning: ignoring unsupported tag 'PAGE_OUTLINE_PANEL' at line 1764, file /tmp/doxyfile.5HiznU
+warning: Tag 'DOT_TRANSPARENT' at line 2787 of file '/tmp/doxyfile.5HiznU' has become obsolete.
          To avoid this warning please remove this line from your configuration file or upgrade it using "doxygen -u"
