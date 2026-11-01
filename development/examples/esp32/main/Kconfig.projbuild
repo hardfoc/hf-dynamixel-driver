@@ -1,0 +1,68 @@
+menu "HF Dynamixel Example"
+
+    config HF_DYNAMIXEL_UART_PORT
+        int "UART port number"
+        default 1
+        help
+            UART_NUM_* used by the example adapter (UART1 recommended).
+
+    config HF_DYNAMIXEL_UART_TX_GPIO
+        int "UART TX GPIO"
+        default 17 if IDF_TARGET_ESP32S3
+        default 4
+        help
+            MCU TX toward the servo data line or buffer DI.
+            ESP32-C6 default GPIO4; ESP32-S3 default GPIO17.
+
+    config HF_DYNAMIXEL_UART_RX_GPIO
+        int "UART RX GPIO"
+        default 18 if IDF_TARGET_ESP32S3
+        default 5
+        help
+            MCU RX from the servo data line or buffer RO.
+            ESP32-C6 default GPIO5; ESP32-S3 default GPIO18.
+
+    config HF_DYNAMIXEL_UART_DIR_GPIO
+        int "Optional TX-enable / DIR GPIO (-1 = unused)"
+        default -1
+        help
+            Set to a GPIO when using a direction-controlled RS-485 or
+            TTL buffer. -1 skips the pin (open-drain or auto-direction).
+
+    config HF_DYNAMIXEL_DIR_ACTIVE_HIGH
+        bool "DIR GPIO is high while transmitting"
+        default y
+        depends on HF_DYNAMIXEL_UART_DIR_GPIO >= 0
+
+    config HF_DYNAMIXEL_BAUD
+        int "Bus baud rate"
+        default 57600
+        help
+            Initial bring-up rate. Must match the servo EEPROM baud index.
+
+    config HF_DYNAMIXEL_SERVO_ID
+        int "Preferred servo ID (used when scan finds nothing)"
+        range 1 252
+        default 1
+
+    config HF_DYNAMIXEL_SCAN_LAST_ID
+        int "Scan last ID (inclusive)"
+        range 1 252
+        default 20
+
+    config HF_DYNAMIXEL_EXPECT_LOCAL_ECHO
+        bool "Expect local UART echo (single-wire open-drain)"
+        default n
+        help
+            Enable when the UART RX pin hears its own TX bytes.
+
+    config HF_DYNAMIXEL_BIND_XSERIES_FALLBACK
+        bool "Bind shared X-series table when the model number is unknown"
+        default y
+        help
+            After a successful ping, if the model is not in the hand-authored
+            catalog (XC430, XL430, XM430, XH430, ...), bind the shared
+            Protocol 2.0 X-series register map so typed position APIs still
+            work on a later larger servo.
+
+endmenu

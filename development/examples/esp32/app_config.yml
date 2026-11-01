@@ -1,0 +1,63 @@
+---
+version: "1.0"
+
+metadata:
+  project: "ESP32 HF-Dynamixel Driver Examples"
+  default_app: "dynamixel_readonly_example"
+  target: "esp32c6"
+  idf_versions: ["release/v5.5", "release/v5.4"]
+  build_types: [["Debug", "Release"], ["Debug"]]
+
+apps:
+  dynamixel_readonly_example:
+    description: "Read-only ping/scan/telemetry (C6 TX=4 RX=5, S3 TX=17 RX=18, 57600)"
+    source_file: "dynamixel_readonly_example.cpp"
+    category: "example"
+    idf_versions: ["release/v5.5"]
+    build_types: ["Debug", "Release"]
+    ci_enabled: true
+    featured: true
+    hardware_required: true
+
+  dynamixel_scan_example:
+    description: "Scan the bus and dump model/catalog vs X-series fallback"
+    source_file: "dynamixel_scan_example.cpp"
+    category: "example"
+    idf_versions: ["release/v5.5"]
+    build_types: ["Debug"]
+    ci_enabled: true
+    featured: true
+    hardware_required: true
+
+  dynamixel_motion_example:
+    description: "Unloaded small-step motion after reading present position"
+    source_file: "dynamixel_motion_example.cpp"
+    category: "example"
+    idf_versions: ["release/v5.5"]
+    build_types: ["Debug"]
+    ci_enabled: true
+    featured: false
+    hardware_required: true
+
+build_config:
+  build_types:
+    Debug:
+      description: "Debug build"
+      cmake_build_type: "Debug"
+      optimization: "-O0"
+      debug_level: "-g3"
+      defines: ["DEBUG"]
+    Release:
+      description: "Release build"
+      cmake_build_type: "Release"
+      optimization: "-O2"
+      debug_level: "-g0"
+      defines: ["NDEBUG"]
+  build_directory_pattern: "build-app-{app_type}-type-{build_type}-target-{target}-idf-{idf_version}"
+  project_name_pattern: "esp32_dynamixel_{app_type}_app"
+
+ci_config:
+  timeout_minutes: 40
+  fail_fast: false
+  exclude_combinations: []
+  special_apps: []

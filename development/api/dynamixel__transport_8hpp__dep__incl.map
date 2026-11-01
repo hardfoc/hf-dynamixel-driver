@@ -1,0 +1,24 @@
+<map id="inc/dynamixel_transport.hpp" name="inc/dynamixel_transport.hpp">
+<area shape="rect" id="Node000001" title="CRTP serial transport and type&#45;erased bus view." alt="" coords="317,5,523,33"/>
+<area shape="rect" id="Node000002" href="$dynamixel_8hpp.html" title="Umbrella header for the HF Dynamixel Protocol 2.0 driver." alt="" coords="339,232,480,260"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="402,44,387,82,382,124,387,166,396,203,406,232,401,231,391,205,381,167,376,124,381,80,399,48"/>
+<area shape="rect" id="Node000009" href="$dynamixel__bus_8hpp.html" title="Shared Protocol 2.0 bus over a caller&#45;supplied transport." alt="" coords="396,81,566,109"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="441,42,473,80,468,81,440,48"/>
+<area shape="rect" id="Node000003" href="$hf__dynamixel__esp__uart_8hpp.html" title="Native ESP&#45;IDF UART adapter for dynamixel::Transport." alt="" coords="207,308,372,370"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="378,271,331,310,328,305,382,268"/>
+<area shape="rect" id="Node000004" href="$hf__dynamixel__example__app_8hpp.html" title="Shared ESP32 example wiring: UART type, bus open, identify/bind." alt="" coords="267,418,432,479"/>
+<area shape="poly" id="edge7_Node000002_Node000004" title=" " alt="" coords="407,274,400,321,387,371,367,419,362,416,381,369,394,320,404,278"/>
+<area shape="rect" id="Node000008" href="$ping__read_8cpp.html" title=" " alt="" coords="447,316,596,361"/>
+<area shape="poly" id="edge8_Node000002_Node000008" title=" " alt="" coords="437,267,497,316,492,316,437,272"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="314,381,335,418,330,417,313,386"/>
+<area shape="rect" id="Node000005" href="$dynamixel__motion__example_8cpp.html" title=" " alt="" coords="5,536,243,580"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="275,486,170,538,168,533,270,487"/>
+<area shape="rect" id="Node000006" href="$dynamixel__readonly__example_8cpp.html" title=" " alt="" coords="267,527,432,589"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="351,493,352,528,347,525,348,497"/>
+<area shape="rect" id="Node000007" href="$dynamixel__scan__example_8cpp.html" title=" " alt="" coords="456,536,677,580"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="424,484,526,535,520,535,423,489"/>
+<area shape="poly" id="edge10_Node000009_Node000002" title=" " alt="" coords="461,119,437,158,422,198,414,233,409,230,417,196,432,155,457,123"/>
+<area shape="rect" id="Node000010" href="$dynamixel__device_8hpp.html" title="One servo on a shared Bus, with optional model descriptor." alt="" coords="446,157,636,184"/>
+<area shape="poly" id="edge11_Node000009_Node000010" title=" " alt="" coords="502,118,533,156,528,156,501,124"/>
+<area shape="poly" id="edge12_Node000010_Node000002" title=" " alt="" coords="502,194,434,234,431,230,507,191"/>
+</map>

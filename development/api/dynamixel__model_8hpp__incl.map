@@ -1,0 +1,13 @@
+<map id="inc/dynamixel_model.hpp" name="inc/dynamixel_model.hpp">
+<area shape="rect" id="Node000001" title="Hand&#45;authored X&#45;series Protocol 2.0 descriptors." alt="" coords="54,5,243,33"/>
+<area shape="rect" id="Node000002" href="$dynamixel__types_8hpp.html" title="Public result and status types for the Dynamixel driver." alt="" coords="68,81,229,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="150,31,151,66,146,64,147,36"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,157,71,184"/>
+<area shape="poly" id="edge5_Node000001_Node000003" title=" " alt="" coords="115,36,86,55,59,83,46,111,41,142,36,140,41,110,54,79,83,51,119,32"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="226,157,295,184"/>
+<area shape="poly" id="edge6_Node000001_Node000004" title=" " alt="" coords="180,31,214,51,243,79,257,110,262,143,257,140,252,112,238,83,211,55,180,36"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="132,109,71,150,68,146,126,109"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="169,107,231,148,226,148,168,112"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="100,157,197,184"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="150,107,151,142,146,140,147,111"/>
+</map>

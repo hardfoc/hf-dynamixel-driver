@@ -1,0 +1,5 @@
+<map id="dynamixel::ModelDescriptor" name="dynamixel::ModelDescriptor">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,268,210,296"/>
+<area shape="rect" id="Node000002" href="$structdynamixel_1_1RegisterDesc.html" title=" " alt="" coords="16,5,199,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,48,110,268,105,267,105,49"/>
+</map>

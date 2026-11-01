@@ -1,0 +1,373 @@
+{"0": {
+    "doc": "ESP32 README",
+    "title": "ESP32 examples",
+    "content": "Native ESP-IDF adapters live in main/include/hf_dynamixel_esp_uart.hpp. They are not part of the portable library. Build only through the scripts/ submodule (hf-espidf-project-tools). ",
+    "url": "/hf-dynamixel-driver/development/examples/esp32/README.html#esp32-examples",
+    
+    "relUrl": "/examples/esp32/README.html#esp32-examples"
+  },"1": {
+    "doc": "ESP32 README",
+    "title": "Wiring (transistor / TTL bring-up)",
+    "content": "| Chip | UART | TX | RX | Baud | . | ESP32-C6 | UART1 | GPIO4 | GPIO5 | 57600 8N1 | . | ESP32-S3 | UART1 | GPIO17 | GPIO18 | 57600 8N1 | . Optional direction GPIO for a buffered interface (CONFIG_HF_DYNAMIXEL_UART_DIR_GPIO). Do not treat a transistor board as a long-cable or high-rate reference. ",
+    "url": "/hf-dynamixel-driver/development/examples/esp32/README.html#wiring-transistor--ttl-bring-up",
+    
+    "relUrl": "/examples/esp32/README.html#wiring-transistor--ttl-bring-up"
+  },"2": {
+    "doc": "ESP32 README",
+    "title": "Build",
+    "content": "| 1 2 3 4 5 6 7 . | git submodule update --init --recursive cd examples/esp32 ./scripts/build_app.sh list ./scripts/build_app.sh dynamixel_readonly_example Debug CONFIG_TARGET=esp32s3 ./scripts/build_app.sh dynamixel_readonly_example Debug ./scripts/build_app.sh dynamixel_scan_example Debug ./scripts/build_app.sh dynamixel_motion_example Debug . | . | dynamixel_readonly_example never enables torque. | dynamixel_scan_example never enables torque; use it when swapping in a larger X-series. | dynamixel_motion_example reads present position, sets a small nearby goal, then enables torque. | . Pins, baud, servo ID, echo, and X-series fallback are under idf.py menuconfig → HF Dynamixel Example. Full walkthrough: docs/esp32_examples.md. ",
+    "url": "/hf-dynamixel-driver/development/examples/esp32/README.html#build",
+    
+    "relUrl": "/examples/esp32/README.html#build"
+  },"3": {
+    "doc": "ESP32 README",
+    "title": "ESP32 README",
+    "content": " ",
+    "url": "/hf-dynamixel-driver/development/examples/esp32/README.html",
+    
+    "relUrl": "/examples/esp32/README.html"
+  },"4": {
+    "doc": "HardFOC Dynamixel Driver",
+    "title": "hf-dynamixel-driver",
+    "content": ". Protocol 2.0 Dynamixel driver for HardFOC. The official ROBOTIS Dynamixel SDK is the packet engine. HF owns the transport contract, result model, X-series descriptors, and tests. Docs: https://hardfoc.github.io/hf-dynamixel-driver/ . | 1 2 . | add_subdirectory(hf-dynamixel-driver) target_link_libraries(app PRIVATE hf::dynamixel) . | . | 1 2 3 4 5 6 7 8 . | MyUart uart; // implements dynamixel::Transport&lt;MyUart&gt; dynamixel::Bus bus{dynamixel::TransportView{uart}}; bus.Open({.baud_rate = 57600}); auto ping = bus.Ping(1); dynamixel::Device servo(bus, 1); if (!servo.Identify().ok()) { servo.BindXSeriesFallback(); // later larger X-series } . | . | C++17, no exceptions in HF code | Public headers never include dynamixel_sdk/* | First device: XC430-W150 (model 1070). Current control is not a capability. | Catalog also lists XC430-W240, XL430-W250, XM430-W210/W350, XH430-W210/W350 | Standalone: this repo does not depend on hf-core or hf-internal-interface-wrap | ESP32-C6 and ESP32-S3 examples build with examples/esp32/scripts/build_app.sh | . SDK pin: 4.1.0 / f838bc90f72fcf5b9c279432d6e12fc24969daa8. See docs/sdk_integration.md. | 1 2 3 4 5 6 7 . | git submodule update --init --recursive cmake -S . -B build -DHF_DYNAMIXEL_BUILD_TESTS=ON cmake --build build &amp;&amp; ctest --test-dir build cd examples/esp32 ./scripts/build_app.sh dynamixel_readonly_example Debug CONFIG_TARGET=esp32s3 ./scripts/build_app.sh dynamixel_readonly_example Debug . | . ",
+    "url": "/hf-dynamixel-driver/development/#hf-dynamixel-driver",
+    
+    "relUrl": "/#hf-dynamixel-driver"
+  },"5": {
+    "doc": "HardFOC Dynamixel Driver",
+    "title": "HardFOC Dynamixel Driver",
+    "content": " ",
+    "url": "/hf-dynamixel-driver/development/",
+    
+    "relUrl": "/"
+  },"6": {
+    "doc": "Architecture",
+    "title": "Architecture",
+    "content": "HF owns the public API, transport contract, X-series descriptors, and tests. ROBOTIS Dynamixel SDK 4.1.0 owns Protocol 2.0 encode/decode. | 1 2 3 4 5 . | Application → Device → Bus → PortHandlerAdapter (private) ↓ Protocol2PacketHandler ↓ TransportView → CRTP adapter . | . ",
+    "url": "/hf-dynamixel-driver/development/docs/architecture/",
+    
+    "relUrl": "/docs/architecture/"
+  },"7": {
+    "doc": "Architecture",
+    "title": "Boundaries",
+    "content": "| Layer | Lives in | May include SDK? | May enable torque? | . | inc/dynamixel_*.hpp | this repo | No | No | . | src/backend/port_handler_adapter.hpp | this repo | Yes (private) | No | . | dynamixel_sdk TUs | submodule | Yes | No | . | ESP-IDF UART adapter | examples/esp32/main/include | No | No | . | DynamixelHandler | hf-core handlers/dynamixel | No | Only when the app calls SetTorqueEnabled | . | Callers implement dynamixel::Transport&lt;Derived&gt;. Bus binds it through TransportView so Bus is not Bus&lt;TransportT&gt;. | The transport outlives the bus; the bus outlives devices. | Bus is not copyable and not thread-safe. One caller owns each transaction. hf-core serializes with RtosMutex. | Constructors never open UART, enable torque, or move a servo. | Sync read is implemented with syncReadTx plus per-id readRx so one missing status does not invalidate the whole group. | . See SDK integration for the pinned commit and measured limitations (is_using_ is not a mutex; the SDK mallocs per call). ",
+    "url": "/hf-dynamixel-driver/development/docs/architecture/#boundaries",
+    
+    "relUrl": "/docs/architecture/#boundaries"
+  },"8": {
+    "doc": "ESP32 examples",
+    "title": "ESP32 examples",
+    "content": "The examples live in examples/esp32/ and must be built with the hf-espidf-project-tools scripts checked out as examples/esp32/scripts. Direct idf.py from the repo root is not the supported path. ",
+    "url": "/hf-dynamixel-driver/development/docs/esp32_examples/",
+    
+    "relUrl": "/docs/esp32_examples/"
+  },"9": {
+    "doc": "ESP32 examples",
+    "title": "Apps",
+    "content": "| App | Source | Torque | Purpose | . | dynamixel_readonly_example | dynamixel_readonly_example.cpp | Never | Scan, identify, stream telemetry | . | dynamixel_scan_example | dynamixel_scan_example.cpp | Never | Dump every ID and catalog vs fallback | . | dynamixel_motion_example | dynamixel_motion_example.cpp | After a small nearby goal | Unloaded XC430 / X-series step | . app_config.yml lists those names./scripts/build_app.sh list prints them. ",
+    "url": "/hf-dynamixel-driver/development/docs/esp32_examples/#apps",
+    
+    "relUrl": "/docs/esp32_examples/#apps"
+  },"10": {
+    "doc": "ESP32 examples",
+    "title": "Targets",
+    "content": "CI and metadata.target default to esp32c6. The same sources build for esp32s3 because pins come from Kconfig / sdkconfig.defaults.&lt;target&gt;: . | Chip | UART | TX | RX | DIR | Baud | . | ESP32-C6 | UART1 | GPIO4 | GPIO5 | unused (-1) | 57600 | . | ESP32-S3 | UART1 | GPIO17 | GPIO18 | unused (-1) | 57600 | . The scripts read the chip from get_target() (the YAML metadata.target) unless you override it: . | 1 2 3 4 5 6 7 8 9 10 11 . | cd examples/esp32 # ESP32-C6 (default, what CI builds) ./scripts/build_app.sh dynamixel_readonly_example Debug # ESP32-S3 — same script, different target folder CONFIG_TARGET=esp32s3 ./scripts/build_app.sh dynamixel_readonly_example Debug # Other apps ./scripts/build_app.sh dynamixel_scan_example Debug ./scripts/build_app.sh dynamixel_motion_example Debug . | . CONFIG_TARGET is the supported override in build_app.sh. It sets IDF_TARGET and the build directory pattern build-app-{app}-type-{type}-target-{target}-idf-{idf}. Flash and monitor with the matching script helpers (flash_app.sh, monitor_app.sh) from the same scripts/ tree. ",
+    "url": "/hf-dynamixel-driver/development/docs/esp32_examples/#targets",
+    
+    "relUrl": "/docs/esp32_examples/#targets"
+  },"11": {
+    "doc": "ESP32 examples",
+    "title": "Kconfig",
+    "content": "idf.py menuconfig → HF Dynamixel Example: . | TX / RX / optional DIR GPIO | baud, preferred servo ID, scan last ID | local-echo (single-wire open-drain) | bind X-series fallback when the model number is unknown | . Defaults are chip-specific (sdkconfig.defaults.esp32c6 / sdkconfig.defaults.esp32s3). ",
+    "url": "/hf-dynamixel-driver/development/docs/esp32_examples/#kconfig",
+    
+    "relUrl": "/docs/esp32_examples/#kconfig"
+  },"12": {
+    "doc": "ESP32 examples",
+    "title": "First hardware session (XC430-W150)",
+    "content": ". | 12 V (or the servo’s rated supply) on the Dynamixel power pins. Logic is 3.3 V TTL toward the ESP32. | Common ground. Short cable. 57600 8N1. | Flash dynamixel_readonly_example. Confirm ping model 1070. | Leave torque off until a 1000-read session is clean. | Only then run dynamixel_motion_example unloaded, small step from present position (never an implicit zero). | . ",
+    "url": "/hf-dynamixel-driver/development/docs/esp32_examples/#first-hardware-session-xc430-w150",
+    
+    "relUrl": "/docs/esp32_examples/#first-hardware-session-xc430-w150"
+  },"13": {
+    "doc": "ESP32 examples",
+    "title": "Later larger servo",
+    "content": ". | Run dynamixel_scan_example. Note the ping model number and firmware. | If it is XM430-W350 (1020) or another catalog entry, typed APIs bind automatically. | If it is not in the table yet, keep CONFIG_HF_DYNAMIXEL_BIND_XSERIES_FALLBACK=y and use the shared X-series addresses. Then add a named ModelDescriptor when you decide the part. | . See model support and wiring. ",
+    "url": "/hf-dynamixel-driver/development/docs/esp32_examples/#later-larger-servo",
+    
+    "relUrl": "/docs/esp32_examples/#later-larger-servo"
+  },"14": {
+    "doc": "GitHub Pages",
+    "title": "Publishing GitHub Pages",
+    "content": "Documentation is built by .github/workflows/ci-docs-publish.yml, which calls hardfoc/hf-general-ci-tools ru-docs-publish.yml. That reusable workflow: . | Checks out this repo recursively (DynamixelSDK + ESP32 scripts). | Runs Doxygen with _config/Doxyfile (API HTML under docs/html). | Builds Jekyll from _config/_config.yml (just-the-docs remote theme). | Optionally link-checks and markdown-lints. | Pushes the combined site to the gh-pages branch when the event is a push to main / release/* or a v* tag. | . ",
+    "url": "/hf-dynamixel-driver/development/docs/github_pages/#publishing-github-pages",
+    
+    "relUrl": "/docs/github_pages/#publishing-github-pages"
+  },"15": {
+    "doc": "GitHub Pages",
+    "title": "One-time repository settings",
+    "content": "In GitHub → Settings → Pages: . | Source: Deploy from a branch. | Branch: gh-pages / / (root). | Wait for the first green 📚 Docs Publish CI run on main. | . The published URL is https://hardfoc.github.io/hf-dynamixel-driver/ (baseurl: /hf-dynamixel-driver). Doxygen is linked as https://hardfoc.github.io/hf-dynamixel-driver/html/. Pull requests run the same workflow with deploy_pages: false so the theme, Doxygen, and link check fail in CI before merge. ",
+    "url": "/hf-dynamixel-driver/development/docs/github_pages/#one-time-repository-settings",
+    
+    "relUrl": "/docs/github_pages/#one-time-repository-settings"
+  },"16": {
+    "doc": "GitHub Pages",
+    "title": "Local preview",
+    "content": "| 1 2 3 4 5 . | # API doxygen _config/Doxyfile # Site (needs Bundler + just-the-docs remote theme) bundle exec jekyll serve --config _config/_config.yml . | . ",
+    "url": "/hf-dynamixel-driver/development/docs/github_pages/#local-preview",
+    
+    "relUrl": "/docs/github_pages/#local-preview"
+  },"17": {
+    "doc": "GitHub Pages",
+    "title": "Companion workflows",
+    "content": "| Workflow | Purpose | . | ci-docs-publish.yml | Jekyll + Doxygen + optional deploy | . | ci-docs-linkcheck.yml | lychee via _config/lychee.toml | . | ci-markdown-lint.yml | _config/.markdownlint.json | . | ci-yaml-lint.yml | _config/.yamllint | . | host-tests.yml | CMake/CTest + install-prefix smoke | . | esp32-examples-build-ci.yml | generate_matrix.py + hf-espidf-ci-tools | . | release.yml | GitHub release on v* tags | . _config/ also holds .clang-format / .clang-tidy for ci-cpp-lint.yml. SDK sources under external/ are excluded from that lint. ",
+    "url": "/hf-dynamixel-driver/development/docs/github_pages/#companion-workflows",
+    
+    "relUrl": "/docs/github_pages/#companion-workflows"
+  },"18": {
+    "doc": "GitHub Pages",
+    "title": "GitHub Pages",
+    "content": " ",
+    "url": "/hf-dynamixel-driver/development/docs/github_pages/",
+    
+    "relUrl": "/docs/github_pages/"
+  },"19": {
+    "doc": "hf-core handler",
+    "title": "hf-core handler",
+    "content": "This repository stays portable. The HAL-facing wrapper lives in hf-core, not here. | Piece | Location | . | Toggle | HF_CORE_ENABLE_DYNAMIXEL (default OFF) | . | Compile define | HARDFOC_DYNAMIXEL_SUPPORT=1 | . | Auto-enables | HF_CORE_ENABLE_UART | . | Handler | handlers/dynamixel/DynamixelHandler.h | . | Transport | HalUartDynamixelComm over BaseUart&amp; | . examples/esp32/components/hf_core in hf-core turns the toggle ON so core firmware examples compile the handler. Product images should keep it OFF until they own a UART and a servo. | 1 2 3 4 5 6 7 8 9 10 11 12 . | #include \"DynamixelHandler.h\" DynamixelHandlerConfig cfg; cfg.servo_id = 1; cfg.transport.baud_rate = 57600; cfg.bind_xseries_fallback = true; DynamixelHandler dxl(uart, cfg); // uart already configured if (!dxl.EnsureInitialized()) { return; } auto tel = dxl.ReadTelemetry(); // still no torque . | . EnsureInitialized() opens the bus and identifies (or binds the X-series fallback). It does not enable torque. Share RtosMutex* when more than one protocol shares the UART — Dynamixel half-duplex almost never does. See hf-core docs/handlers/dynamixel_handler.md and docs/cmake_integration.md. ",
+    "url": "/hf-dynamixel-driver/development/docs/hf_core_handler/",
+    
+    "relUrl": "/docs/hf_core_handler/"
+  },"20": {
+    "doc": "Documentation",
+    "title": "HF-Dynamixel documentation",
+    "content": "This site documents the portable hf-dynamixel-driver: a C++17 wrapper around ROBOTIS Dynamixel SDK 4.1.0. HF owns the transport contract, result model, and X-series descriptors. The SDK owns Protocol 2.0 encode/decode. The first bench servo is XC430-W150 (model 1070). A later larger X-series servo can use the same examples via the catalog (XM430/XH430) or BindXSeriesFallback() after a successful ping. Browse on GitHub: repository · issues · Doxygen API . ",
+    "url": "/hf-dynamixel-driver/development/docs/#hf-dynamixel-documentation",
+    
+    "relUrl": "/docs/#hf-dynamixel-documentation"
+  },"21": {
+    "doc": "Documentation",
+    "title": "Start here",
+    "content": ". | Installation — CMake, submodules, hf::dynamixel | Quick start — CRTP transport, ping, typed XC430 path | ESP32 examples — build_app.sh on C6 or S3 | Wiring — pins, baud, half-duplex, supplies | Model support — XC430 vs a larger X-series | . ",
+    "url": "/hf-dynamixel-driver/development/docs/#start-here",
+    
+    "relUrl": "/docs/#start-here"
+  },"22": {
+    "doc": "Documentation",
+    "title": "Design and integration",
+    "content": ". | Architecture — Bus / Device / TransportView boundaries | SDK integration — pin, COMM codes, known limits | Porting — implement dynamixel::Transport&lt;Derived&gt; | hf-core handler — HF_CORE_ENABLE_DYNAMIXEL + DynamixelHandler | . ",
+    "url": "/hf-dynamixel-driver/development/docs/#design-and-integration",
+    
+    "relUrl": "/docs/#design-and-integration"
+  },"23": {
+    "doc": "Documentation",
+    "title": "Publishing",
+    "content": ". | GitHub Pages — Jekyll + Doxygen via hf-general-ci-tools | Troubleshooting — timeouts, echo, torque, unknown models | . ",
+    "url": "/hf-dynamixel-driver/development/docs/#publishing",
+    
+    "relUrl": "/docs/#publishing"
+  },"24": {
+    "doc": "Documentation",
+    "title": "Documentation",
+    "content": " ",
+    "url": "/hf-dynamixel-driver/development/docs/",
+    
+    "relUrl": "/docs/"
+  },"25": {
+    "doc": "Installation",
+    "title": "Installation",
+    "content": "C++17, CMake 3.16+. The library is static (SDK sources + HF wrapper). This repository does not depend on hf-core. | 1 2 3 4 5 6 7 8 . | git clone --recurse-submodules https://github.com/hardfoc/hf-dynamixel-driver.git cd hf-dynamixel-driver # or, if already cloned: git submodule update --init --recursive cmake -S . -B build -DHF_DYNAMIXEL_BUILD_TESTS=ON -DHF_DYNAMIXEL_BUILD_HOST_EXAMPLE=ON cmake --build build ctest --test-dir build --output-on-failure . | . Required submodules: . | Path | Remote | Role | . | external/DynamixelSDK | ROBOTIS-GIT/DynamixelSDK | Protocol 2.0 engine, pin 4.1.0 | . | examples/esp32/scripts | hardfoc/hf-espidf-project-tools | build_app.sh, matrix, flash helpers | . ",
+    "url": "/hf-dynamixel-driver/development/docs/installation/",
+    
+    "relUrl": "/docs/installation/"
+  },"26": {
+    "doc": "Installation",
+    "title": "Consume from another CMake project",
+    "content": "| 1 2 . | add_subdirectory(external/hf-dynamixel-driver) target_link_libraries(my_firmware PRIVATE hf::dynamixel) . | . Or include cmake/hf_dynamixel_build_settings.cmake and compile ${HF_DYNAMIXEL_SOURCE_FILES} yourself (ESP-IDF component style). Firmware must contain one Dynamixel SDK copy. Do not also link a second upstream dynamixel_sdk target into the same image. ",
+    "url": "/hf-dynamixel-driver/development/docs/installation/#consume-from-another-cmake-project",
+    
+    "relUrl": "/docs/installation/#consume-from-another-cmake-project"
+  },"27": {
+    "doc": "Installation",
+    "title": "Install / export",
+    "content": "| 1 2 . | cmake -S . -B build -DCMAKE_INSTALL_PREFIX=/tmp/hf-dynamixel cmake --build build --target install . | . The exported package is hf::dynamixel. Public headers never include dynamixel_sdk/*. ",
+    "url": "/hf-dynamixel-driver/development/docs/installation/#install--export",
+    
+    "relUrl": "/docs/installation/#install--export"
+  },"28": {
+    "doc": "Installation",
+    "title": "ESP-IDF",
+    "content": "See ESP32 examples. The example component examples/esp32/components/hf_dynamixel includes the same build settings and defines __linux__ on the SDK translation units so their include guards resolve on Xtensa / RISC-V. ",
+    "url": "/hf-dynamixel-driver/development/docs/installation/#esp-idf",
+    
+    "relUrl": "/docs/installation/#esp-idf"
+  },"29": {
+    "doc": "Installation",
+    "title": "hf-core",
+    "content": "When aggregated through hf-core, enable HF_CORE_ENABLE_DYNAMIXEL (default OFF; ESP32 core examples turn it ON). That pulls the driver sources and DynamixelHandler. See hf-core handler. ",
+    "url": "/hf-dynamixel-driver/development/docs/installation/#hf-core",
+    
+    "relUrl": "/docs/installation/#hf-core"
+  },"30": {
+    "doc": "Model support",
+    "title": "Model support",
+    "content": "The first validated bench servo is XC430-W150, model number 1070. Common Protocol 2.0 X-series parts share the same control-table addresses (operating mode 11, torque 64, goal position 116, present position 132, …). They are listed in inc/dynamixel_model.hpp: . | Constant | Model | Number | Current register | Address 126 | . | kXc430W150 | XC430-W150 | 1070 | no | present load | . | kXc430W240 | XC430-W240 | 1080 | no | present load | . | kXl430W250 | XL430-W250 | 1060 | no | present load | . | kXm430W210 | XM430-W210 | 1030 | yes (addr 102) | present current | . | kXm430W350 | XM430-W350 | 1020 | yes | present current | . | kXh430W210 | XH430-W210 | 1010 | yes | present current | . | kXh430W350 | XH430-W350 | 1000 | yes | present current | . | kXSeriesFallback | unlisted X-series | 0 | treated as no | treated as load | . Identify() calls FindModel(ping.model_number). On a hit, typed torque / mode / position APIs are available. ",
+    "url": "/hf-dynamixel-driver/development/docs/model_support/",
+    
+    "relUrl": "/docs/model_support/"
+  },"31": {
+    "doc": "Model support",
+    "title": "The servo you have not picked yet",
+    "content": "A later larger servo can still run the same ESP32 examples: . | Ping succeeds and prints the real model number. | If that number is not in the table, Identify() returns UnsupportedRequest with the ping payload still filled. | BindXSeriesFallback() (or CONFIG_HF_DYNAMIXEL_BIND_XSERIES_FALLBACK) attaches the shared X-series map so present/goal position work. | When you decide the part, add a MakeXSeries(...) row (set supports_current / effort_is_current from the e-Manual) and FindModel will bind it automatically. | . BindModel(desc) before Identify() is kept when desc.model_number is 0 or matches the ping. ",
+    "url": "/hf-dynamixel-driver/development/docs/model_support/#the-servo-you-have-not-picked-yet",
+    
+    "relUrl": "/docs/model_support/#the-servo-you-have-not-picked-yet"
+  },"32": {
+    "doc": "Model support",
+    "title": "What is not assumed",
+    "content": ". | Current control is not exposed as a typed API yet. XM/XH set supports_current so callers can gate their own writes to address 102. | Telemetry.load is the raw value at address 126. Read model()-&gt;effort_is_current before treating it as milliamps. | Protocol 1.0, MX-series, and DYNAMIXEL-P tables are out of scope. | EEPROM writes stay explicit. Torque is never enabled by Identify() or Bus construction. | . Unknown models may always use Bus::ReadRegister / WriteRegister. ",
+    "url": "/hf-dynamixel-driver/development/docs/model_support/#what-is-not-assumed",
+    
+    "relUrl": "/docs/model_support/#what-is-not-assumed"
+  },"33": {
+    "doc": "Porting",
+    "title": "Porting",
+    "content": "Implement dynamixel::Transport&lt;Derived&gt;: . | Hook | Meaning | . | open / close | Configure or release the UART. No servo motion. | . | set_baud_rate | Host rate only. | . | write_some | Partial writes are explicit. | . | finish_transmit | Last stop bit has left the wire; release the driver for RX. | . | read_some | Currently available bytes. 0 is not a failure. | . | discard_stale_input | Only at a transaction boundary (SDK clearPort). | . | now_us | Monotonic clock. | . | delay_ms_impl / yield_impl | Optional cooperative wait. | . TransportConfig.echo_policy: . | None — buffered or separate RX path | ExpectedLocalEcho — adapter matches the TX bytes, then leaves the rest | . Electrical mode (DIR GPIO, open-drain, auto-direction transceiver) stays in the adapter. Device never sees a pin. Reference adapters: . | ESP-IDF example: examples/esp32/main/include/hf_dynamixel_esp_uart.hpp | hf-core: HalUartDynamixelComm in handlers/dynamixel/DynamixelHandler.h (wraps BaseUart&amp;, same pattern as HalUartFdo2Comm) | . ",
+    "url": "/hf-dynamixel-driver/development/docs/porting/",
+    
+    "relUrl": "/docs/porting/"
+  },"34": {
+    "doc": "Quick start",
+    "title": "Quick start",
+    "content": "The driver never opens UART, enables torque, or moves a servo from a constructor. You supply a dynamixel::Transport adapter; Bus talks Protocol 2.0 through it. | 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 . | #include \"dynamixel.hpp\" MyUart uart; // implements dynamixel::Transport&lt;MyUart&gt; dynamixel::Bus bus{dynamixel::TransportView{uart}}; // brace-init, not Bus(View) dynamixel::TransportConfig cfg; cfg.baud_rate = 57600; cfg.echo_policy = dynamixel::EchoPolicy::None; if (!bus.Open(cfg).ok()) { return; } auto ping = bus.Ping(1); if (!ping.ok()) { return; } dynamixel::Device servo(bus, 1); auto idn = servo.Identify(); if (!idn.ok()) { // Ping worked but the model number is not in the catalog. servo.BindXSeriesFallback(); } auto pos = servo.ReadPosition(); // torque stays off . | . Do not write Bus bus(TransportView(uart)); — that is a most-vexing-parse and declares a function. ",
+    "url": "/hf-dynamixel-driver/development/docs/quickstart/",
+    
+    "relUrl": "/docs/quickstart/"
+  },"35": {
+    "doc": "Quick start",
+    "title": "What Identify does not do",
+    "content": ". | It does not enable torque. | It does not change operating mode, ID, or baud. | It does not recover a servo that is already in an error state. | . EEPROM writes (ID, baud, operating mode) are always explicit WriteRegister / SetOperatingMode calls. A timeout on those writes is UncertainOutcome, not proof the old value remains. ",
+    "url": "/hf-dynamixel-driver/development/docs/quickstart/#what-identify-does-not-do",
+    
+    "relUrl": "/docs/quickstart/#what-identify-does-not-do"
+  },"36": {
+    "doc": "Quick start",
+    "title": "Next",
+    "content": ". | ESP32-C6 / S3 firmware: ESP32 examples | Adapter hooks: Porting | Catalog and fallback: Model support | . ",
+    "url": "/hf-dynamixel-driver/development/docs/quickstart/#next",
+    
+    "relUrl": "/docs/quickstart/#next"
+  },"37": {
+    "doc": "SDK integration",
+    "title": "SDK integration",
+    "content": "Pinned engine: ROBOTIS DynamixelSDK 4.1.0 / f838bc90f72fcf5b9c279432d6e12fc24969daa8. HF does not fork or reimplement Protocol 2.0. The wrapper: . | Instantiates Protocol2PacketHandler::getInstance() (SDK singleton). | Implements a private PortHandler subclass. It does not call getPortHandler() (that factory is desktop-port specific). | Maps COMM_* to dynamixel::DriverError in MapCommCode. | Compiles only the protocol / group TUs listed in cmake/hf_dynamixel_sdk_sources.cmake. No stock Linux / Windows / Arduino port. | . ",
+    "url": "/hf-dynamixel-driver/development/docs/sdk_integration/",
+    
+    "relUrl": "/docs/sdk_integration/"
+  },"38": {
+    "doc": "SDK integration",
+    "title": "Limits we inherited and document",
+    "content": "| Behavior | Consequence | . | Per-call malloc inside the SDK | Heap must exist; we do not patch it out | . | is_using_ is a flag, not a mutex | Bus is not thread-safe; hf-core adds RtosMutex | . | clearPort before TX | Stale RX is discarded at the transaction boundary only | . | GroupSyncRead last_result_ is all-or-nothing | HF SyncRead uses TX + per-id RX | . Apache-2.0 notices for the SDK live in THIRD_PARTY_NOTICES. This repository is MIT. ",
+    "url": "/hf-dynamixel-driver/development/docs/sdk_integration/#limits-we-inherited-and-document",
+    
+    "relUrl": "/docs/sdk_integration/#limits-we-inherited-and-document"
+  },"39": {
+    "doc": "SDK integration",
+    "title": "ESP-IDF include guards",
+    "content": "SDK .cpp files only include their headers when __linux__ / __APPLE__ / WIN32 / ARDUINO is defined. The ESP-IDF component (and hf-core, on those translation units only) defines __linux__ so the TUs compile on Xtensa and RISC-V. That define is not applied to the rest of hf-core. ",
+    "url": "/hf-dynamixel-driver/development/docs/sdk_integration/#esp-idf-include-guards",
+    
+    "relUrl": "/docs/sdk_integration/#esp-idf-include-guards"
+  },"40": {
+    "doc": "Troubleshooting",
+    "title": "Troubleshooting",
+    "content": " ",
+    "url": "/hf-dynamixel-driver/development/docs/troubleshooting/",
+    
+    "relUrl": "/docs/troubleshooting/"
+  },"41": {
+    "doc": "Troubleshooting",
+    "title": "Timeout on every ping",
+    "content": ". | Baud mismatch (servo EEPROM vs CONFIG_HF_DYNAMIXEL_BAUD). Factory XC430 is often 57600. | TX/RX swapped for the chip you actually flashed (C6 4/5 vs S3 17/18). | No common ground, or the servo is unpowered. | Half-duplex DIR stuck in TX. Leave DIR at -1 unless the buffer needs it. | Single-wire open-drain without CONFIG_HF_DYNAMIXEL_EXPECT_LOCAL_ECHO. | . ",
+    "url": "/hf-dynamixel-driver/development/docs/troubleshooting/#timeout-on-every-ping",
+    
+    "relUrl": "/docs/troubleshooting/#timeout-on-every-ping"
+  },"42": {
+    "doc": "Troubleshooting",
+    "title": "EchoMismatch",
+    "content": "The UART heard its own TX but the bytes did not match, or echo was expected and none arrived. Flip CONFIG_HF_DYNAMIXEL_EXPECT_LOCAL_ECHO to match the electrical mode. ",
+    "url": "/hf-dynamixel-driver/development/docs/troubleshooting/#echomismatch",
+    
+    "relUrl": "/docs/troubleshooting/#echomismatch"
+  },"43": {
+    "doc": "Troubleshooting",
+    "title": "UnsupportedRequest from Identify()",
+    "content": "Ping succeeded; the model number is not in kKnownModels. The result still carries ping.value.model_number. Enable the Kconfig fallback or call BindXSeriesFallback() / BindModel(kXm430W350) as appropriate. ",
+    "url": "/hf-dynamixel-driver/development/docs/troubleshooting/#unsupportedrequest-from-identify",
+    
+    "relUrl": "/docs/troubleshooting/#unsupportedrequest-from-identify"
+  },"44": {
+    "doc": "Troubleshooting",
+    "title": "Busy from SetOperatingMode",
+    "content": "Torque is on. Disable torque, then change mode. The driver will not do that implicitly. ",
+    "url": "/hf-dynamixel-driver/development/docs/troubleshooting/#busy-from-setoperatingmode",
+    
+    "relUrl": "/docs/troubleshooting/#busy-from-setoperatingmode"
+  },"45": {
+    "doc": "Troubleshooting",
+    "title": "Motion jumps or slams",
+    "content": "The motion example is supposed to add 64 ticks to present position. If you see a dash to 0 / 2048, the read failed or you wrote a raw goal without reading first. Stop and go back to the read-only example. ",
+    "url": "/hf-dynamixel-driver/development/docs/troubleshooting/#motion-jumps-or-slams",
+    
+    "relUrl": "/docs/troubleshooting/#motion-jumps-or-slams"
+  },"46": {
+    "doc": "Troubleshooting",
+    "title": "Examples will not configure",
+    "content": "| 1 . | APP_TYPE not defined. Use build_app.sh . | . You invoked CMake or idf.py without the scripts. From examples/esp32: . | 1 2 . | ./scripts/build_app.sh list ./scripts/build_app.sh dynamixel_readonly_example Debug . | . If scripts/ is empty: git submodule update --init --recursive. ",
+    "url": "/hf-dynamixel-driver/development/docs/troubleshooting/#examples-will-not-configure",
+    
+    "relUrl": "/docs/troubleshooting/#examples-will-not-configure"
+  },"47": {
+    "doc": "Troubleshooting",
+    "title": "S3 build still uses C6 pins",
+    "content": "CONFIG_TARGET was not set, so metadata.target (esp32c6) won. Use: . | 1 . | CONFIG_TARGET=esp32s3 ./scripts/build_app.sh dynamixel_readonly_example Debug . | . Confirm the log line uart1 tx=17 rx=18. ",
+    "url": "/hf-dynamixel-driver/development/docs/troubleshooting/#s3-build-still-uses-c6-pins",
+    
+    "relUrl": "/docs/troubleshooting/#s3-build-still-uses-c6-pins"
+  },"48": {
+    "doc": "Wiring",
+    "title": "Wiring",
+    "content": "Initial bring-up: 57600 bit/s, 8N1, short cable. | Chip | UART | TX (MCU → servo) | RX (servo → MCU) | Optional DIR | . | ESP32-C6 | UART1 | GPIO4 | GPIO5 | unused | . | ESP32-S3 | UART1 | GPIO17 | GPIO18 | unused | . Override in menuconfig or sdkconfig.defaults.&lt;target&gt;. Do not infer C6 runtime results from an S3 build or the other way around. ",
+    "url": "/hf-dynamixel-driver/development/docs/wiring/",
+    
+    "relUrl": "/docs/wiring/"
+  },"49": {
+    "doc": "Wiring",
+    "title": "Electrical modes",
+    "content": "Implemented in the transport, not in Device: . | Direction-controlled buffer — assert DIR, send, finish_transmit, release DIR (CONFIG_HF_DYNAMIXEL_UART_DIR_GPIO) | Open-drain single wire — keep the receiver on; set CONFIG_HF_DYNAMIXEL_EXPECT_LOCAL_ECHO | Automatic-direction transceiver — leave DIR at -1 | . A transistor TTL board is acceptable for bench ping/read. Qualify a proper buffered interface before high-rate or long-cable claims. ",
+    "url": "/hf-dynamixel-driver/development/docs/wiring/#electrical-modes",
+    
+    "relUrl": "/docs/wiring/#electrical-modes"
+  },"50": {
+    "doc": "Wiring",
+    "title": "Power",
+    "content": "XC430-W150 and XM430-class servos are not 3.3 V motors. Use the rated Dynamixel supply (typically 12 V) on the servo power pins. Share ground with the ESP32. Logic must be 3.3 V compatible toward the MCU. The motion example enables torque. Run it unloaded, after a clean read-only session, and only after IdentifyOrBind has a descriptor. ",
+    "url": "/hf-dynamixel-driver/development/docs/wiring/#power",
+    
+    "relUrl": "/docs/wiring/#power"
+  },"51": {
+    "doc": "Wiring",
+    "title": "Hardware gate (not run in CI)",
+    "content": "1000 read-only transactions at 57600 with zero unexplained errors, plus unplug and corrupt-response cases. Record board, wiring, supply, baud, servo firmware, SDK hash, and compiler. ",
+    "url": "/hf-dynamixel-driver/development/docs/wiring/#hardware-gate-not-run-in-ci",
+    
+    "relUrl": "/docs/wiring/#hardware-gate-not-run-in-ci"
+  },"52": {
+    "doc": "Changelog",
+    "title": "Changelog",
+    "content": "# Changelog ## 0.4.0 - X-series catalog (XC430, XL430, XM430, XH430) plus `BindModel` / `BindXSeriesFallback` for a later larger servo. - ESP32-C6 and ESP32-S3 examples share one source tree: Kconfig pins, `sdkconfig.defaults.`, `CONFIG_TARGET=esp32s3` for the scripts. - Added `dynamixel_scan_example`. Read-only and motion examples stream telemetry / bind fallback. - Jekyll + Doxygen GitHub Pages (`_config/`, `ci-docs-publish.yml`). - hf-core aggregation: `HF_CORE_ENABLE_DYNAMIXEL` and `DynamixelHandler` are documented here and implemented in hf-core. ## 0.3.0 - Pin DynamixelSDK 4.1.0 and wrap Protocol 2.0 through a private PortHandler adapter. - Public CRTP transport, Bus/Device API, XC430-W150 descriptor, sync read/write. - Host tests drive the real protocol engine through a scripted transport. - ESP-IDF UART example adapter (C6 bring-up, S3 compile target). ",
+    "url": "/hf-dynamixel-driver/development/CHANGELOG.html",
+    
+    "relUrl": "/CHANGELOG.html"
+  }
+}

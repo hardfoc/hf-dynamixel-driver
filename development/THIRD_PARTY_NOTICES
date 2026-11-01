@@ -1,0 +1,13 @@
+This repository includes the ROBOTIS DYNAMIXEL SDK as a git submodule
+under external/DynamixelSDK.
+
+  Project: DynamixelSDK
+  Version: 4.1.0
+  Commit:  f838bc90f72fcf5b9c279432d6e12fc24969daa8
+  URL:     https://github.com/ROBOTIS-GIT/DynamixelSDK
+  License: Apache License 2.0
+
+The Apache-2.0 license text is in external/DynamixelSDK/LICENSE.
+HF-owned sources in inc/, src/, examples/, and tests/ are MIT
+(see LICENSE). Passing tests or an Apache-2.0 dependency does not
+imply certification or production suitability.

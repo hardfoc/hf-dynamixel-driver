@@ -1,0 +1,5 @@
+<map id="dynamixel::Transport&lt; Derived &gt;" name="dynamixel::Transport&lt; Derived &gt;">
+<area shape="rect" id="Node000001" title="CRTP base for a Dynamixel half&#45;duplex byte transport." alt="" coords="5,31,163,76"/>
+<area shape="rect" id="Node000002" href="$classhf__dynamixel__examples_1_1DynamixelEspIdfUart.html" title=" " alt="" coords="211,5,410,101"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="178,51,213,53,208,54,178,56"/>
+</map>

@@ -1,0 +1,18 @@
+<map id="inc/dynamixel_device.hpp" name="inc/dynamixel_device.hpp">
+<area shape="rect" id="Node000001" title="One servo on a shared Bus, with optional model descriptor." alt="" coords="314,5,504,33"/>
+<area shape="rect" id="Node000002" href="$dynamixel_8hpp.html" title="Umbrella header for the HF Dynamixel Protocol 2.0 driver." alt="" coords="339,81,480,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="410,46,412,82,407,80,408,51"/>
+<area shape="rect" id="Node000003" href="$hf__dynamixel__esp__uart_8hpp.html" title="Native ESP&#45;IDF UART adapter for dynamixel::Transport." alt="" coords="207,157,372,218"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="378,120,331,158,328,154,382,116"/>
+<area shape="rect" id="Node000004" href="$hf__dynamixel__example__app_8hpp.html" title="Shared ESP32 example wiring: UART type, bus open, identify/bind." alt="" coords="267,266,432,328"/>
+<area shape="poly" id="edge7_Node000002_Node000004" title=" " alt="" coords="407,122,400,170,387,219,367,268,362,264,381,217,394,168,404,127"/>
+<area shape="rect" id="Node000008" href="$ping__read_8cpp.html" title=" " alt="" coords="447,165,596,210"/>
+<area shape="poly" id="edge8_Node000002_Node000008" title=" " alt="" coords="437,116,497,164,492,165,437,121"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="314,229,335,266,330,265,313,235"/>
+<area shape="rect" id="Node000005" href="$dynamixel__motion__example_8cpp.html" title=" " alt="" coords="5,384,243,429"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="275,334,170,386,168,382,270,336"/>
+<area shape="rect" id="Node000006" href="$dynamixel__readonly__example_8cpp.html" title=" " alt="" coords="267,376,432,438"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="351,342,352,377,347,374,348,346"/>
+<area shape="rect" id="Node000007" href="$dynamixel__scan__example_8cpp.html" title=" " alt="" coords="456,384,677,429"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="424,333,526,384,520,384,423,338"/>
+</map>

@@ -1,0 +1,29 @@
+<map id="inc/dynamixel_device.hpp" name="inc/dynamixel_device.hpp">
+<area shape="rect" id="Node000001" title="One servo on a shared Bus, with optional model descriptor." alt="" coords="98,5,289,33"/>
+<area shape="rect" id="Node000002" href="$dynamixel__bus_8hpp.html" title="Shared Protocol 2.0 bus over a caller&#45;supplied transport." alt="" coords="120,81,267,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,31,196,66,191,65,192,36"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="154,308,219,336"/>
+<area shape="poly" id="edge17_Node000001_Node000005" title=" " alt="" coords="159,36,125,55,83,81,44,116,28,136,14,158,8,181,12,203,24,224,42,243,90,276,142,302,137,304,88,281,39,247,20,227,7,205,3,181,10,156,23,133,40,112,80,77,122,50,162,32"/>
+<area shape="rect" id="Node000010" href="$dynamixel__model_8hpp.html" title="Hand&#45;authored X&#45;series Protocol 2.0 descriptors." alt="" coords="387,157,552,184"/>
+<area shape="poly" id="edge13_Node000001_Node000010" title=" " alt="" coords="218,31,434,148,429,150,217,36"/>
+<area shape="rect" id="Node000003" href="$dynamixel__transport_8hpp.html" title="CRTP serial transport and type&#45;erased bus view." alt="" coords="178,157,361,184"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="207,107,248,146,242,146,207,112"/>
+<area shape="poly" id="edge10_Node000002_Node000005" title=" " alt="" coords="187,107,177,132,168,157,164,193,166,230,180,294,175,293,161,231,159,193,163,156,172,130,184,111"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="577,308,647,336"/>
+<area shape="poly" id="edge11_Node000002_Node000006" title=" " alt="" coords="267,100,432,120,511,135,565,154,590,170,607,185,620,205,632,232,635,248,635,264,627,296,623,292,630,263,630,248,627,233,616,207,603,189,587,174,563,159,509,140,432,125,268,105"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="25,157,101,184"/>
+<area shape="poly" id="edge12_Node000002_Node000009" title=" " alt="" coords="168,111,101,151,97,147,172,107"/>
+<area shape="rect" id="Node000004" href="$dynamixel__types_8hpp.html" title="Public result and status types for the Dynamixel driver." alt="" coords="389,232,550,260"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="305,182,422,226,417,227,305,188"/>
+<area shape="poly" id="edge7_Node000003_Node000005" title=" " alt="" coords="256,183,234,207,214,234,201,264,193,295,189,291,196,262,210,231,230,204,251,186"/>
+<area shape="poly" id="edge8_Node000003_Node000006" title=" " alt="" coords="362,180,478,200,528,214,563,230,589,259,606,294,601,292,585,262,560,234,526,219,476,205,362,185"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="224,232,315,260"/>
+<area shape="poly" id="edge9_Node000003_Node000008" title=" " alt="" coords="271,183,272,218,267,215,268,187"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="421,261,235,311,234,306,416,260"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="495,258,576,301,571,300,494,263"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="421,308,518,336"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="471,259,471,294,467,291,467,262"/>
+<area shape="poly" id="edge14_Node000010_Node000004" title=" " alt="" coords="471,183,472,218,467,215,468,187"/>
+<area shape="poly" id="edge15_Node000010_Node000005" title=" " alt="" coords="453,184,397,222,328,262,235,305,233,300,325,258,394,218,448,186"/>
+<area shape="poly" id="edge16_Node000010_Node000006" title=" " alt="" coords="533,182,574,201,592,214,608,231,615,246,619,262,619,295,615,291,614,263,610,247,603,234,589,218,572,205,533,188"/>
+</map>
