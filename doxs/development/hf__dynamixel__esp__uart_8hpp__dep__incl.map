@@ -1,0 +1,11 @@
+<map id="examples/esp32/main/include/hf_dynamixel_esp_uart.hpp" name="examples/esp32/main/include/hf_dynamixel_esp_uart.hpp">
+<area shape="rect" id="Node000001" title="Native ESP&#45;IDF UART adapter for dynamixel::Transport." alt="" coords="267,5,432,67"/>
+<area shape="rect" id="Node000002" href="$hf__dynamixel__example__app_8hpp.html" title="Shared ESP32 example wiring: UART type, bus open, identify/bind." alt="" coords="267,115,432,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="351,80,352,116,347,113,348,85"/>
+<area shape="rect" id="Node000003" href="$dynamixel__motion__example_8cpp.html" title=" " alt="" coords="5,233,243,278"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="275,183,170,235,168,230,270,185"/>
+<area shape="rect" id="Node000004" href="$dynamixel__readonly__example_8cpp.html" title=" " alt="" coords="267,225,432,286"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="351,190,352,226,347,223,348,194"/>
+<area shape="rect" id="Node000005" href="$dynamixel__scan__example_8cpp.html" title=" " alt="" coords="456,233,677,278"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="424,181,526,233,520,233,423,186"/>
+</map>

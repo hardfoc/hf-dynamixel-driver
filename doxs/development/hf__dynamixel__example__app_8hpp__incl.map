@@ -1,0 +1,62 @@
+<map id="examples/esp32/main/include/hf_dynamixel_example_app.hpp" name="examples/esp32/main/include/hf_dynamixel_example_app.hpp">
+<area shape="rect" id="Node000001" title="Shared ESP32 example wiring: UART type, bus open, identify/bind." alt="" coords="480,5,645,67"/>
+<area shape="rect" id="Node000002" href="$dynamixel_8hpp.html" title="Umbrella header for the HF Dynamixel Protocol 2.0 driver." alt="" coords="434,191,552,218"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="546,65,523,116,503,177,498,175,519,114,543,70"/>
+<area shape="rect" id="Node000014" href="$hf__dynamixel__board_8hpp.html" title="Target&#45;aware pin / baud aliases for the ESP&#45;IDF examples." alt="" coords="128,115,309,143"/>
+<area shape="poly" id="edge25_Node000001_Node000014" title=" " alt="" coords="477,61,284,113,282,108,481,57"/>
+<area shape="rect" id="Node000016" href="$hf__dynamixel__esp__uart_8hpp.html" title="Native ESP&#45;IDF UART adapter for dynamixel::Transport." alt="" coords="533,115,733,143"/>
+<area shape="poly" id="edge27_Node000001_Node000016" title=" " alt="" coords="586,65,616,103,611,102,585,70"/>
+<area shape="rect" id="Node000017" title=" " alt="" coords="125,191,229,218"/>
+<area shape="poly" id="edge36_Node000001_Node000017" title=" " alt="" coords="492,70,322,145,224,186,221,182,320,140,496,66"/>
+<area shape="rect" id="Node000018" title=" " alt="" coords="1064,191,1165,218"/>
+<area shape="poly" id="edge37_Node000001_Node000018" title=" " alt="" coords="638,65,746,113,771,127,797,140,864,160,919,170,1051,190,1045,191,918,175,863,166,795,145,769,132,744,117,638,70"/>
+<area shape="rect" id="Node000022" title=" " alt="" coords="807,115,891,143"/>
+<area shape="poly" id="edge38_Node000001_Node000022" title=" " alt="" coords="645,61,796,109,791,111,646,66"/>
+<area shape="rect" id="Node000003" href="$dynamixel__types_8hpp.html" title="Public result and status types for the Dynamixel driver." alt="" coords="506,493,666,521"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="509,216,531,238,549,265,569,322,581,381,587,435,589,479,584,476,582,436,576,382,564,324,544,268,526,241,508,221"/>
+<area shape="rect" id="Node000007" href="$dynamixel__transport_8hpp.html" title="CRTP serial transport and type&#45;erased bus view." alt="" coords="363,418,546,445"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="503,216,518,239,529,266,531,280,529,295,519,326,505,356,475,407,471,403,500,354,514,324,524,293,526,280,524,267,514,242,502,222"/>
+<area shape="rect" id="Node000009" href="$dynamixel__model_8hpp.html" title="Hand&#45;authored X&#45;series Protocol 2.0 descriptors." alt="" coords="621,418,786,445"/>
+<area shape="poly" id="edge11_Node000002_Node000009" title=" " alt="" coords="538,216,582,235,623,264,650,298,672,335,699,404,694,402,667,337,646,301,619,268,580,240,538,222"/>
+<area shape="rect" id="Node000010" href="$dynamixel__bus_8hpp.html" title="Shared Protocol 2.0 bus over a caller&#45;supplied transport." alt="" coords="201,342,348,370"/>
+<area shape="poly" id="edge15_Node000002_Node000010" title=" " alt="" coords="442,220,395,240,347,268,316,298,292,330,288,327,312,295,343,264,393,236,446,217"/>
+<area shape="rect" id="Node000012" href="$dynamixel__device_8hpp.html" title="One servo on a shared Bus, with optional model descriptor." alt="" coords="115,266,282,294"/>
+<area shape="poly" id="edge20_Node000002_Node000012" title=" " alt="" coords="438,221,267,264,265,260,442,217"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="358,266,514,294"/>
+<area shape="poly" id="edge24_Node000002_Node000013" title=" " alt="" coords="485,217,457,256,453,252,481,221"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="144,569,210,597"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="513,524,226,576,225,570,512,519"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="498,569,568,597"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="579,520,553,559,550,554,574,523"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="592,569,688,597"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="597,519,624,557,619,555,595,524"/>
+<area shape="poly" id="edge7_Node000007_Node000003" title=" " alt="" coords="478,443,552,486,547,485,477,449"/>
+<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="360,442,294,461,260,476,229,495,205,524,188,556,184,552,200,521,226,491,257,471,292,456,365,440"/>
+<area shape="poly" id="edge9_Node000007_Node000005" title=" " alt="" coords="461,443,497,520,518,557,513,555,492,522,458,448"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="239,493,331,521"/>
+<area shape="poly" id="edge10_Node000007_Node000008" title=" " alt="" coords="427,445,330,489,328,484,422,447"/>
+<area shape="poly" id="edge12_Node000009_Node000003" title=" " alt="" coords="685,445,621,488,619,483,680,447"/>
+<area shape="poly" id="edge13_Node000009_Node000004" title=" " alt="" coords="658,448,225,571,224,565,656,443"/>
+<area shape="poly" id="edge14_Node000009_Node000005" title=" " alt="" coords="705,444,700,483,693,504,680,523,664,535,640,547,583,569,582,563,638,542,662,530,676,519,688,502,695,482,701,448"/>
+<area shape="poly" id="edge17_Node000010_Node000004" title=" " alt="" coords="267,368,235,424,201,494,184,555,180,552,196,492,231,421,264,372"/>
+<area shape="poly" id="edge18_Node000010_Node000005" title=" " alt="" coords="284,367,314,403,352,443,431,508,503,560,497,560,427,512,349,447,310,407,283,373"/>
+<area shape="poly" id="edge16_Node000010_Node000007" title=" " alt="" coords="307,368,411,411,406,412,306,373"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="115,418,191,445"/>
+<area shape="poly" id="edge19_Node000010_Node000011" title=" " alt="" coords="251,372,189,412,186,407,255,368"/>
+<area shape="poly" id="edge23_Node000012_Node000004" title=" " alt="" coords="184,297,158,328,121,375,86,432,61,494,57,508,61,520,74,536,91,549,132,569,127,571,89,554,70,540,56,522,52,508,56,493,81,429,117,372,154,325,187,292"/>
+<area shape="poly" id="edge22_Node000012_Node000009" title=" " alt="" coords="243,292,647,411,643,415,242,297"/>
+<area shape="poly" id="edge21_Node000012_Node000010" title=" " alt="" coords="212,292,253,331,247,332,212,297"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="5,191,101,218"/>
+<area shape="poly" id="edge26_Node000014_Node000015" title=" " alt="" coords="187,145,98,186,94,182,190,141"/>
+<area shape="poly" id="edge28_Node000016_Node000002" title=" " alt="" coords="606,145,533,185,530,181,610,142"/>
+<area shape="poly" id="edge35_Node000016_Node000004" title=" " alt="" coords="574,145,296,213,165,247,104,269,88,288,81,306,80,355,80,433,87,470,104,504,127,533,151,559,146,558,123,537,100,506,82,471,74,433,74,354,76,305,84,285,101,264,164,242,295,207,577,141"/>
+<area shape="poly" id="edge34_Node000016_Node000005" title=" " alt="" coords="653,140,681,162,707,189,759,255,800,312,813,342,818,373,815,408,801,446,783,476,762,494,706,523,653,545,583,569,582,564,651,540,704,519,759,489,779,472,796,444,810,407,813,373,808,343,795,315,755,258,703,192,678,166,653,146"/>
+<area shape="poly" id="edge29_Node000016_Node000017" title=" " alt="" coords="545,145,248,193,245,194,242,189,247,188,548,141"/>
+<area shape="poly" id="edge30_Node000016_Node000018" title=" " alt="" coords="733,140,1050,189,1045,191,734,146"/>
+<area shape="rect" id="Node000019" title=" " alt="" coords="768,191,866,218"/>
+<area shape="poly" id="edge31_Node000016_Node000019" title=" " alt="" coords="666,141,773,184,768,185,666,146"/>
+<area shape="rect" id="Node000020" title=" " alt="" coords="890,191,1040,218"/>
+<area shape="poly" id="edge32_Node000016_Node000020" title=" " alt="" coords="693,141,893,186,888,188,693,146"/>
+<area shape="rect" id="Node000021" title=" " alt="" coords="576,191,692,218"/>
+<area shape="poly" id="edge33_Node000016_Node000021" title=" " alt="" coords="635,141,636,176,631,174,632,146"/>
+</map>

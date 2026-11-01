@@ -1,0 +1,21 @@
+<map id="inc/dynamixel_bus.hpp" name="inc/dynamixel_bus.hpp">
+<area shape="rect" id="Node000001" title="Shared Protocol 2.0 bus over a caller&#45;supplied transport." alt="" coords="267,5,438,33"/>
+<area shape="rect" id="Node000002" href="$dynamixel__transport_8hpp.html" title="CRTP serial transport and type&#45;erased bus view." alt="" coords="177,81,360,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="340,32,297,73,293,69,335,35"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="119,232,184,260"/>
+<area shape="poly" id="edge9_Node000001_Node000004" title=" " alt="" coords="265,29,200,43,129,66,95,83,64,104,36,129,14,158,8,171,10,183,18,194,30,204,65,221,106,234,101,236,63,226,28,209,14,198,5,185,3,171,9,155,32,125,61,99,93,78,127,61,199,37,269,26"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="351,232,421,260"/>
+<area shape="poly" id="edge10_Node000001_Node000005" title=" " alt="" coords="359,31,375,80,384,118,389,156,389,218,385,216,383,157,379,119,370,82,356,36"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="474,81,551,109"/>
+<area shape="poly" id="edge11_Node000001_Node000008" title=" " alt="" coords="381,31,473,74,468,75,381,36"/>
+<area shape="rect" id="Node000003" href="$dynamixel__types_8hpp.html" title="Public result and status types for the Dynamixel driver." alt="" coords="188,157,349,184"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="270,107,271,142,266,140,267,111"/>
+<area shape="poly" id="edge6_Node000002_Node000004" title=" " alt="" coords="236,111,207,131,179,158,164,187,156,219,152,216,159,186,174,155,204,127,241,108"/>
+<area shape="poly" id="edge7_Node000002_Node000005" title=" " alt="" coords="299,106,333,127,363,155,378,186,385,218,381,216,373,187,358,158,330,131,298,112"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="23,157,114,184"/>
+<area shape="poly" id="edge8_Node000002_Node000007" title=" " alt="" coords="231,111,119,153,117,149,234,107"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="250,184,186,227,183,222,245,186"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="290,182,355,224,350,224,289,187"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="220,232,317,260"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="270,183,271,218,266,215,267,187"/>
+</map>

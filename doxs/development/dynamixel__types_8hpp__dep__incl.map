@@ -1,0 +1,31 @@
+<map id="inc/dynamixel_types.hpp" name="inc/dynamixel_types.hpp">
+<area shape="rect" id="Node000001" title="Public result and status types for the Dynamixel driver." alt="" coords="216,5,400,33"/>
+<area shape="rect" id="Node000002" href="$dynamixel_8hpp.html" title="Umbrella header for the HF Dynamixel Protocol 2.0 driver." alt="" coords="339,308,480,336"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="275,44,246,71,217,106,206,124,200,144,198,164,204,183,217,207,235,227,277,262,324,288,368,307,363,308,321,292,274,266,231,231,213,210,199,185,193,164,194,143,201,122,212,103,243,68,278,40"/>
+<area shape="rect" id="Node000009" href="$dynamixel__model_8hpp.html" title="Hand&#45;authored X&#45;series Protocol 2.0 descriptors." alt="" coords="214,157,402,184"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="309,46,311,157,305,156,307,51"/>
+<area shape="rect" id="Node000011" href="$dynamixel__transport_8hpp.html" title="CRTP serial transport and type&#45;erased bus view." alt="" coords="409,81,615,109"/>
+<area shape="poly" id="edge13_Node000001_Node000011" title=" " alt="" coords="358,36,478,79,473,82,359,41"/>
+<area shape="rect" id="Node000003" href="$hf__dynamixel__esp__uart_8hpp.html" title="Native ESP&#45;IDF UART adapter for dynamixel::Transport." alt="" coords="327,384,492,445"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="411,349,412,384,407,382,408,354"/>
+<area shape="rect" id="Node000004" href="$hf__dynamixel__example__app_8hpp.html" title="Shared ESP32 example wiring: UART type, bus open, identify/bind." alt="" coords="267,493,432,555"/>
+<area shape="poly" id="edge7_Node000002_Node000004" title=" " alt="" coords="357,345,336,362,317,385,309,412,312,440,320,467,333,494,327,492,316,469,306,441,304,411,312,382,332,358,361,342"/>
+<area shape="rect" id="Node000008" href="$ping__read_8cpp.html" title=" " alt="" coords="516,392,665,437"/>
+<area shape="poly" id="edge8_Node000002_Node000008" title=" " alt="" coords="450,340,550,391,544,392,449,346"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="387,457,368,495,364,491,383,461"/>
+<area shape="rect" id="Node000005" href="$dynamixel__motion__example_8cpp.html" title=" " alt="" coords="5,612,243,656"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="275,561,170,613,168,609,270,563"/>
+<area shape="rect" id="Node000006" href="$dynamixel__readonly__example_8cpp.html" title=" " alt="" coords="267,603,432,665"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="351,569,352,604,347,601,348,573"/>
+<area shape="rect" id="Node000007" href="$dynamixel__scan__example_8cpp.html" title=" " alt="" coords="456,612,677,656"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="424,560,526,611,520,611,423,565"/>
+<area shape="poly" id="edge10_Node000009_Node000002" title=" " alt="" coords="300,197,298,230,300,245,305,259,317,274,332,287,368,307,363,308,329,291,313,278,300,261,294,246,292,230,298,202"/>
+<area shape="rect" id="Node000010" href="$dynamixel__device_8hpp.html" title="One servo on a shared Bus, with optional model descriptor." alt="" coords="314,232,504,260"/>
+<area shape="poly" id="edge11_Node000009_Node000010" title=" " alt="" coords="338,191,394,231,389,232,339,196"/>
+<area shape="poly" id="edge12_Node000010_Node000002" title=" " alt="" coords="410,273,412,309,407,307,408,278"/>
+<area shape="poly" id="edge14_Node000011_Node000002" title=" " alt="" coords="564,113,591,131,612,155,616,170,612,185,599,209,583,231,542,266,496,292,454,310,451,305,493,287,539,262,579,227,595,207,607,183,611,170,607,158,588,135,564,118"/>
+<area shape="rect" id="Node000012" href="$dynamixel__bus_8hpp.html" title="Shared Protocol 2.0 bus over a caller&#45;supplied transport." alt="" coords="427,157,597,184"/>
+<area shape="poly" id="edge15_Node000011_Node000012" title=" " alt="" coords="513,122,514,157,510,155,511,127"/>
+<area shape="poly" id="edge16_Node000012_Node000002" title=" " alt="" coords="522,197,526,230,524,246,518,261,506,278,490,291,455,310,452,305,487,287,502,274,514,259,519,245,521,230,520,202"/>
+<area shape="poly" id="edge17_Node000012_Node000010" title=" " alt="" coords="479,196,429,234,426,230,483,192"/>
+</map>

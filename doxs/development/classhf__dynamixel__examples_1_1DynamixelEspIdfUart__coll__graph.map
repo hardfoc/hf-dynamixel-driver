@@ -1,0 +1,5 @@
+<map id="hf_dynamixel_examples::DynamixelEspIdfUart&lt; kPort, kTxGpio, kRxGpio, kDirGpio, kDirActiveHigh, kBaud &gt;" name="hf_dynamixel_examples::DynamixelEspIdfUart&lt; kPort, kTxGpio, kRxGpio, kDirGpio, kDirActiveHigh, kBaud &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,98,205,194"/>
+<area shape="rect" id="Node000002" href="$classdynamixel_1_1Transport.html" title="CRTP base for a Dynamixel half&#45;duplex byte transport." alt="" coords="26,5,184,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="106,63,108,98,102,97,104,68"/>
+</map>
