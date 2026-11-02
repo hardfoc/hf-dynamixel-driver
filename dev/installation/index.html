@@ -1457,11 +1457,12 @@ sources it needs; nothing else.</p>
 </tbody>
 </table>
 <p>Link one copy of the SDK per firmware image. Do not also link a separate upstream <code>dynamixel_sdk</code> target.</p>
-<p><code>cmake --install</code> exports the same target as <code>hf::dynamixel</code> (<code>lib/cmake/hf_dynamixel</code>) with the public headers.</p>
+<p><code>cmake --install</code> exports the same target as <code>hf::dynamixel</code> (<code>lib/cmake/hf_dynamixel</code>) with the public headers;
+a consumer calls <code>find_package(hf_dynamixel REQUIRED)</code> and links <code>hf::dynamixel</code>.</p>
 <h2 id="esp-idf">ESP-IDF<a class="headerlink" href="#esp-idf" title="Permanent link">&para;</a></h2>
 <p>The ESP-IDF component wrapper is
-<a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/4c4c3575b787bbb29c9e4cd32497a434e8d48466/components/hf_dynamixel/CMakeLists.txt"><code>components/hf_dynamixel/CMakeLists.txt</code></a> (the examples use the copy in
-<a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/4c4c3575b787bbb29c9e4cd32497a434e8d48466/examples/esp32/components/hf_dynamixel/CMakeLists.txt"><code>examples/esp32/components/hf_dynamixel/</code></a>). Point
+<a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/components/hf_dynamixel/CMakeLists.txt"><code>components/hf_dynamixel/CMakeLists.txt</code></a> (the examples use the copy in
+<a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/examples/esp32/components/hf_dynamixel/CMakeLists.txt"><code>examples/esp32/components/hf_dynamixel/</code></a>). Point
 <code>EXTRA_COMPONENT_DIRS</code> at it, or copy it into your project's <code>components/</code>, and set the <code>HF_DYNAMIXEL_ROOT</code> cache
 variable to the driver checkout. It requires the <code>driver</code> and <code>esp_timer</code> components. Your component then declares
 <code>REQUIRES hf_dynamixel</code>.</p>
@@ -1482,15 +1483,15 @@ hf-core under <code>handlers/dynamixel/</code> and <code>docs/handlers/dynamixel
 </thead>
 <tbody>
 <tr>
-<td><a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/4c4c3575b787bbb29c9e4cd32497a434e8d48466/cmake/hf_dynamixel_build_settings.cmake"><code>cmake/hf_dynamixel_build_settings.cmake</code></a></td>
+<td><a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/cmake/hf_dynamixel_build_settings.cmake"><code>cmake/hf_dynamixel_build_settings.cmake</code></a></td>
 <td>Sources, include directories, version, SDK pin: the single source of truth</td>
 </tr>
 <tr>
-<td><a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/4c4c3575b787bbb29c9e4cd32497a434e8d48466/cmake/hf_dynamixel_sdk_sources.cmake"><code>cmake/hf_dynamixel_sdk_sources.cmake</code></a></td>
+<td><a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/cmake/hf_dynamixel_sdk_sources.cmake"><code>cmake/hf_dynamixel_sdk_sources.cmake</code></a></td>
 <td>The SDK translation units compiled and their defines</td>
 </tr>
 <tr>
-<td><a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/4c4c3575b787bbb29c9e4cd32497a434e8d48466/CMakeLists.txt"><code>CMakeLists.txt</code></a></td>
+<td><a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/CMakeLists.txt"><code>CMakeLists.txt</code></a></td>
 <td>Static library, options, install and export</td>
 </tr>
 </tbody>

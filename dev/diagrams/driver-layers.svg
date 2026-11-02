@@ -34,8 +34,10 @@
 <text x="618.5" y="341.5" font-size="16" font-weight="700" fill="#3730A3">Bus::Ping</text>
 <rect x="714" y="323.4" width="100.1" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
 <text x="722" y="341.5" font-size="16" font-weight="700" fill="#3730A3">Bus::Scan</text>
-<rect x="822.1" y="323.4" width="169.7" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
-<text x="830.1" y="341.5" font-size="16" font-weight="700" fill="#3730A3">Bus::ReadRegister</text>
+<rect x="822.1" y="323.4" width="117.6" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
+<text x="830.1" y="341.5" font-size="16" font-weight="700" fill="#3730A3">Bus::Reboot</text>
+<rect x="947.6" y="323.4" width="169.7" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
+<text x="955.6" y="341.5" font-size="16" font-weight="700" fill="#3730A3">Bus::ReadRegister</text>
 <rect x="48" y="357.4" width="173.3" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
 <text x="56" y="375.5" font-size="16" font-weight="700" fill="#3730A3">Bus::WriteRegister</text>
 <rect x="229.3" y="357.4" width="145.9" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
@@ -48,14 +50,16 @@
 <text x="697.8" y="375.5" font-size="16" font-weight="700" fill="#3730A3">Device::BindModel</text>
 <rect x="871" y="357.4" width="255.8" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
 <text x="879" y="375.5" font-size="16" font-weight="700" fill="#3730A3">Device::BindXSeriesFallback</text>
-<rect x="48" y="391.4" width="238.7" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
-<text x="56" y="409.5" font-size="16" font-weight="700" fill="#3730A3">Device::SetTorqueEnabled</text>
-<rect x="294.7" y="391.4" width="241.6" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
-<text x="302.7" y="409.5" font-size="16" font-weight="700" fill="#3730A3">Device::SetOperatingMode</text>
-<rect x="544.4" y="391.4" width="224.3" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
-<text x="552.4" y="409.5" font-size="16" font-weight="700" fill="#3730A3">Device::SetMotionProfile</text>
-<rect x="776.6" y="391.4" width="216.8" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
-<text x="784.6" y="409.5" font-size="16" font-weight="700" fill="#3730A3">Device::SetGoalPosition</text>
+<rect x="48" y="391.4" width="143.5" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
+<text x="56" y="409.5" font-size="16" font-weight="700" fill="#3730A3">Device::Reboot</text>
+<rect x="199.5" y="391.4" width="238.7" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
+<text x="207.5" y="409.5" font-size="16" font-weight="700" fill="#3730A3">Device::SetTorqueEnabled</text>
+<rect x="446.2" y="391.4" width="241.6" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
+<text x="454.2" y="409.5" font-size="16" font-weight="700" fill="#3730A3">Device::SetOperatingMode</text>
+<rect x="695.8" y="391.4" width="224.3" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
+<text x="703.8" y="409.5" font-size="16" font-weight="700" fill="#3730A3">Device::SetMotionProfile</text>
+<rect x="928.1" y="391.4" width="216.8" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
+<text x="936.1" y="409.5" font-size="16" font-weight="700" fill="#3730A3">Device::SetGoalPosition</text>
 <rect x="48" y="425.4" width="218.3" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
 <text x="56" y="443.5" font-size="16" font-weight="700" fill="#3730A3">Device::SetGoalVelocity</text>
 <rect x="274.3" y="425.4" width="190.4" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>

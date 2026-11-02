@@ -1467,7 +1467,7 @@
 </tr>
 <tr>
 <td>Wrong ID</td>
-<td>Factory ID is 1; <code>Scan()</code> IDs 1 to 20</td>
+<td>Factory ID is 1; <code>Scan()</code> IDs 0 to 20</td>
 </tr>
 <tr>
 <td>TX and RX swapped, or wired for the wrong board</td>
@@ -1501,7 +1501,8 @@ confirm, then fix the circuit before raising the rate again.</p>
 <h2 id="a-goal-call-returns-unsupportedrequest">A goal call returns <code>UnsupportedRequest</code><a class="headerlink" href="#a-goal-call-returns-unsupportedrequest" title="Permanent link">&para;</a></h2>
 <p>The servo is in another operating mode (<code>SetGoalVelocity()</code> in Position mode, for example), or no model is bound.
 Change the mode with torque off, or call <code>Identify()</code> first. A servo left in current mode (0) or current-based
-position mode (5) by another tool refuses every typed goal: set a supported mode first.</p>
+position mode (5) by another tool refuses every typed goal: <code>operating_mode()</code> is <code>Unknown</code> and
+<code>operating_mode_raw()</code> has the register value. Set a supported mode first.</p>
 <h2 id="setoperatingmode-returns-busy"><code>SetOperatingMode()</code> returns <code>Busy</code><a class="headerlink" href="#setoperatingmode-returns-busy" title="Permanent link">&para;</a></h2>
 <p>Torque is on. Call <code>SetTorqueEnabled(false)</code> first; the driver will not do it for you.</p>
 <h2 id="a-write-returns-uncertainoutcome">A write returns <code>UncertainOutcome</code><a class="headerlink" href="#a-write-returns-uncertainoutcome" title="Permanent link">&para;</a></h2>
@@ -1510,7 +1511,8 @@ you retry; for an EEPROM change of ID or baud rate, the servo may now answer at 
 <h2 id="torque-turns-itself-off">Torque turns itself off<a class="headerlink" href="#torque-turns-itself-off" title="Permanent link">&para;</a></h2>
 <p>The servo hit a fault enabled in Shutdown (address 63): input voltage, overheating, encoder, electrical shock or
 overload. <code>Telemetry::hardware_error</code> has the bits (<a href="../api-guide/#handle-errors">API guide</a>). Fix the cause, then
-power-cycle the servo: only a reboot restores torque, and this driver does not send the Reboot instruction.</p>
+call <code>Reboot()</code> or power-cycle the servo: only a reboot clears the fault and lets torque back on
+(<a href="../api-guide/#recover-from-a-hardware-error">Recover from a hardware error</a>).</p>
 <h2 id="the-motion-example-jumps">The motion example jumps<a class="headerlink" href="#the-motion-example-jumps" title="Permanent link">&para;</a></h2>
 <p><code>dynamixel_motion_example</code> moves 64 ticks from the present position. A dash towards 0 or 2048 means the position
 read failed and a raw goal was written anyway. Go back to the read-only example until reads are clean.</p>

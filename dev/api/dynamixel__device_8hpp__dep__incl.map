@@ -1,7 +1,0 @@
-<map id="inc/dynamixel_device.hpp" name="inc/dynamixel_device.hpp">
-<area shape="rect" id="Node000001" title="One servo on a shared Bus, with optional model descriptor." alt="" coords="75,5,266,31"/>
-<area shape="rect" id="Node000002" href="$dynamixel_8hpp.html" title="Umbrella header for the HF Dynamixel Protocol 2.0 driver." alt="" coords="5,79,147,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="146,41,93,81,90,76,143,37"/>
-<area shape="rect" id="Node000003" href="$dynamixel__device_8cpp.html" title=" " alt="" coords="171,79,362,104"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="199,37,253,76,249,81,196,41"/>
-</map>

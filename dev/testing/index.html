@@ -1339,25 +1339,25 @@ local echo). Time is virtual, so timeouts cost nothing.</p>
 </thead>
 <tbody>
 <tr>
-<td><a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/4c4c3575b787bbb29c9e4cd32497a434e8d48466/tests/host/dynamixel_driver_test.cpp"><code>tests/host/dynamixel_driver_test.cpp</code></a></td>
-<td>Ping and read, timeout, bad CRC, wrong ID, echo, partial writes, fragmented replies, typed <code>Device</code> calls, unknown and fallback models, sync read and write, broadcast writes</td>
+<td><a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/tests/host/dynamixel_driver_test.cpp"><code>tests/host/dynamixel_driver_test.cpp</code></a></td>
+<td>Ping and read, timeout, bad CRC, wrong ID, echo, partial writes, fragmented replies, typed <code>Device</code> calls, unknown and fallback models, sync read and write, broadcast writes, ID 0 scans, Reboot, unknown Operating Mode values, <code>SetGoalPwm</code> checks, <code>max_packet_bytes</code> limits, the one-block <code>ReadTelemetry()</code></td>
 </tr>
 <tr>
-<td><a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/4c4c3575b787bbb29c9e4cd32497a434e8d48466/tests/host/fake_transport.hpp"><code>tests/host/fake_transport.hpp</code></a></td>
+<td><a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/tests/host/fake_transport.hpp"><code>tests/host/fake_transport.hpp</code></a></td>
 <td>The scripted servo</td>
 </tr>
 <tr>
-<td><a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/4c4c3575b787bbb29c9e4cd32497a434e8d48466/tests/host/protocol2_status.hpp"><code>tests/host/protocol2_status.hpp</code></a></td>
+<td><a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/tests/host/protocol2_status.hpp"><code>tests/host/protocol2_status.hpp</code></a></td>
 <td>Status packets and CRC for the fake</td>
 </tr>
 <tr>
-<td><a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/4c4c3575b787bbb29c9e4cd32497a434e8d48466/examples/host/ping_read.cpp"><code>examples/host/ping_read.cpp</code></a></td>
+<td><a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/examples/host/ping_read.cpp"><code>examples/host/ping_read.cpp</code></a></td>
 <td>A ping and a position read over the fake, run by CI</td>
 </tr>
 </tbody>
 </table>
 <h2 id="documentation-snippets">Documentation snippets<a class="headerlink" href="#documentation-snippets" title="Permanent link">&para;</a></h2>
-<p>Every C++ block on this site is included from <a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/4c4c3575b787bbb29c9e4cd32497a434e8d48466/tests/docs/my_uart.hpp"><code>tests/docs/</code></a>, which the host build
+<p>Every C++ block on this site is included from <a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/tests/docs/my_uart.hpp"><code>tests/docs/</code></a>, which the host build
 compiles (target <code>hf_dynamixel_doc_snippets</code>, <code>-Wall -Wextra -Wpedantic</code>) with <code>Transport&lt;MyUart&gt;</code> instantiated.
 A change to the API that breaks a page breaks the build first.</p>
 <h2 id="ci-workflows">CI workflows<a class="headerlink" href="#ci-workflows" title="Permanent link">&para;</a></h2>
@@ -1371,7 +1371,7 @@ A change to the API that breaks a page breaks the build first.</p>
 <tbody>
 <tr>
 <td>Host tests</td>
-<td>Build, tests, the host example, the doc snippets, and an install into a prefix</td>
+<td>Build, tests, the host example, the doc snippets, an install into a prefix, and a <code>find_package()</code> consumer of it (<a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/tests/install/CMakeLists.txt"><code>tests/install/</code></a>)</td>
 </tr>
 <tr>
 <td>ESP32 Examples Build CI</td>

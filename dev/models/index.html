@@ -1320,7 +1320,7 @@
 <p>Which servos the driver knows by model number, what "knows" gives you, and how to run a servo it does not list.</p>
 <h2 id="the-catalog">The catalog<a class="headerlink" href="#the-catalog" title="Permanent link">&para;</a></h2>
 <p><code>Device::Identify()</code> pings the servo and looks its model number up in <code>kKnownModels</code>
-(<a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/4c4c3575b787bbb29c9e4cd32497a434e8d48466/inc/dynamixel_model.hpp"><code>inc/dynamixel_model.hpp</code></a>). Every entry is built by <code>MakeXSeries()</code> and shares the
+(<a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/inc/dynamixel_model.hpp"><code>inc/dynamixel_model.hpp</code></a>). Every entry is built by <code>MakeXSeries()</code> and shares the
 X-series control table (<a href="../hardware/#control-table-used-by-the-driver">Hardware</a>); they differ only in two flags.</p>
 <table>
 <thead>
@@ -1404,12 +1404,15 @@ work. With one:</p>
 </tr>
 <tr>
 <td><code>SetGoalPwm()</code></td>
-<td>Mode PWM</td>
+<td>Mode PWM (16), and a model with <code>supports_pwm</code></td>
 </tr>
 </tbody>
 </table>
-<p><code>Identify()</code> also reads the servo's Operating Mode and caches it; <code>SetOperatingMode()</code> updates the cache. A goal
-for another mode is refused before anything is sent.</p>
+<p><code>Identify()</code> also reads the servo's Operating Mode and caches it; <code>SetOperatingMode()</code> updates the cache, and
+<code>operating_mode()</code> returns it. A register value without a typed mode (current 0, current-based position 5, or a
+value the control table does not define) is cached as <code>OperatingMode::Unknown</code>, with the raw byte in
+<code>operating_mode_raw()</code>. A goal for another mode, or any goal while the mode is <code>Unknown</code>, is refused before
+anything is sent.</p>
 <h2 id="a-servo-the-catalog-does-not-list">A servo the catalog does not list<a class="headerlink" href="#a-servo-the-catalog-does-not-list" title="Permanent link">&para;</a></h2>
 <ol>
 <li><code>Identify()</code> returns <code>UnsupportedRequest</code> with <code>ping.value.model_number</code> filled in: the servo answered.</li>

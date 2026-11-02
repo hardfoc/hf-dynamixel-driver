@@ -1168,6 +1168,45 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Unreleased">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fixed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fixed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#breaking-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Breaking changes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1243,6 +1282,45 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Unreleased">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fixed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fixed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#breaking-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Breaking changes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1300,6 +1378,59 @@
   build from <code>tests/docs/</code>, a layer figure drawn from the headers, the Doxygen reference under <code>api/</code>. The
   Jekyll site and its files are gone.</li>
 <li>README rewritten to the HardFOC README standard.</li>
+</ul>
+<h3 id="added">Added<a class="headerlink" href="#added" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>Bus::Reboot(id)</code> and <code>Device::Reboot()</code>: the Protocol 2.0 Reboot instruction (0x08, e-Manual section 5.7),
+  the software way to clear a latched Hardware Error Status. An Alert-only status reply counts as success; no
+  reply is <code>UncertainOutcome</code>. New <code>kStatusAlertBit</code> and <code>kStatusErrorNumberMask</code> (section 3.2).</li>
+</ul>
+<h3 id="fixed">Fixed<a class="headerlink" href="#fixed" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p>The installed CMake package exports the target as <code>hf::dynamixel</code>, as documented; it was <code>hf::hf_dynamixel</code>, so
+  <code>find_package(hf_dynamixel)</code> consumers could not link the documented name. <code>hf::hf_dynamixel</code> stays as a
+  compatibility target. CI builds a consumer of the install.</p>
+</li>
+<li>
+<p><code>Device::ReadTelemetry()</code> reads Present PWM (124) to Present Temperature (146), contiguous in the X-series RAM
+  control table, in one Read instead of six, then Hardware Error Status (70): two packets instead of seven, same
+  values. It falls back to per-register reads when the block does not fit <code>max_packet_bytes</code> or the servo refuses
+  the range. The returned <code>detail</code> is now the block read's.</p>
+</li>
+<li>
+<p><code>TransportConfig::max_packet_bytes</code> now bounds packet sizes; before, nothing read it. <code>ReadRegister()</code>,
+  <code>WriteRegister()</code>, <code>SyncRead()</code> and <code>SyncWrite()</code> return <code>BufferTooSmall</code> without sending when the instruction
+  or status packet (10 or 11 bytes plus parameters, e-Manual Protocol 2.0 section 2.4) would be longer.
+  <code>Bus::Open()</code> returns <code>InvalidParameter</code> below <code>kMinPacketBytes</code> (14) and caps the limit at
+  <code>kSdkMaxPacketBytes</code> (1024, the SDK's buffers). New <code>InstructionPacketBytes()</code> and <code>StatusPacketBytes()</code>.</p>
+</li>
+<li>
+<p><code>Device::SetGoalPwm()</code> runs the same checks as the other goal setters: it needs a model whose descriptor
+  supports PWM Control Mode (Operating Mode 16) as well as a cached mode of PWM, and refuses before sending.</p>
+</li>
+<li>
+<p><code>Device::Identify()</code> no longer casts an Operating Mode register value without a typed mode (0, 5 or an
+  undefined value; X-series e-Manual section 2.4, Operating Mode (11)) into <code>OperatingMode</code>. It maps it to the
+  new <code>OperatingMode::Unknown</code>, which every typed goal refuses. New <code>OperatingModeFromRaw()</code>,
+  <code>Device::operating_mode()</code> and <code>Device::operating_mode_raw()</code>; <code>SetOperatingMode(Unknown)</code> returns
+  <code>InvalidParameter</code>.</p>
+</li>
+<li>
+<p><code>Bus::Scan()</code> accepts ID 0, and its default range now starts at 0: Protocol 2.0 device IDs are 0 to 252
+  (e-Manual, Protocol 2.0, section 2.3). <code>ReadRegister()</code> returns <code>InvalidId</code> (was <code>InvalidParameter</code>) for an
+  ID above 252, and <code>SyncRead()</code> / <code>SyncWrite()</code> now reject such IDs with <code>InvalidId</code>. New <code>IsDeviceId()</code> and
+  <code>kMinDeviceId</code>.</p>
+</li>
+</ul>
+<h3 id="breaking-changes">Breaking changes<a class="headerlink" href="#breaking-changes" title="Permanent link">&para;</a></h3>
+<ul>
+<li>With the default <code>max_packet_bytes</code> of 256, a single read above 245 bytes, a write above 244 bytes or a sync
+  write above 242 bytes of IDs and data now returns <code>BufferTooSmall</code> instead of being sent. Raise
+  <code>max_packet_bytes</code> (up to 1024) for longer transfers. <code>Bus::Open()</code> fails for a <code>max_packet_bytes</code> below 14.</li>
+<li><code>Bus::ReadRegister()</code> returns <code>InvalidId</code> (was <code>InvalidParameter</code>) for an ID above 252; <code>SyncRead()</code> and
+  <code>SyncWrite()</code> reject such IDs.</li>
+<li><code>Bus::Scan()</code> with default arguments now pings ID 0 too (253 IDs instead of 252).</li>
 </ul>
 <h2 id="040">0.4.0<a class="headerlink" href="#040" title="Permanent link">&para;</a></h2>
 <ul>

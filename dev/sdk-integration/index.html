@@ -1341,7 +1341,7 @@
 </tr>
 <tr>
 <td>Licence</td>
-<td>Apache-2.0 (<a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/4c4c3575b787bbb29c9e4cd32497a434e8d48466/THIRD_PARTY_NOTICES"><code>THIRD_PARTY_NOTICES</code></a>); the driver is MIT</td>
+<td>Apache-2.0 (<a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/THIRD_PARTY_NOTICES"><code>THIRD_PARTY_NOTICES</code></a>); the driver is MIT</td>
 </tr>
 </tbody>
 </table>
@@ -1350,12 +1350,12 @@
 <ul>
 <li><code>Protocol2PacketHandler::getInstance()</code>, the SDK's singleton, for every packet.</li>
 <li><code>GroupSyncWrite</code> for <code>Bus::SyncWrite()</code>.</li>
-<li>Four source files, listed in <a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/4c4c3575b787bbb29c9e4cd32497a434e8d48466/cmake/hf_dynamixel_sdk_sources.cmake"><code>cmake/hf_dynamixel_sdk_sources.cmake</code></a>:
+<li>Four source files, listed in <a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/cmake/hf_dynamixel_sdk_sources.cmake"><code>cmake/hf_dynamixel_sdk_sources.cmake</code></a>:
   <code>protocol2_packet_handler.cpp</code>, <code>group_handler.cpp</code>, <code>group_sync_read.cpp</code>, <code>group_sync_write.cpp</code>. None of
   the SDK's Linux, Windows or Arduino port handlers is compiled.</li>
 </ul>
 <p>The SDK talks to a <code>PortHandler</code>. The driver's private
-<a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/4c4c3575b787bbb29c9e4cd32497a434e8d48466/src/backend/port_handler_adapter.hpp"><code>PortHandlerAdapter</code></a> implements it over your transport: <code>writePort()</code>
+<a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/src/backend/port_handler_adapter.hpp"><code>PortHandlerAdapter</code></a> implements it over your transport: <code>writePort()</code>
 loops on <code>write_some()</code>, then calls <code>finish_transmit()</code> and checks the echo; <code>readPort()</code> calls <code>read_some()</code>; the
 packet timeout is measured with <code>now_us()</code>. It never calls the SDK's <code>getPortHandler()</code> factory.</p>
 <p><code>MapCommCode()</code> turns the SDK's result codes into <code>DriverError</code>:</p>

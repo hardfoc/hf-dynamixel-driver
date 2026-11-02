@@ -1320,7 +1320,7 @@
 <p>Complete ESP32 applications that exercise the driver on an X-series servo, from a read-only session to a small
 move.</p>
 <p>They run on an ESP32-C6 (CI's target) or an ESP32-S3, UART1, wired as on the <a href="../hardware/#example-boards">Hardware</a>
-page; the transport is <a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/4c4c3575b787bbb29c9e4cd32497a434e8d48466/examples/esp32/main/include/hf_dynamixel_esp_uart.hpp"><code>hf_dynamixel_esp_uart.hpp</code></a>.
+page; the transport is <a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/examples/esp32/main/include/hf_dynamixel_esp_uart.hpp"><code>hf_dynamixel_esp_uart.hpp</code></a>.
 CI builds every app below on each pull request.</p>
 <h2 id="the-apps">The apps<a class="headerlink" href="#the-apps" title="Permanent link">&para;</a></h2>
 <!-- generated: examples -->
@@ -1337,19 +1337,19 @@ CI builds every app below on each pull request.</p>
 <tr>
 <td><code>dynamixel_readonly_example</code> <span class="twemoji" title="featured"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.62L12 2 9.19 8.62 2 9.24l5.45 4.73L5.82 21z"/></svg></span></td>
 <td>Scan, identify and stream telemetry; never enables torque</td>
-<td><a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/4c4c3575b787bbb29c9e4cd32497a434e8d48466/examples/esp32/main/dynamixel_readonly_example.cpp"><code>dynamixel_readonly_example.cpp</code></a></td>
+<td><a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/examples/esp32/main/dynamixel_readonly_example.cpp"><code>dynamixel_readonly_example.cpp</code></a></td>
 <td>yes</td>
 </tr>
 <tr>
 <td><code>dynamixel_scan_example</code> <span class="twemoji" title="featured"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.62L12 2 9.19 8.62 2 9.24l5.45 4.73L5.82 21z"/></svg></span></td>
 <td>List every servo with its model number and catalog entry or fallback</td>
-<td><a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/4c4c3575b787bbb29c9e4cd32497a434e8d48466/examples/esp32/main/dynamixel_scan_example.cpp"><code>dynamixel_scan_example.cpp</code></a></td>
+<td><a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/examples/esp32/main/dynamixel_scan_example.cpp"><code>dynamixel_scan_example.cpp</code></a></td>
 <td>yes</td>
 </tr>
 <tr>
 <td><code>dynamixel_motion_example</code></td>
 <td>Small unloaded move from the present position, then torque off</td>
-<td><a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/4c4c3575b787bbb29c9e4cd32497a434e8d48466/examples/esp32/main/dynamixel_motion_example.cpp"><code>dynamixel_motion_example.cpp</code></a></td>
+<td><a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/examples/esp32/main/dynamixel_motion_example.cpp"><code>dynamixel_motion_example.cpp</code></a></td>
 <td>yes</td>
 </tr>
 </tbody>
@@ -1358,7 +1358,7 @@ CI builds every app below on each pull request.</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/build_app.sh<span class="w"> </span>dynamixel_readonly_example<span class="w"> </span>Release
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./scripts/flash_app.sh<span class="w"> </span>flash_monitor<span class="w"> </span>dynamixel_readonly_example<span class="w"> </span>Release
 </span></code></pre></div>
-<p>Source of this table: <a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/4c4c3575b787bbb29c9e4cd32497a434e8d48466/examples/esp32/app_config.yml"><code>examples/esp32/app_config.yml</code></a>.</p>
+<p>Source of this table: <a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/examples/esp32/app_config.yml"><code>examples/esp32/app_config.yml</code></a>.</p>
 <!-- /generated -->
 
 <h2 id="set-up-once">Set up once<a class="headerlink" href="#set-up-once" title="Permanent link">&para;</a></h2>
@@ -1367,7 +1367,7 @@ CI builds every app below on each pull request.</p>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>.<span class="w"> </span><span class="nv">$IDF_PATH</span>/export.sh<span class="w">                                </span><span class="c1"># ESP-IDF v5.5</span>
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>./scripts/build_app.sh<span class="w"> </span>list<span class="w">                          </span><span class="c1"># every app and build type</span>
 </span></code></pre></div>
-<p>The scripts read <a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/4c4c3575b787bbb29c9e4cd32497a434e8d48466/examples/esp32/app_config.yml"><code>app_config.yml</code></a> (the same file this page's table comes
+<p>The scripts read <a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/examples/esp32/app_config.yml"><code>app_config.yml</code></a> (the same file this page's table comes
 from) and build each app as its own firmware image. Calling <code>idf.py</code> directly stops with
 <code>APP_TYPE not defined</code>.</p>
 <p>For an ESP32-S3, set the target for the scripts:</p>
@@ -1413,7 +1413,7 @@ from) and build each app as its own firmware image. Calling <code>idf.py</code> 
 </tr>
 </tbody>
 </table>
-<p>The <a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/4c4c3575b787bbb29c9e4cd32497a434e8d48466/examples/esp32/README.md">example folder's README</a> has the build commands and the wiring notes.</p>
+<p>The <a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/examples/esp32/README.md">example folder's README</a> has the build commands and the wiring notes.</p>
 
 
 

@@ -1326,7 +1326,7 @@
 <details class="hf-figure-desc">
 <summary>Figure description and sources</summary>
 <p>From top to bottom. Your application talks to one Bus per serial line and one Device per servo; the public members listed are the Bus and Device methods from inc/dynamixel_bus.hpp and inc/dynamixel_device.hpp. The bus encodes and decodes Protocol 2.0 packets with the ROBOTIS DYNAMIXEL SDK, behind a private PortHandler adapter, and reaches the line through TransportView, the type-erased view of a Transport<Derived> class (inc/dynamixel_transport.hpp). That class is the only code you write: it moves bytes over a half-duplex UART and reads a microsecond clock. Below it are the servos.</p>
-<p>Drawn from: <a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/4c4c3575b787bbb29c9e4cd32497a434e8d48466/inc/dynamixel_bus.hpp"><code>inc/dynamixel_bus.hpp</code></a> <code>Bus members</code>; <a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/4c4c3575b787bbb29c9e4cd32497a434e8d48466/inc/dynamixel_device.hpp"><code>inc/dynamixel_device.hpp</code></a> <code>Device members</code>; <a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/4c4c3575b787bbb29c9e4cd32497a434e8d48466/inc/dynamixel_transport.hpp"><code>inc/dynamixel_transport.hpp</code></a> <code>Transport hooks</code>; figure module <a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/4c4c3575b787bbb29c9e4cd32497a434e8d48466/docs/diagrams/figures/driver-layers.py"><code>docs/diagrams/figures/driver-layers.py</code></a>.</p>
+<p>Drawn from: <a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/inc/dynamixel_bus.hpp"><code>inc/dynamixel_bus.hpp</code></a> <code>Bus members</code>; <a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/inc/dynamixel_device.hpp"><code>inc/dynamixel_device.hpp</code></a> <code>Device members</code>; <a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/inc/dynamixel_transport.hpp"><code>inc/dynamixel_transport.hpp</code></a> <code>Transport hooks</code>; figure module <a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/docs/diagrams/figures/driver-layers.py"><code>docs/diagrams/figures/driver-layers.py</code></a>.</p>
 </details>
 <h2 id="the-three-layers">The three layers<a class="headerlink" href="#the-three-layers" title="Permanent link">&para;</a></h2>
 <table>
@@ -1340,12 +1340,12 @@
 <tbody>
 <tr>
 <td><strong>Core</strong>: <code>Bus</code>, <code>Device</code>, model catalog</td>
-<td><a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/4c4c3575b787bbb29c9e4cd32497a434e8d48466/inc/dynamixel.hpp"><code>inc/</code></a>, <a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/4c4c3575b787bbb29c9e4cd32497a434e8d48466/src/dynamixel_bus.cpp"><code>src/</code></a></td>
+<td><a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/inc/dynamixel.hpp"><code>inc/</code></a>, <a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/src/dynamixel_bus.cpp"><code>src/</code></a></td>
 <td>Never, for a new board</td>
 </tr>
 <tr>
 <td><strong>Protocol engine and interface</strong>: the SDK, <code>TransportView</code></td>
-<td><a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/4c4c3575b787bbb29c9e4cd32497a434e8d48466/src/backend/port_handler_adapter.hpp"><code>src/backend/</code></a>, <a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/4c4c3575b787bbb29c9e4cd32497a434e8d48466/inc/dynamixel_transport.hpp"><code>inc/dynamixel_transport.hpp</code></a></td>
+<td><a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/src/backend/port_handler_adapter.hpp"><code>src/backend/</code></a>, <a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/inc/dynamixel_transport.hpp"><code>inc/dynamixel_transport.hpp</code></a></td>
 <td>Never</td>
 </tr>
 <tr>

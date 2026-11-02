@@ -1006,6 +1006,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#recover-from-a-hardware-error" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recover from a hardware error
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1445,6 +1456,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#recover-from-a-hardware-error" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recover from a hardware error
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1474,7 +1496,7 @@
 <p>How to do the common jobs with the driver: open the bus, find and identify servos, move them, read them, talk to
 several at once and handle errors.</p>
 <p>Every snippet on this page is compiled by the host CI from
-<a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/4c4c3575b787bbb29c9e4cd32497a434e8d48466/tests/docs/api_tasks.cpp"><code>tests/docs/api_tasks.cpp</code></a>, with <code>MyUart</code> the transport from
+<a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/tests/docs/api_tasks.cpp"><code>tests/docs/api_tasks.cpp</code></a>, with <code>MyUart</code> the transport from
 <a href="../porting/">Porting</a> and <code>DriverError</code> standing for <code>dynamixel::DriverError</code>. The
 <a href="../api-reference/">API reference</a> lists every member.</p>
 <h2 id="the-shape-of-the-api">The shape of the API<a class="headerlink" href="#the-shape-of-the-api" title="Permanent link">&para;</a></h2>
@@ -1523,7 +1545,7 @@ as the bus. <code>Open()</code> calls your transport's <code>open()</code>; it s
 <a href="../configuration/">Configuration</a> lists every <code>TransportConfig</code> field.</p>
 <h2 id="find-the-servos">Find the servos<a class="headerlink" href="#find-the-servos" title="Permanent link">&para;</a></h2>
 <div class="language-cpp highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kt">uint8_t</span><span class="w"> </span><span class="n">ids</span><span class="p">[</span><span class="mi">16</span><span class="p">];</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">found</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bus</span><span class="p">.</span><span class="n">Scan</span><span class="p">(</span><span class="n">ids</span><span class="p">,</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">);</span><span class="w">          </span><span class="c1">// ping IDs 1..20, keep up to 16 answers</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">found</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bus</span><span class="p">.</span><span class="n">Scan</span><span class="p">(</span><span class="n">ids</span><span class="p">,</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">);</span><span class="w">          </span><span class="c1">// ping IDs 0..20, keep up to 16 answers</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">found</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">found</span><span class="p">.</span><span class="n">value</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">ping</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bus</span><span class="p">.</span><span class="n">Ping</span><span class="p">(</span><span class="n">ids</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
 </span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ping</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -1532,8 +1554,9 @@ as the bus. <code>Open()</code> calls your transport's <code>open()</code>; it s
 </span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">  </span><span class="p">}</span>
 </span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="p">}</span>
 </span></code></pre></div>
-<p><code>Scan()</code> pings each ID in turn and costs one reply timeout per absent ID, so keep the range short. It starts at
-ID 1 at the lowest; ping ID 0 yourself with <code>Ping(0)</code>.</p>
+<p><code>Scan()</code> pings each ID in turn and costs one reply timeout per absent ID, so keep the range short. Any device ID
+from 0 to 252 is valid (Protocol 2.0, section 2.3); the default range is all of them. ID 253 is not a device ID
+and 254 is the broadcast ID, so <code>Scan()</code>, <code>Ping()</code>, <code>ReadRegister()</code> and the sync calls reject them.</p>
 <h2 id="identify-a-servo">Identify a servo<a class="headerlink" href="#identify-a-servo" title="Permanent link">&para;</a></h2>
 <div class="language-cpp highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">ping</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">servo</span><span class="p">.</span><span class="n">Identify</span><span class="p">();</span><span class="w">                   </span><span class="c1">// ping, catalog lookup, read Operating Mode</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ping</span><span class="p">.</span><span class="n">error</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">DriverError</span><span class="o">::</span><span class="n">UnsupportedRequest</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -1619,8 +1642,11 @@ which shape every position move; 0 means unlimited.</p>
 </span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span><span class="s">"load %d x 0.1 %%</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">load</span><span class="p">);</span><span class="w">           </span><span class="c1">// XC / XL: Present Load</span>
 </span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="p">}</span>
 </span></code></pre></div>
-<p><code>ReadTelemetry()</code> makes seven register reads. It fails only when the position read fails; the other fields stay
-0 when their read fails. For one value, <code>ReadPosition()</code> is a single read. For several servos at once, use a sync
+<p><code>ReadTelemetry()</code> makes two reads: one of the contiguous Present block, Present PWM (124) to Present Temperature
+(146), 23 bytes, and one of Hardware Error Status (70). It fails when the block read fails; <code>hardware_error</code> stays
+0 when its own read fails, and <code>detail</code> is the block read's. When the block reply would not fit <code>max_packet_bytes</code>
+or the servo refuses the range with an error number, it falls back to one read per register, which fails only when
+the position read fails. For one value, <code>ReadPosition()</code> is a single read. For several servos at once, use a sync
 read.</p>
 <h2 id="read-or-write-several-servos-at-once">Read or write several servos at once<a class="headerlink" href="#read-or-write-several-servos-at-once" title="Permanent link">&para;</a></h2>
 <div class="language-cpp highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">const</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">ids</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">};</span>
@@ -1754,6 +1780,11 @@ left behind.</p>
 <td>Torque off first</td>
 </tr>
 <tr>
+<td><code>BufferTooSmall</code></td>
+<td>The request's packet is longer than <code>max_packet_bytes</code>; nothing was sent</td>
+<td>Split it, or raise the limit (<a href="../configuration/#transport-configuration">Configuration</a>)</td>
+</tr>
+<tr>
 <td><code>NotInitialized</code>, <code>InvalidParameter</code>, <code>InvalidId</code></td>
 <td>Bus not open, a null buffer or zero length, ID above 252</td>
 <td>Fix the call</td>
@@ -1763,8 +1794,32 @@ left behind.</p>
 <p>When bit 7 of the error byte is set, read Hardware Error Status (address 70, also in <code>Telemetry::hardware_error</code>):
 bit 0 input voltage, bit 2 overheating, bit 3 motor encoder, bit 4 electrical shock, bit 5 overload. On the
 faults enabled in Shutdown (address 63) the servo clears Torque Enable, and only a reboot turns it back on: a power
-cycle, or the Reboot instruction, which this driver does not send.
+cycle, or the Reboot instruction.
 <a href="../troubleshooting/">Troubleshooting</a> maps symptoms to causes.</p>
+<h2 id="recover-from-a-hardware-error">Recover from a hardware error<a class="headerlink" href="#recover-from-a-hardware-error" title="Permanent link">&para;</a></h2>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kt">uint8_t</span><span class="w"> </span><span class="n">hw</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">                                       </span><span class="c1">// Hardware Error Status, address 70</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="n">servo</span><span class="p">.</span><span class="n">ReadRegister</span><span class="p">(</span><span class="mi">70</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">hw</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w">                       </span><span class="c1">// DeviceError with the Alert bit still fills hw</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">hw</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="p">}</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span><span class="s">"hardware error 0x%02x, rebooting</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">hw</span><span class="p">);</span><span class="w"> </span><span class="c1">// fix the cause first (supply, load, heat)</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">rb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">servo</span><span class="p">.</span><span class="n">Reboot</span><span class="p">();</span><span class="w">                       </span><span class="c1">// Reboot instruction (0x08)</span>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">rb</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">rb</span><span class="p">.</span><span class="n">error</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">DriverError</span><span class="o">::</span><span class="n">UncertainOutcome</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span><span class="w">                                       </span><span class="c1">// UncertainOutcome: it may be rebooting already</span>
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="p">}</span>
+</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">attempt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">attempt</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">attempt</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">      </span><span class="c1">// the servo answers again once it has booted</span>
+</span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">bus</span><span class="p">.</span><span class="n">Ping</span><span class="p">(</span><span class="n">servo</span><span class="p">.</span><span class="n">id</span><span class="p">()))</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-13"><a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w">                                      </span><span class="c1">// torque is off; RAM is back to its defaults</span>
+</span><span id="__span-10-14"><a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-10-15"><a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="p">}</span>
+</span><span id="__span-10-16"><a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+</span></code></pre></div>
+<p><code>Reboot()</code> (on the <code>Device</code>, or <code>Bus::Reboot(id)</code>) sends the Reboot instruction, 0x08 (Protocol 2.0, section
+5.7). The servo answers before it restarts; the Alert bit in that reply is the fault being cleared, so it does not
+count as an error, and <code>detail.device_error</code> keeps it. A non-zero error number is <code>DeviceError</code>; no reply is
+<code>UncertainOutcome</code>, because the servo may have rebooted anyway. After a reboot the RAM area is back to its
+defaults: torque is off and Hardware Error Status is 0. The broadcast ID reboots every servo and gets no reply.
+Fix the cause of the fault first, or it latches again.</p>
 
 
 

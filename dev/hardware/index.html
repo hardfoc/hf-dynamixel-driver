@@ -1599,7 +1599,7 @@ packet. Every multi-byte field is little-endian.</p>
 the bus (1.4 A for one XC430-W150 at 12 V), join its ground to the MCU's and keep the logic path between them
 level-compatible. Present Input Voltage (address 144, 0.1 V per unit) reads the supply at each servo.</p>
 <h2 id="control-table-used-by-the-driver">Control table used by the driver<a class="headerlink" href="#control-table-used-by-the-driver" title="Permanent link">&para;</a></h2>
-<p>The driver's X-series descriptor (<a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/4c4c3575b787bbb29c9e4cd32497a434e8d48466/inc/dynamixel_model.hpp"><code>inc/dynamixel_model.hpp</code></a>) uses these addresses.
+<p>The driver's X-series descriptor (<a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/inc/dynamixel_model.hpp"><code>inc/dynamixel_model.hpp</code></a>) uses these addresses.
 EEPROM entries can only be written while torque is off.</p>
 <table>
 <thead>
@@ -1693,7 +1693,7 @@ load 0.1 %. On XM and XH models address 126 is Present Current, 2.69 mA per unit
 </tbody>
 </table>
 <p>The pins, an optional direction GPIO and the baud rate are Kconfig options
-(<a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/4c4c3575b787bbb29c9e4cd32497a434e8d48466/examples/esp32/main/Kconfig.projbuild"><code>Kconfig.projbuild</code></a>).</p>
+(<a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/examples/esp32/main/Kconfig.projbuild"><code>Kconfig.projbuild</code></a>).</p>
 <h2 id="reference-documents">Reference documents<a class="headerlink" href="#reference-documents" title="Permanent link">&para;</a></h2>
 <table>
 <thead>

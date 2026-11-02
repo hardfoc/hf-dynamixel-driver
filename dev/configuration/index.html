@@ -1370,10 +1370,16 @@ model descriptors, and the Kconfig options of the ESP32 examples.</p>
 <tr>
 <td><code>max_packet_bytes</code></td>
 <td><code>256</code> (<code>kMaxPacketBytes</code>)</td>
-<td>Passed to your transport; the driver itself does not read it</td>
+<td>Largest packet the bus sends or asks a servo for; see below</td>
 </tr>
 </tbody>
 </table>
+<p><code>max_packet_bytes</code> bounds every packet before byte stuffing. Protocol 2.0 (e-Manual section 2.4) makes an
+instruction packet 10 bytes plus its parameters and a status packet 11 bytes plus its data, so with the default of
+256 a <code>ReadRegister()</code> or <code>SyncRead()</code> returns at most 245 bytes per servo, a <code>WriteRegister()</code> writes at most
+244, and a <code>SyncWrite()</code> carries at most 242 bytes of ID plus data. A request that would not fit returns
+<code>BufferTooSmall</code> without sending. <code>Open()</code> refuses a value below 14 (<code>kMinPacketBytes</code>, a ping reply) with
+<code>InvalidParameter</code> and caps a value above 1024 (<code>kSdkMaxPacketBytes</code>, the SDK's packet buffers).</p>
 <p>For reads, writes and pings of one servo, the reply timeout for n expected bytes is n × byte time +
 2 × <code>latency_ms</code> + 2 ms, measured with your transport's <code>now_us()</code>. Raise <code>latency_ms</code> when the transport adds
 buffering of its own (a USB serial adapter, an RTOS queue); lower it, and the servos' Return Delay Time, for faster
@@ -1462,13 +1468,23 @@ does not list, <code>MakeXSeries()</code> builds one from the shared table:</p>
 <tr>
 <td><code>kMaxPacketBytes</code></td>
 <td><code>256</code></td>
-<td>Default packet limit</td>
+<td>Default <code>max_packet_bytes</code></td>
+</tr>
+<tr>
+<td><code>kMinPacketBytes</code></td>
+<td><code>14</code></td>
+<td>Smallest <code>max_packet_bytes</code> <code>Open()</code> accepts</td>
+</tr>
+<tr>
+<td><code>kSdkMaxPacketBytes</code></td>
+<td><code>1024</code></td>
+<td>Cap on <code>max_packet_bytes</code> (SDK buffers)</td>
 </tr>
 </tbody>
 </table>
 <h2 id="esp32-example-options">ESP32 example options<a class="headerlink" href="#esp32-example-options" title="Permanent link">&para;</a></h2>
 <p><code>idf.py menuconfig</code>, menu <strong>HF Dynamixel Example</strong>
-(<a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/4c4c3575b787bbb29c9e4cd32497a434e8d48466/examples/esp32/main/Kconfig.projbuild"><code>Kconfig.projbuild</code></a>):</p>
+(<a href="https://github.com/hardfoc/hf-dynamixel-driver/blob/14c6d1f003151d0593718357fee9221dd38ea896/examples/esp32/main/Kconfig.projbuild"><code>Kconfig.projbuild</code></a>):</p>
 <p>Every option is named <code>CONFIG_HF_DYNAMIXEL_</code> followed by the name in the first column.</p>
 <table>
 <thead>
