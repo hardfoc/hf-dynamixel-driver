@@ -160,6 +160,7 @@ inline bool ModeSupported(const ModelDescriptor& m, OperatingMode mode) noexcept
         case OperatingMode::Position:         return m.supports_position;
         case OperatingMode::ExtendedPosition: return m.supports_extended_position;
         case OperatingMode::Pwm:              return m.supports_pwm;
+        case OperatingMode::Unknown:          return false;
     }
     return false;
 }

@@ -25,6 +25,10 @@ public:
     TransportConfig config_{};
     bool open_{false};
     CommDetail last_{};
+    std::size_t packet_limit_{kMaxPacketBytes};
+
+    /// True when a packet of `bytes` (before byte stuffing) fits max_packet_bytes.
+    bool Fits(std::size_t bytes) const noexcept { return bytes <= packet_limit_; }
 };
 
 Bus::Bus(TransportView transport) noexcept
@@ -61,6 +65,10 @@ DriverResult<void> Bus::Open(const TransportConfig& config) noexcept {
     if (!impl_->adapter_.transport().valid()) {
         return DriverResult<void>::failure(DriverError::InvalidParameter);
     }
+    if (config.max_packet_bytes < kMinPacketBytes) {
+        return DriverResult<void>::failure(DriverError::InvalidParameter);
+    }
+    impl_->packet_limit_ = std::min(config.max_packet_bytes, kSdkMaxPacketBytes);
     impl_->config_ = config;
     impl_->adapter_.set_config(config);
     if (!impl_->adapter_.openPort()) {
@@ -100,7 +108,7 @@ DriverResult<PingInfo> Bus::Ping(uint8_t id) noexcept {
     if (!impl_->open_) {
         return DriverResult<PingInfo>::failure(DriverError::NotInitialized);
     }
-    if (id > kMaxDeviceId) {
+    if (!IsDeviceId(id)) {
         return DriverResult<PingInfo>::failure(DriverError::InvalidId);
     }
     uint16_t model = 0;
@@ -138,7 +146,8 @@ DriverResult<uint8_t> Bus::Scan(uint8_t* out_ids, uint8_t max_ids,
     if (out_ids == nullptr || max_ids == 0) {
         return DriverResult<uint8_t>::failure(DriverError::InvalidParameter);
     }
-    if (first_id < 1 || last_id > kMaxDeviceId || first_id > last_id) {
+    // Protocol 2.0 section 2.3: device IDs are 0 to 252 (0xFC); 254 is broadcast.
+    if (last_id > kMaxDeviceId || first_id > last_id) {
         return DriverResult<uint8_t>::failure(DriverError::InvalidParameter);
     }
     uint8_t found = 0;
@@ -151,13 +160,51 @@ DriverResult<uint8_t> Bus::Scan(uint8_t* out_ids, uint8_t max_ids,
     return DriverResult<uint8_t>::success(found, impl_->last_);
 }
 
+DriverResult<void> Bus::Reboot(uint8_t id) noexcept {
+    if (!impl_->open_) {
+        return DriverResult<void>::failure(DriverError::NotInitialized);
+    }
+    if (id != kBroadcastId && !IsDeviceId(id)) {
+        return DriverResult<void>::failure(DriverError::InvalidId);
+    }
+    uint8_t error = 0;
+    const int comm = impl_->ph_->reboot(&impl_->adapter_, id, &error);
+    if (!impl_->adapter_.last_echo_ok()) {
+        impl_->last_ = MakeDetail(id, COMM_TX_FAIL, 0, 0, 0,
+                                  impl_->adapter_.transport().now_us(), false);
+        return DriverResult<void>::failure(DriverError::EchoMismatch, impl_->last_);
+    }
+    const bool broadcast = (id == kBroadcastId);
+    impl_->last_ = MakeDetail(id, comm, error, 0, 0, impl_->adapter_.transport().now_us(),
+                              comm == COMM_SUCCESS && !broadcast &&
+                                  (error & kStatusErrorNumberMask) == 0);
+    if (comm != COMM_SUCCESS) {
+        const DriverError mapped = MapCommCode(comm);
+        if (mapped == DriverError::Timeout) {
+            return DriverResult<void>::failure(DriverError::UncertainOutcome, impl_->last_);
+        }
+        return DriverResult<void>::failure(mapped, impl_->last_);
+    }
+    // The Alert bit only reports the latched hardware fault this reboot clears.
+    if ((error & kStatusErrorNumberMask) != 0) {
+        return DriverResult<void>::failure(DriverError::DeviceError, impl_->last_);
+    }
+    return DriverResult<void>::success(impl_->last_);
+}
+
 DriverResult<uint16_t> Bus::ReadRegister(uint8_t id, uint16_t address,
                                          uint8_t* data, uint16_t length) noexcept {
     if (!impl_->open_) {
         return DriverResult<uint16_t>::failure(DriverError::NotInitialized);
     }
-    if (id > kMaxDeviceId || data == nullptr || length == 0) {
+    if (!IsDeviceId(id)) {
+        return DriverResult<uint16_t>::failure(DriverError::InvalidId);
+    }
+    if (data == nullptr || length == 0) {
         return DriverResult<uint16_t>::failure(DriverError::InvalidParameter);
+    }
+    if (!impl_->Fits(StatusPacketBytes(length))) {
+        return DriverResult<uint16_t>::failure(DriverError::BufferTooSmall);
     }
     uint8_t error = 0;
     const int comm = impl_->ph_->readTxRx(&impl_->adapter_, id, address, length, data, &error);
@@ -183,11 +230,15 @@ DriverResult<void> Bus::WriteRegister(uint8_t id, uint16_t address,
     if (data == nullptr || length == 0) {
         return DriverResult<void>::failure(DriverError::InvalidParameter);
     }
-    if (id != kBroadcastId && id > kMaxDeviceId) {
+    if (id != kBroadcastId && !IsDeviceId(id)) {
         return DriverResult<void>::failure(DriverError::InvalidId);
     }
     if (id == kBroadcastId && policy != WritePolicy::TxOnly) {
         return DriverResult<void>::failure(DriverError::InvalidParameter);
+    }
+    // Write (0x03, section 5.3): 2 address bytes + data.
+    if (!impl_->Fits(InstructionPacketBytes(2U + length))) {
+        return DriverResult<void>::failure(DriverError::BufferTooSmall);
     }
 
     uint8_t* writable = const_cast<uint8_t*>(data);
@@ -246,6 +297,21 @@ DriverResult<uint8_t> Bus::SyncWrite(uint16_t address, uint16_t length,
     if (ids == nullptr || payloads == nullptr || count == 0 || length == 0) {
         return DriverResult<uint8_t>::failure(DriverError::InvalidParameter);
     }
+    for (uint8_t i = 0; i < count; ++i) {
+        if (!IsDeviceId(ids[i])) {
+            return DriverResult<uint8_t>::failure(DriverError::InvalidId);
+        }
+    }
+    // Sync Write (0x83, section 5.11): address (2) + length (2), then ID + data per servo.
+    std::size_t with_payload = 0;
+    for (uint8_t i = 0; i < count; ++i) {
+        if (payloads[i] != nullptr) {
+            ++with_payload;
+        }
+    }
+    if (!impl_->Fits(InstructionPacketBytes(4U + with_payload * (1U + length)))) {
+        return DriverResult<uint8_t>::failure(DriverError::BufferTooSmall);
+    }
     ::dynamixel::GroupSyncWrite group(&impl_->adapter_, impl_->ph_, address, length);
     uint8_t added = 0;
     for (uint8_t i = 0; i < count; ++i) {
@@ -278,10 +344,19 @@ DriverResult<uint8_t> Bus::SyncRead(uint16_t address, uint16_t length,
         count == 0 || length == 0) {
         return DriverResult<uint8_t>::failure(DriverError::InvalidParameter);
     }
+    // Sync Read (0x82, section 5.10): address (2) + length (2) + one ID per
+    // servo out, a status packet with `length` data bytes back from each.
+    if (!impl_->Fits(InstructionPacketBytes(4U + count)) ||
+        !impl_->Fits(StatusPacketBytes(length))) {
+        return DriverResult<uint8_t>::failure(DriverError::BufferTooSmall);
+    }
     // Drive sync-read TX once, then collect each status packet independently.
     // The stock GroupSyncRead treats the first missing servo as a total failure.
     std::vector<uint8_t> param(count);
     for (uint8_t i = 0; i < count; ++i) {
+        if (!IsDeviceId(ids[i])) {
+            return DriverResult<uint8_t>::failure(DriverError::InvalidId);
+        }
         param[i] = ids[i];
         items[i] = SyncReadItem{};
         items[i].id = ids[i];

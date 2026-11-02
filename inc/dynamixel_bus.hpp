@@ -41,9 +41,27 @@ public:
     DriverResult<void> SetHostBaudRate(uint32_t baud) noexcept;
 
     DriverResult<PingInfo> Ping(uint8_t id) noexcept;
+    /// Ping first_id..last_id (inclusive). The default covers every device ID, 0 to 252.
     DriverResult<uint8_t> Scan(uint8_t* out_ids, uint8_t max_ids,
-                               uint8_t first_id = 1,
+                               uint8_t first_id = kMinDeviceId,
                                uint8_t last_id = kMaxDeviceId) noexcept;
+
+    /**
+     * @brief Send the Reboot instruction (0x08, Protocol 2.0 section 5.7).
+     *
+     * A reboot is the software way to clear a latched Hardware Error Status
+     * and turn torque back on after a shutdown. For a device ID the servo
+     * answers before it restarts; a status whose only flag is the Alert bit
+     * (the latched fault being cleared) counts as success, with the error
+     * byte kept in `detail.device_error`. The broadcast ID reboots every
+     * servo and gets no reply. The servo is unreachable while it boots, so
+     * wait and `Ping()` it before the next command.
+     *
+     * @return `UncertainOutcome` when the request went out and no status came
+     *         back (the servo may be rebooting), `DeviceError` for a non-zero
+     *         error number, `InvalidId` for 253.
+     */
+    DriverResult<void> Reboot(uint8_t id) noexcept;
 
     DriverResult<uint16_t> ReadRegister(uint8_t id, uint16_t address,
                                         uint8_t* data, uint16_t length) noexcept;

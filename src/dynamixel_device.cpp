@@ -1,6 +1,32 @@
 #include "dynamixel_device.hpp"
 
+#include <algorithm>
+
 namespace dynamixel {
+
+namespace {
+
+/// Little-endian register bytes to a value, sign-extended when the register is signed.
+int32_t DecodeRegister(const RegisterDesc& reg, const uint8_t* raw) noexcept {
+    const uint8_t width = (reg.width < 4) ? reg.width : 4;
+    uint32_t u = 0;
+    for (uint8_t i = 0; i < width; ++i) {
+        u |= static_cast<uint32_t>(raw[i]) << (8 * i);
+    }
+    int32_t value = static_cast<int32_t>(u);
+    if (reg.is_signed && width < 4 && width > 0) {
+        const uint32_t sign = 1u << (8 * width - 1);
+        if (u & sign) {
+            value = static_cast<int32_t>(u | ~((1u << (8 * width)) - 1u));
+        }
+    }
+    return value;
+}
+
+/// Largest Present-block read ReadTelemetry() makes in one packet.
+constexpr uint16_t kTelemetryBlockMaxBytes = 32;
+
+}  // namespace
 
 Device::Device(Bus& bus, uint8_t id) noexcept : bus_(bus), id_(id) {}
 
@@ -54,7 +80,8 @@ DriverResult<PingInfo> Device::Identify() noexcept {
     uint8_t mode = 0;
     const auto rd = bus_.ReadRegister(id_, model_->operating_mode_reg.address, &mode, 1);
     if (rd.ok()) {
-        cached_mode_ = static_cast<OperatingMode>(mode);
+        mode_raw_ = mode;
+        cached_mode_ = OperatingModeFromRaw(mode);
         mode_known_ = true;
     }
     return ping;
@@ -66,18 +93,7 @@ DriverResult<int32_t> Device::ReadSigned(const RegisterDesc& reg) noexcept {
     if (!rd.ok()) {
         return DriverResult<int32_t>::failure(rd.error, rd.detail);
     }
-    uint32_t u = 0;
-    for (uint8_t i = 0; i < reg.width; ++i) {
-        u |= static_cast<uint32_t>(raw[i]) << (8 * i);
-    }
-    int32_t value = static_cast<int32_t>(u);
-    if (reg.is_signed && reg.width < 4) {
-        const uint32_t sign = 1u << (8 * reg.width - 1);
-        if (u & sign) {
-            value = static_cast<int32_t>(u | ~((1u << (8 * reg.width)) - 1u));
-        }
-    }
-    return DriverResult<int32_t>::success(value, rd.detail);
+    return DriverResult<int32_t>::success(DecodeRegister(reg, raw), rd.detail);
 }
 
 DriverResult<void> Device::WriteSigned(const RegisterDesc& reg, int32_t value,
@@ -88,6 +104,10 @@ DriverResult<void> Device::WriteSigned(const RegisterDesc& reg, int32_t value,
         raw[i] = static_cast<uint8_t>((u >> (8 * i)) & 0xFF);
     }
     return bus_.WriteRegister(id_, reg.address, raw, reg.width, policy);
+}
+
+DriverResult<void> Device::Reboot() noexcept {
+    return bus_.Reboot(id_);
 }
 
 DriverResult<void> Device::SetTorqueEnabled(bool enabled) noexcept {
@@ -104,6 +124,9 @@ DriverResult<void> Device::SetOperatingMode(OperatingMode mode) noexcept {
     if (!m.ok()) {
         return m;
     }
+    if (mode == OperatingMode::Unknown) {
+        return DriverResult<void>::failure(DriverError::InvalidParameter);
+    }
     if (!ModeSupported(*model_, mode)) {
         return DriverResult<void>::failure(DriverError::UnsupportedRequest);
     }
@@ -118,6 +141,7 @@ DriverResult<void> Device::SetOperatingMode(OperatingMode mode) noexcept {
     const uint8_t v = static_cast<uint8_t>(mode);
     auto wr = bus_.WriteRegister(id_, model_->operating_mode_reg.address, &v, 1);
     if (wr.ok()) {
+        mode_raw_ = v;
         cached_mode_ = mode;
         mode_known_ = true;
     }
@@ -168,10 +192,9 @@ DriverResult<void> Device::SetGoalVelocity(int32_t ticks_per_sec) noexcept {
 }
 
 DriverResult<void> Device::SetGoalPwm(int16_t pwm) noexcept {
-    if (mode_known_ && cached_mode_ != OperatingMode::Pwm) {
-        return DriverResult<void>::failure(DriverError::UnsupportedRequest);
-    }
-    const auto m = RequireModel();
+    // PWM Control Mode is Operating Mode 16; in the other modes Goal PWM (100)
+    // is only a PWM limit. Same model and cached-mode checks as the other goals.
+    const auto m = RequireMode(OperatingMode::Pwm);
     if (!m.ok()) {
         return m;
     }
@@ -187,11 +210,64 @@ DriverResult<int32_t> Device::ReadPosition() noexcept {
 }
 
 DriverResult<Telemetry> Device::ReadTelemetry() noexcept {
-    Telemetry tel{};
     const auto m = RequireModel();
     if (!m.ok()) {
         return DriverResult<Telemetry>::failure(m.error, m.detail);
     }
+    // X-series control table, RAM area: Present PWM (124, 2), Present
+    // Load/Current (126, 2), Present Velocity (128, 4), Present Position
+    // (132, 4), Velocity/Position Trajectory (136, 140), Present Input Voltage
+    // (144, 2) and Present Temperature (146, 1) are contiguous, so one Read
+    // (Protocol 2.0 section 5.2) of 124..146 replaces six. Hardware Error
+    // Status (70) is far from that block and stays a separate 1-byte read.
+    const RegisterDesc& pwm = model_->present_pwm_reg;
+    const RegisterDesc& load = model_->present_load_reg;
+    const RegisterDesc& vel = model_->present_velocity_reg;
+    const RegisterDesc& pos = model_->present_position_reg;
+    const uint16_t volt = model_->present_voltage_reg.address;
+    const uint16_t temp = model_->present_temperature_reg.address;
+    const uint16_t lo = std::min({pwm.address, load.address, vel.address, pos.address, volt, temp});
+    const uint16_t hi = std::max({static_cast<uint16_t>(pwm.address + pwm.width),
+                                  static_cast<uint16_t>(load.address + load.width),
+                                  static_cast<uint16_t>(vel.address + vel.width),
+                                  static_cast<uint16_t>(pos.address + pos.width),
+                                  static_cast<uint16_t>(volt + 2U),
+                                  static_cast<uint16_t>(temp + 1U)});
+    const uint16_t span = static_cast<uint16_t>(hi - lo);
+    if (span > kTelemetryBlockMaxBytes || pwm.width > 4 || load.width > 4 || vel.width > 4 ||
+        pos.width > 4) {
+        return ReadTelemetryPerRegister();
+    }
+    uint8_t block[kTelemetryBlockMaxBytes] = {};
+    const auto rd = bus_.ReadRegister(id_, lo, block, span);
+    if (!rd.ok()) {
+        // Too long for max_packet_bytes, or the servo refused the range (an
+        // error number, not just the Alert bit): read register by register.
+        const bool refused = rd.error == DriverError::DeviceError &&
+                             (rd.detail.device_error & kStatusErrorNumberMask) != 0;
+        if (rd.error == DriverError::BufferTooSmall || refused) {
+            return ReadTelemetryPerRegister();
+        }
+        return DriverResult<Telemetry>::failure(rd.error, rd.detail);
+    }
+    Telemetry tel{};
+    tel.position = DecodeRegister(pos, block + (pos.address - lo));
+    tel.velocity = DecodeRegister(vel, block + (vel.address - lo));
+    tel.load = static_cast<int16_t>(DecodeRegister(load, block + (load.address - lo)));
+    tel.pwm = static_cast<int16_t>(DecodeRegister(pwm, block + (pwm.address - lo)));
+    tel.voltage_0p1_v =
+        static_cast<uint16_t>(block[volt - lo] | (block[volt - lo + 1] << 8));
+    tel.temperature_c = block[temp - lo];
+    uint8_t hw = 0;
+    const auto h = bus_.ReadRegister(id_, model_->hardware_error_reg.address, &hw, 1);
+    if (h.ok()) {
+        tel.hardware_error = hw;
+    }
+    return DriverResult<Telemetry>::success(tel, rd.detail);
+}
+
+DriverResult<Telemetry> Device::ReadTelemetryPerRegister() noexcept {
+    Telemetry tel{};
     const auto pos = ReadSigned(model_->present_position_reg);
     if (!pos.ok()) {
         return DriverResult<Telemetry>::failure(pos.error, pos.detail);

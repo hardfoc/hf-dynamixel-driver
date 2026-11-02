@@ -26,7 +26,7 @@ bool open_bus(dynamixel::Bus& bus) {
 void scan(dynamixel::Bus& bus) {
   // --8<-- [start:scan]
   uint8_t ids[16];
-  const auto found = bus.Scan(ids, 16, 1, 20);          // ping IDs 1..20, keep up to 16 answers
+  const auto found = bus.Scan(ids, 16, 0, 20);          // ping IDs 0..20, keep up to 16 answers
   for (uint8_t i = 0; found && i < found.value; ++i) {
     const auto ping = bus.Ping(ids[i]);
     if (ping) {
@@ -148,6 +148,27 @@ void errors(dynamixel::Device& servo) {
       break;
   }
   // --8<-- [end:errors]
+}
+
+bool recover(dynamixel::Bus& bus, dynamixel::Device& servo) {
+  // --8<-- [start:reboot]
+  uint8_t hw = 0;                                       // Hardware Error Status, address 70
+  servo.ReadRegister(70, &hw, 1);                       // DeviceError with the Alert bit still fills hw
+  if (hw == 0) {
+    return true;
+  }
+  std::printf("hardware error 0x%02x, rebooting\n", hw); // fix the cause first (supply, load, heat)
+  const auto rb = servo.Reboot();                       // Reboot instruction (0x08)
+  if (!rb && rb.error != DriverError::UncertainOutcome) {
+    return false;                                       // UncertainOutcome: it may be rebooting already
+  }
+  for (int attempt = 0; attempt < 20; ++attempt) {      // the servo answers again once it has booted
+    if (bus.Ping(servo.id())) {
+      return true;                                      // torque is off; RAM is back to its defaults
+    }
+  }
+  return false;
+  // --8<-- [end:reboot]
 }
 
 bool change_baud(dynamixel::Bus& bus, dynamixel::Device& servo) {

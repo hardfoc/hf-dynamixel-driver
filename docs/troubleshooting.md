@@ -10,7 +10,7 @@ Start with the `DriverError` and `detail` of the failing call: `detail.comm_code
 | Cause | Fix |
 | --- | --- |
 | Baud rate differs from the servo's | Try 57600 (factory), then the other seven rates; or scan with ROBOTIS's DYNAMIXEL Wizard |
-| Wrong ID | Factory ID is 1; `Scan()` IDs 1 to 20 |
+| Wrong ID | Factory ID is 1; `Scan()` IDs 0 to 20 |
 | TX and RX swapped, or wired for the wrong board | ESP32-C6 uses GPIO4 / GPIO5, ESP32-S3 GPIO17 / GPIO18 |
 | Direction pin stuck in transmit | Release it in `finish_transmit()`; leave the DIR GPIO at -1 for an auto-direction transceiver |
 | No common ground, or servo unpowered | Join the grounds; the servo needs its own supply (6.5 V to 14.8 V for an XC430-W150) |
@@ -37,7 +37,8 @@ The ping worked and the model number is not in the catalog. `ping.value.model_nu
 
 The servo is in another operating mode (`SetGoalVelocity()` in Position mode, for example), or no model is bound.
 Change the mode with torque off, or call `Identify()` first. A servo left in current mode (0) or current-based
-position mode (5) by another tool refuses every typed goal: set a supported mode first.
+position mode (5) by another tool refuses every typed goal: `operating_mode()` is `Unknown` and
+`operating_mode_raw()` has the register value. Set a supported mode first.
 
 ## `SetOperatingMode()` returns `Busy`
 
@@ -52,7 +53,8 @@ you retry; for an EEPROM change of ID or baud rate, the servo may now answer at 
 
 The servo hit a fault enabled in Shutdown (address 63): input voltage, overheating, encoder, electrical shock or
 overload. `Telemetry::hardware_error` has the bits ([API guide](api-guide.md#handle-errors)). Fix the cause, then
-power-cycle the servo: only a reboot restores torque, and this driver does not send the Reboot instruction.
+call `Reboot()` or power-cycle the servo: only a reboot clears the fault and lets torque back on
+([Recover from a hardware error](api-guide.md#recover-from-a-hardware-error)).
 
 ## The motion example jumps
 

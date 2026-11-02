@@ -21,7 +21,7 @@ The test binary is built with AddressSanitizer and UBSan on GCC and Clang (`HF_D
 
 | File | Covers |
 | --- | --- |
-| [`tests/host/dynamixel_driver_test.cpp`](../tests/host/dynamixel_driver_test.cpp) | Ping and read, timeout, bad CRC, wrong ID, echo, partial writes, fragmented replies, typed `Device` calls, unknown and fallback models, sync read and write, broadcast writes |
+| [`tests/host/dynamixel_driver_test.cpp`](../tests/host/dynamixel_driver_test.cpp) | Ping and read, timeout, bad CRC, wrong ID, echo, partial writes, fragmented replies, typed `Device` calls, unknown and fallback models, sync read and write, broadcast writes, ID 0 scans, Reboot, unknown Operating Mode values, `SetGoalPwm` checks, `max_packet_bytes` limits, the one-block `ReadTelemetry()` |
 | [`tests/host/fake_transport.hpp`](../tests/host/fake_transport.hpp) | The scripted servo |
 | [`tests/host/protocol2_status.hpp`](../tests/host/protocol2_status.hpp) | Status packets and CRC for the fake |
 | [`examples/host/ping_read.cpp`](../examples/host/ping_read.cpp) | A ping and a position read over the fake, run by CI |
@@ -36,7 +36,7 @@ A change to the API that breaks a page breaks the build first.
 
 | Workflow | What it checks |
 | --- | --- |
-| Host tests | Build, tests, the host example, the doc snippets, and an install into a prefix |
+| Host tests | Build, tests, the host example, the doc snippets, an install into a prefix, and a `find_package()` consumer of it ([`tests/install/`](../tests/install/CMakeLists.txt)) |
 | ESP32 Examples Build CI | Every app in `examples/esp32/app_config.yml`, for each listed ESP-IDF version and build type |
 | C++ Lint CI | clang-format and clang-tidy |
 | Docs | Strict site build, figure and generated-table drift, Doxygen, link check, Lighthouse budget |

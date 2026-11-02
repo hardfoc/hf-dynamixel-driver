@@ -25,7 +25,9 @@ public:
     bool corrupt_next_crc{false};
     uint16_t model_number{1070};
     uint8_t firmware{46};
-    uint8_t hardware_error{0};
+    uint8_t hardware_error{0};  ///< Non-zero: latched fault, Alert bit in every status.
+    int reboots{0};
+    int next_error{-1};  ///< >= 0: error byte for the next status packet only.
     std::vector<std::vector<uint8_t>> tx_log;
     std::deque<uint8_t> rx;
 
@@ -99,8 +101,24 @@ private:
         }
         const uint8_t inst = TxInstruction(tx, n);
         const uint8_t id = TxId(tx, n);
+        uint8_t err = (hardware_error != 0) ? 0x80 : 0x00;
+        if (next_error >= 0) {
+            err = static_cast<uint8_t>(next_error);
+            next_error = -1;
+        }
+        registers[70] = hardware_error;
         if (inst == 1) {  // PING
-            Queue(PingStatus(id, model_number));
+            Queue(PingStatus(id, model_number, err));
+            return;
+        }
+        if (inst == 0x08) {  // REBOOT: status first, then RAM back to defaults
+            if (id != 0xFE) {
+                Queue(WriteStatus(id, err));
+            }
+            ++reboots;
+            hardware_error = 0;
+            registers[70] = 0;
+            registers[64] = 0;
             return;
         }
         if (inst == 2 && n >= 12) {  // READ
@@ -110,7 +128,7 @@ private:
             for (uint16_t i = 0; i < len && (addr + i) < sizeof(registers); ++i) {
                 data[i] = registers[addr + i];
             }
-            Queue(ReadStatus(id, data.data(), static_cast<uint16_t>(data.size())));
+            Queue(ReadStatus(id, data.data(), static_cast<uint16_t>(data.size()), err));
             return;
         }
         if (inst == 3 && n >= 10) {  // WRITE
@@ -121,7 +139,7 @@ private:
                 present[addr + i] = true;
             }
             if (id != 0xFE) {
-                Queue(WriteStatus(id));
+                Queue(WriteStatus(id, err));
             }
             return;
         }
@@ -137,7 +155,7 @@ private:
                 for (uint16_t b = 0; b < len && (addr + b) < sizeof(registers); ++b) {
                     data[b] = registers[addr + b];
                 }
-                Queue(ReadStatus(sid, data.data(), static_cast<uint16_t>(data.size())));
+                Queue(ReadStatus(sid, data.data(), static_cast<uint16_t>(data.size()), err));
             }
         }
     }

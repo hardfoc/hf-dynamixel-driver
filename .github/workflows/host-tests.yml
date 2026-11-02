@@ -32,3 +32,6 @@ jobs:
           cmake --install build --prefix "${RUNNER_TEMP}/hf-dynamixel"
           test -f "${RUNNER_TEMP}/hf-dynamixel/include/dynamixel.hpp"
           test -f "${RUNNER_TEMP}/hf-dynamixel/lib/libhf_dynamixel.a"
+          cmake -S tests/install -B build-consumer -DCMAKE_PREFIX_PATH="${RUNNER_TEMP}/hf-dynamixel"
+          cmake --build build-consumer
+          ./build-consumer/hf_dynamixel_install_consumer

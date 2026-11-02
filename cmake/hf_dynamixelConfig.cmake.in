@@ -3,4 +3,10 @@
 include("${CMAKE_CURRENT_LIST_DIR}/hf_dynamixelConfigVersion.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/hf_dynamixelTargets.cmake" OPTIONAL)
 
+# Earlier packages exported hf::hf_dynamixel; keep that name working.
+if(TARGET hf::dynamixel AND NOT TARGET hf::hf_dynamixel)
+  add_library(hf::hf_dynamixel INTERFACE IMPORTED)
+  set_target_properties(hf::hf_dynamixel PROPERTIES INTERFACE_LINK_LIBRARIES hf::dynamixel)
+endif()
+
 check_required_components(hf_dynamixel)

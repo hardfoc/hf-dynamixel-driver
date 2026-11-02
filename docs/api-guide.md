@@ -37,8 +37,9 @@ as the bus. `Open()` calls your transport's `open()`; it sends nothing.
 --8<-- "tests/docs/api_tasks.cpp:scan"
 ```
 
-`Scan()` pings each ID in turn and costs one reply timeout per absent ID, so keep the range short. It starts at
-ID 1 at the lowest; ping ID 0 yourself with `Ping(0)`.
+`Scan()` pings each ID in turn and costs one reply timeout per absent ID, so keep the range short. Any device ID
+from 0 to 252 is valid (Protocol 2.0, section 2.3); the default range is all of them. ID 253 is not a device ID
+and 254 is the broadcast ID, so `Scan()`, `Ping()`, `ReadRegister()` and the sync calls reject them.
 
 ## Identify a servo
 
@@ -81,8 +82,11 @@ which shape every position move; 0 means unlimited.
 --8<-- "tests/docs/api_tasks.cpp:read"
 ```
 
-`ReadTelemetry()` makes seven register reads. It fails only when the position read fails; the other fields stay
-0 when their read fails. For one value, `ReadPosition()` is a single read. For several servos at once, use a sync
+`ReadTelemetry()` makes two reads: one of the contiguous Present block, Present PWM (124) to Present Temperature
+(146), 23 bytes, and one of Hardware Error Status (70). It fails when the block read fails; `hardware_error` stays
+0 when its own read fails, and `detail` is the block read's. When the block reply would not fit `max_packet_bytes`
+or the servo refuses the range with an error number, it falls back to one read per register, which fails only when
+the position read fails. For one value, `ReadPosition()` is a single read. For several servos at once, use a sync
 read.
 
 ## Read or write several servos at once
@@ -136,10 +140,24 @@ left behind.
 | `DeviceError` | The servo answered with an error byte | `detail.device_error`: bit 7 hardware alert, bits 0 to 6 the error number |
 | `UnsupportedRequest` | No model bound, or wrong mode for the call | `Identify()` or bind a model; change mode |
 | `Busy` | Torque on during a mode change, or the bus is mid-transaction | Torque off first |
+| `BufferTooSmall` | The request's packet is longer than `max_packet_bytes`; nothing was sent | Split it, or raise the limit ([Configuration](configuration.md#transport-configuration)) |
 | `NotInitialized`, `InvalidParameter`, `InvalidId` | Bus not open, a null buffer or zero length, ID above 252 | Fix the call |
 
 When bit 7 of the error byte is set, read Hardware Error Status (address 70, also in `Telemetry::hardware_error`):
 bit 0 input voltage, bit 2 overheating, bit 3 motor encoder, bit 4 electrical shock, bit 5 overload. On the
 faults enabled in Shutdown (address 63) the servo clears Torque Enable, and only a reboot turns it back on: a power
-cycle, or the Reboot instruction, which this driver does not send.
+cycle, or the Reboot instruction.
 [Troubleshooting](troubleshooting.md) maps symptoms to causes.
+
+## Recover from a hardware error
+
+```cpp
+--8<-- "tests/docs/api_tasks.cpp:reboot"
+```
+
+`Reboot()` (on the `Device`, or `Bus::Reboot(id)`) sends the Reboot instruction, 0x08 (Protocol 2.0, section
+5.7). The servo answers before it restarts; the Alert bit in that reply is the fault being cleared, so it does not
+count as an error, and `detail.device_error` keeps it. A non-zero error number is `DeviceError`; no reply is
+`UncertainOutcome`, because the servo may have rebooted anyway. After a reboot the RAM area is back to its
+defaults: torque is off and Hardware Error Status is 0. The broadcast ID reboots every servo and gets no reply.
+Fix the cause of the fault first, or it latches again.

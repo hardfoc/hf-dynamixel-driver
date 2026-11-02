@@ -19,6 +19,10 @@ namespace dynamixel {
 
 struct TransportConfig {
     uint32_t    baud_rate{kDefaultBaud};
+    /// Largest packet (before byte stuffing) the bus sends or asks for. A
+    /// request whose instruction or status packet is longer returns
+    /// `BufferTooSmall` without sending. `Bus::Open()` rejects a value below
+    /// `kMinPacketBytes` and caps one above `kSdkMaxPacketBytes`.
     std::size_t max_packet_bytes{kMaxPacketBytes};
     EchoPolicy  echo_policy{EchoPolicy::None};
     uint32_t    latency_ms{2};  ///< Slack added to SDK packet timeouts (not USB 16 ms).
