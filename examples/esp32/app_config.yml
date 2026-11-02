@@ -10,7 +10,7 @@ metadata:
 
 apps:
   dynamixel_readonly_example:
-    description: "Read-only ping/scan/telemetry (C6 TX=4 RX=5, S3 TX=17 RX=18, 57600)"
+    description: "Scan, identify and stream telemetry; never enables torque"
     source_file: "dynamixel_readonly_example.cpp"
     category: "example"
     idf_versions: ["release/v5.5"]
@@ -20,7 +20,7 @@ apps:
     hardware_required: true
 
   dynamixel_scan_example:
-    description: "Scan the bus and dump model/catalog vs X-series fallback"
+    description: "List every servo with its model number and catalog entry or fallback"
     source_file: "dynamixel_scan_example.cpp"
     category: "example"
     idf_versions: ["release/v5.5"]
@@ -30,7 +30,7 @@ apps:
     hardware_required: true
 
   dynamixel_motion_example:
-    description: "Unloaded small-step motion after reading present position"
+    description: "Small unloaded move from the present position, then torque off"
     source_file: "dynamixel_motion_example.cpp"
     category: "example"
     idf_versions: ["release/v5.5"]

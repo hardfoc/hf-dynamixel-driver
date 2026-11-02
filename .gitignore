@@ -1,4 +1,5 @@
 build/
+build-*/
 builds/
 .cache/
 sdkconfig
@@ -8,8 +9,6 @@ dependencies.lock
 docs/html/
 docs/latex/
 docs/xml/
-_site/
-.jekyll-cache/
 .vscode/
 .idea/
 .venv/
@@ -23,3 +22,4 @@ venv/
 *.map
 .DS_Store
 *~
+site/

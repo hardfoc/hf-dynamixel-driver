@@ -1,0 +1,15 @@
+{
+  "driver-layers": {
+    "title": "Three layers, one of them yours",
+    "alt": "Layer diagram: the application calls the hardware-agnostic Bus and Device classes, which encode Protocol 2.0 packets with the ROBOTIS SDK and reach the line through the transport interface, which calls the UART transport you write, which drives the half-duplex bus of the DYNAMIXEL servos.",
+    "description": "From top to bottom. Your application talks to one Bus per serial line and one Device per servo; the public members listed are the Bus and Device methods from inc/dynamixel_bus.hpp and inc/dynamixel_device.hpp. The bus encodes and decodes Protocol 2.0 packets with the ROBOTIS DYNAMIXEL SDK, behind a private PortHandler adapter, and reaches the line through TransportView, the type-erased view of a Transport<Derived> class (inc/dynamixel_transport.hpp). That class is the only code you write: it moves bytes over a half-duplex UART and reads a microsecond clock. Below it are the servos.",
+    "profile": "overview",
+    "width": 1200,
+    "source": "docs/diagrams/figures/driver-layers.py",
+    "sources": [
+      "inc/dynamixel_bus.hpp:Bus members",
+      "inc/dynamixel_device.hpp:Device members",
+      "inc/dynamixel_transport.hpp:Transport hooks"
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "bus": [
+    "Open",
+    "Close",
+    "IsOpen",
+    "SetHostBaudRate",
+    "Ping",
+    "Scan",
+    "ReadRegister",
+    "WriteRegister",
+    "SyncWrite",
+    "SyncRead"
+  ],
+  "device": [
+    "Identify",
+    "BindModel",
+    "BindXSeriesFallback",
+    "SetTorqueEnabled",
+    "SetOperatingMode",
+    "SetMotionProfile",
+    "SetGoalPosition",
+    "SetGoalVelocity",
+    "SetGoalPwm",
+    "ReadPosition",
+    "ReadTelemetry",
+    "ReadRegister",
+    "WriteRegister"
+  ],
+  "port_hooks": [
+    "open",
+    "close",
+    "set_baud_rate",
+    "write_some",
+    "finish_transmit",
+    "read_some",
+    "discard_stale_input",
+    "now_us"
+  ],
+  "sources": [
+    "inc/dynamixel_bus.hpp:Bus members",
+    "inc/dynamixel_device.hpp:Device members",
+    "inc/dynamixel_transport.hpp:Transport hooks"
+  ]
+}
