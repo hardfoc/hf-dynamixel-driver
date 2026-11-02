@@ -177,10 +177,9 @@ DriverResult<void> Device::SetGoalVelocity(int32_t ticks_per_sec) noexcept {
 }
 
 DriverResult<void> Device::SetGoalPwm(int16_t pwm) noexcept {
-    if (mode_known_ && cached_mode_ != OperatingMode::Pwm) {
-        return DriverResult<void>::failure(DriverError::UnsupportedRequest);
-    }
-    const auto m = RequireModel();
+    // PWM Control Mode is Operating Mode 16; in the other modes Goal PWM (100)
+    // is only a PWM limit. Same model and cached-mode checks as the other goals.
+    const auto m = RequireMode(OperatingMode::Pwm);
     if (!m.ok()) {
         return m;
     }

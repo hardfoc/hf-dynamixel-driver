@@ -18,6 +18,9 @@ All notable changes to this driver are listed here. Versions follow
 
 ### Fixed
 
+- `Device::SetGoalPwm()` runs the same checks as the other goal setters: it needs a model whose descriptor
+  supports PWM Control Mode (Operating Mode 16) as well as a cached mode of PWM, and refuses before sending.
+
 - `Device::Identify()` no longer casts an Operating Mode register value without a typed mode (0, 5 or an
   undefined value; X-series e-Manual section 2.4, Operating Mode (11)) into `OperatingMode`. It maps it to the
   new `OperatingMode::Unknown`, which every typed goal refuses. New `OperatingModeFromRaw()`,

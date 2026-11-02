@@ -33,7 +33,7 @@ work. With one:
 | `SetOperatingMode()` | A model, and torque off (else `Busy`) |
 | `SetGoalPosition()` | Mode Position or Extended Position |
 | `SetGoalVelocity()` | Mode Velocity |
-| `SetGoalPwm()` | Mode PWM |
+| `SetGoalPwm()` | Mode PWM (16), and a model with `supports_pwm` |
 
 `Identify()` also reads the servo's Operating Mode and caches it; `SetOperatingMode()` updates the cache, and
 `operating_mode()` returns it. A register value without a typed mode (current 0, current-based position 5, or a

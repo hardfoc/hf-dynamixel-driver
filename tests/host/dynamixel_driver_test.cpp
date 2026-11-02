@@ -314,6 +314,43 @@ void TestUnknownOperatingMode() {
     }
 }
 
+// PWM Control Mode is Operating Mode 16 (X-series section 2.4, Operating Mode (11)).
+void TestGoalPwmChecksMode() {
+    static dynamixel::ModelDescriptor no_pwm = dynamixel::kXSeriesFallback;
+    no_pwm.supports_pwm = false;
+
+    FakeTransport uart;
+    uart.model_number = 9999;
+    uart.registers[0] = 0x0F;
+    uart.registers[1] = 0x27;
+    uart.registers[11] = 16;
+    dynamixel::Bus bus{dynamixel::TransportView{uart}};
+    CHECK(bus.Open({}).ok());
+
+    dynamixel::Device unread(bus, 1);
+    unread.BindModel(no_pwm);  // mode not read yet
+    std::size_t sent = uart.tx_log.size();
+    CHECK(unread.SetGoalPwm(100).error == dynamixel::DriverError::UnsupportedRequest);
+    CHECK(uart.tx_log.size() == sent);
+
+    dynamixel::Device dev(bus, 1);
+    dev.BindModel(no_pwm);
+    CHECK(dev.Identify().ok());
+    CHECK(dev.operating_mode() == dynamixel::OperatingMode::Pwm);
+    sent = uart.tx_log.size();
+    CHECK(dev.SetGoalPwm(100).error == dynamixel::DriverError::UnsupportedRequest);
+    CHECK(uart.tx_log.size() == sent);
+
+    dynamixel::Device ok_dev(bus, 1);
+    ok_dev.BindXSeriesFallback();
+    CHECK(ok_dev.Identify().ok());
+    CHECK(ok_dev.SetGoalPwm(100).ok());
+    CHECK(uart.registers[100] == 100);
+    uart.registers[11] = 3;
+    CHECK(ok_dev.Identify().ok());
+    CHECK(ok_dev.SetGoalPwm(100).error == dynamixel::DriverError::UnsupportedRequest);
+}
+
 }  // namespace
 
 int main() {
@@ -333,6 +370,7 @@ int main() {
     TestScanIncludesIdZero();
     TestRebootClearsHardwareError();
     TestUnknownOperatingMode();
+    TestGoalPwmChecksMode();
     if (g_failures != 0) {
         std::printf("%d check(s) failed\n", g_failures);
         return 1;
