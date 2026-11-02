@@ -61,3 +61,14 @@ jobs:
       project_dir: ${{ needs.validate.outputs.project_dir }}
       project_tools_dir: ${{ needs.validate.outputs.tools_dir }}
       clean_build: ${{ github.event.inputs.clean_build == 'true' }}
+
+  # ✅ Single required check: passes only if every job above passed
+  ci-gate:
+    name: CI gate
+    needs: [validate, build]
+    if: always()
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-ci-gate.yml@v1
+    permissions:
+      contents: read
+    with:
+      needs_json: ${{ toJSON(needs) }}
