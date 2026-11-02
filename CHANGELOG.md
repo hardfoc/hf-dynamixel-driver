@@ -10,6 +10,12 @@ All notable changes to this driver are listed here. Versions follow
   Jekyll site and its files are gone.
 - README rewritten to the HardFOC README standard.
 
+### Added
+
+- `Bus::Reboot(id)` and `Device::Reboot()`: the Protocol 2.0 Reboot instruction (0x08, e-Manual section 5.7),
+  the software way to clear a latched Hardware Error Status. An Alert-only status reply counts as success; no
+  reply is `UncertainOutcome`. New `kStatusAlertBit` and `kStatusErrorNumberMask` (section 3.2).
+
 ### Fixed
 
 - `Bus::Scan()` accepts ID 0, and its default range now starts at 0: Protocol 2.0 device IDs are 0 to 252

@@ -52,7 +52,8 @@ you retry; for an EEPROM change of ID or baud rate, the servo may now answer at 
 
 The servo hit a fault enabled in Shutdown (address 63): input voltage, overheating, encoder, electrical shock or
 overload. `Telemetry::hardware_error` has the bits ([API guide](api-guide.md#handle-errors)). Fix the cause, then
-power-cycle the servo: only a reboot restores torque, and this driver does not send the Reboot instruction.
+call `Reboot()` or power-cycle the servo: only a reboot clears the fault and lets torque back on
+([Recover from a hardware error](api-guide.md#recover-from-a-hardware-error)).
 
 ## The motion example jumps
 

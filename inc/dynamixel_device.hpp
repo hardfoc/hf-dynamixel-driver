@@ -28,6 +28,10 @@ public:
     void BindModel(const ModelDescriptor& desc) noexcept;
     void BindXSeriesFallback() noexcept;
 
+    /// Reboot this servo (`Bus::Reboot`). Clears a latched Hardware Error
+    /// Status; RAM, including Torque Enable, returns to its defaults.
+    DriverResult<void> Reboot() noexcept;
+
     DriverResult<void> SetTorqueEnabled(bool enabled) noexcept;
     DriverResult<void> SetOperatingMode(OperatingMode mode) noexcept;
     DriverResult<void> SetMotionProfile(uint32_t profile_acceleration,

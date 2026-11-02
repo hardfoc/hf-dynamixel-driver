@@ -130,6 +130,11 @@ inline constexpr uint8_t kMaxDeviceId = 0xFC;
 
 /// True for a unicast device ID (0 to 252). Excludes 253 and the broadcast ID 254.
 constexpr bool IsDeviceId(uint8_t id) noexcept { return id <= kMaxDeviceId; }
+/// Protocol 2.0 section 3.2: bit 7 of the status packet error byte is the Alert
+/// flag (read Hardware Error Status); bits 0 to 6 are the error number.
+inline constexpr uint8_t kStatusAlertBit = 0x80;
+inline constexpr uint8_t kStatusErrorNumberMask = 0x7F;
+
 inline constexpr uint32_t kDefaultBaud = 57600;
 inline constexpr std::size_t kMaxPacketBytes = 256;
 

@@ -247,6 +247,41 @@ void TestScanIncludesIdZero() {
     CHECK(bus.SyncWrite(64, 1, bad_ids, ins, 1).error == dynamixel::DriverError::InvalidId);
 }
 
+// Protocol 2.0 section 5.7: Reboot (0x08) clears a latched Hardware Error Status.
+void TestRebootClearsHardwareError() {
+    FakeTransport uart;
+    dynamixel::Bus bus{dynamixel::TransportView{uart}};
+    CHECK(bus.Open({}).ok());
+    dynamixel::Device dev(bus, 1);
+    CHECK(dev.Identify().ok());
+    uart.hardware_error = 0x04;  // overheating, latched
+    const uint8_t on = 1;
+    const auto wr = bus.WriteRegister(1, 64, &on, 1);
+    CHECK(wr.error == dynamixel::DriverError::DeviceError);
+    CHECK((wr.detail.device_error & dynamixel::kStatusAlertBit) != 0);
+
+    const auto rb = dev.Reboot();
+    CHECK(rb.ok());
+    CHECK(uart.reboots == 1);
+    CHECK(rb.detail.device_error == dynamixel::kStatusAlertBit);  // fault reported, then cleared
+    CHECK(!uart.tx_log.empty() && hf_dxl_test::TxInstruction(uart.tx_log.back().data(),
+                                                               uart.tx_log.back().size()) == 0x08);
+    CHECK(bus.WriteRegister(1, 64, &on, 1).ok());
+
+    // No reply: the servo may already be rebooting.
+    uart.auto_reply = false;
+    CHECK(bus.Reboot(1).error == dynamixel::DriverError::UncertainOutcome);
+    uart.auto_reply = true;
+
+    // A real error number (here Instruction Error, 0x02) is a failure.
+    uart.next_error = 0x02;
+    CHECK(bus.Reboot(1).error == dynamixel::DriverError::DeviceError);
+
+    CHECK(bus.Reboot(253).error == dynamixel::DriverError::InvalidId);
+    CHECK(bus.Reboot(dynamixel::kBroadcastId).ok());
+    CHECK(uart.reboots == 3);  // the 0x02 reply above still rebooted in the fake
+}
+
 }  // namespace
 
 int main() {
@@ -264,6 +299,7 @@ int main() {
     TestSyncWriteRead();
     TestBroadcastWriteIsTxOnly();
     TestScanIncludesIdZero();
+    TestRebootClearsHardwareError();
     if (g_failures != 0) {
         std::printf("%d check(s) failed\n", g_failures);
         return 1;

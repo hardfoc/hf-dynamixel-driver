@@ -152,6 +152,38 @@ DriverResult<uint8_t> Bus::Scan(uint8_t* out_ids, uint8_t max_ids,
     return DriverResult<uint8_t>::success(found, impl_->last_);
 }
 
+DriverResult<void> Bus::Reboot(uint8_t id) noexcept {
+    if (!impl_->open_) {
+        return DriverResult<void>::failure(DriverError::NotInitialized);
+    }
+    if (id != kBroadcastId && !IsDeviceId(id)) {
+        return DriverResult<void>::failure(DriverError::InvalidId);
+    }
+    uint8_t error = 0;
+    const int comm = impl_->ph_->reboot(&impl_->adapter_, id, &error);
+    if (!impl_->adapter_.last_echo_ok()) {
+        impl_->last_ = MakeDetail(id, COMM_TX_FAIL, 0, 0, 0,
+                                  impl_->adapter_.transport().now_us(), false);
+        return DriverResult<void>::failure(DriverError::EchoMismatch, impl_->last_);
+    }
+    const bool broadcast = (id == kBroadcastId);
+    impl_->last_ = MakeDetail(id, comm, error, 0, 0, impl_->adapter_.transport().now_us(),
+                              comm == COMM_SUCCESS && !broadcast &&
+                                  (error & kStatusErrorNumberMask) == 0);
+    if (comm != COMM_SUCCESS) {
+        const DriverError mapped = MapCommCode(comm);
+        if (mapped == DriverError::Timeout) {
+            return DriverResult<void>::failure(DriverError::UncertainOutcome, impl_->last_);
+        }
+        return DriverResult<void>::failure(mapped, impl_->last_);
+    }
+    // The Alert bit only reports the latched hardware fault this reboot clears.
+    if ((error & kStatusErrorNumberMask) != 0) {
+        return DriverResult<void>::failure(DriverError::DeviceError, impl_->last_);
+    }
+    return DriverResult<void>::success(impl_->last_);
+}
+
 DriverResult<uint16_t> Bus::ReadRegister(uint8_t id, uint16_t address,
                                          uint8_t* data, uint16_t length) noexcept {
     if (!impl_->open_) {

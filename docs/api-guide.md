@@ -142,5 +142,18 @@ left behind.
 When bit 7 of the error byte is set, read Hardware Error Status (address 70, also in `Telemetry::hardware_error`):
 bit 0 input voltage, bit 2 overheating, bit 3 motor encoder, bit 4 electrical shock, bit 5 overload. On the
 faults enabled in Shutdown (address 63) the servo clears Torque Enable, and only a reboot turns it back on: a power
-cycle, or the Reboot instruction, which this driver does not send.
+cycle, or the Reboot instruction.
 [Troubleshooting](troubleshooting.md) maps symptoms to causes.
+
+## Recover from a hardware error
+
+```cpp
+--8<-- "tests/docs/api_tasks.cpp:reboot"
+```
+
+`Reboot()` (on the `Device`, or `Bus::Reboot(id)`) sends the Reboot instruction, 0x08 (Protocol 2.0, section
+5.7). The servo answers before it restarts; the Alert bit in that reply is the fault being cleared, so it does not
+count as an error, and `detail.device_error` keeps it. A non-zero error number is `DeviceError`; no reply is
+`UncertainOutcome`, because the servo may have rebooted anyway. After a reboot the RAM area is back to its
+defaults: torque is off and Hardware Error Status is 0. The broadcast ID reboots every servo and gets no reply.
+Fix the cause of the fault first, or it latches again.

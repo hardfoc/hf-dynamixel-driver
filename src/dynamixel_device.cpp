@@ -90,6 +90,10 @@ DriverResult<void> Device::WriteSigned(const RegisterDesc& reg, int32_t value,
     return bus_.WriteRegister(id_, reg.address, raw, reg.width, policy);
 }
 
+DriverResult<void> Device::Reboot() noexcept {
+    return bus_.Reboot(id_);
+}
+
 DriverResult<void> Device::SetTorqueEnabled(bool enabled) noexcept {
     const auto m = RequireModel();
     if (!m.ok()) {
