@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1000" viewBox="0 0 1200 1000" role="img" aria-labelledby="driver-layers-title driver-layers-desc" font-family="Inter, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+<title id="driver-layers-title">Three layers, one of them yours</title>
+<desc id="driver-layers-desc">Layer diagram: the application calls the hardware-agnostic Bus and Device classes, which encode Protocol 2.0 packets with the ROBOTIS SDK and reach the line through the transport interface, which calls the UART transport you write, which drives the half-duplex bus of the DYNAMIXEL servos.</desc>
+<defs><marker id="fk-arrow-rail" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#8893A2"/></marker></defs>
+<rect x="0.5" y="0.5" width="1199" height="999" rx="16" fill="#FFFFFF" stroke="#E2E7EE"/>
+<text x="32" y="46.8" font-size="16" font-weight="700" letter-spacing="1.2" fill="#3730A3">ARCHITECTURE</text>
+<text x="32" y="85.6" font-size="32" font-weight="700" fill="#17202C">Three layers, one of them yours</text>
+<text x="32" y="115.4" font-size="18" fill="#566070">The core and the interface are the same on every MCU. The transport is a small class with eight methods.</text>
+<rect x="32" y="131.4" width="1136" height="1" fill="#E2E7EE"/>
+<rect x="32" y="278.4" width="1136" height="225" rx="16" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1.2"/>
+<path d="M600 242.4 L600 274.4" fill="none" stroke="#8893A2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fk-arrow-rail)"/>
+<path d="M600 507.4 L600 539.4" fill="none" stroke="#8893A2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fk-arrow-rail)"/>
+<path d="M600 661.4 L600 693.4" fill="none" stroke="#8893A2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fk-arrow-rail)"/>
+<path d="M600 812.4 L600 844.4" fill="none" stroke="#8893A2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fk-arrow-rail)"/>
+<rect x="32" y="149.4" width="1136" height="89" rx="12" fill="#FFFFFF" stroke="#C9D1DB" stroke-width="1"/>
+<rect x="32" y="157.4" width="4" height="73" rx="2" fill="#64748B"/>
+<rect x="32" y="543.4" width="1136" height="114" rx="12" fill="#EEF0FF" stroke="#4F46E5" stroke-width="1.4"/>
+<rect x="32" y="551.4" width="4" height="98" rx="2" fill="#4F46E5"/>
+<rect x="32" y="697.4" width="1136" height="111" rx="12" fill="#E6F6F4" stroke="#0F8B80" stroke-width="1.4"/>
+<rect x="32" y="705.4" width="4" height="95" rx="2" fill="#0F8B80"/>
+<rect x="32" y="848.4" width="1136" height="89" rx="12" fill="#FFFFFF" stroke="#C9D1DB" stroke-width="1"/>
+<rect x="32" y="856.4" width="4" height="73" rx="2" fill="#64748B"/>
+<text x="56" y="184.4" font-size="20" font-weight="700" fill="#17202C">Your application</text>
+<text x="56" y="215" font-size="17" fill="#2B3442">control loop, state machine, CLI ...</text>
+<rect x="48" y="323.4" width="103" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
+<text x="56" y="341.5" font-size="16" font-weight="700" fill="#3730A3">Bus::Open</text>
+<rect x="159" y="323.4" width="105.8" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
+<text x="167" y="341.5" font-size="16" font-weight="700" fill="#3730A3">Bus::Close</text>
+<rect x="272.8" y="323.4" width="117.3" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
+<text x="280.8" y="341.5" font-size="16" font-weight="700" fill="#3730A3">Bus::IsOpen</text>
+<rect x="398.1" y="323.4" width="204.4" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
+<text x="406.1" y="341.5" font-size="16" font-weight="700" fill="#3730A3">Bus::SetHostBaudRate</text>
+<rect x="610.5" y="323.4" width="95.5" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
+<text x="618.5" y="341.5" font-size="16" font-weight="700" fill="#3730A3">Bus::Ping</text>
+<rect x="714" y="323.4" width="100.1" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
+<text x="722" y="341.5" font-size="16" font-weight="700" fill="#3730A3">Bus::Scan</text>
+<rect x="822.1" y="323.4" width="169.7" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
+<text x="830.1" y="341.5" font-size="16" font-weight="700" fill="#3730A3">Bus::ReadRegister</text>
+<rect x="48" y="357.4" width="173.3" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
+<text x="56" y="375.5" font-size="16" font-weight="700" fill="#3730A3">Bus::WriteRegister</text>
+<rect x="229.3" y="357.4" width="145.9" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
+<text x="237.3" y="375.5" font-size="16" font-weight="700" fill="#3730A3">Bus::SyncWrite</text>
+<rect x="383.2" y="357.4" width="142.2" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
+<text x="391.2" y="375.5" font-size="16" font-weight="700" fill="#3730A3">Bus::SyncRead</text>
+<rect x="533.4" y="357.4" width="148.4" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
+<text x="541.4" y="375.5" font-size="16" font-weight="700" fill="#3730A3">Device::Identify</text>
+<rect x="689.8" y="357.4" width="173.2" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
+<text x="697.8" y="375.5" font-size="16" font-weight="700" fill="#3730A3">Device::BindModel</text>
+<rect x="871" y="357.4" width="255.8" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
+<text x="879" y="375.5" font-size="16" font-weight="700" fill="#3730A3">Device::BindXSeriesFallback</text>
+<rect x="48" y="391.4" width="238.7" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
+<text x="56" y="409.5" font-size="16" font-weight="700" fill="#3730A3">Device::SetTorqueEnabled</text>
+<rect x="294.7" y="391.4" width="241.6" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
+<text x="302.7" y="409.5" font-size="16" font-weight="700" fill="#3730A3">Device::SetOperatingMode</text>
+<rect x="544.4" y="391.4" width="224.3" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
+<text x="552.4" y="409.5" font-size="16" font-weight="700" fill="#3730A3">Device::SetMotionProfile</text>
+<rect x="776.6" y="391.4" width="216.8" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
+<text x="784.6" y="409.5" font-size="16" font-weight="700" fill="#3730A3">Device::SetGoalPosition</text>
+<rect x="48" y="425.4" width="218.3" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
+<text x="56" y="443.5" font-size="16" font-weight="700" fill="#3730A3">Device::SetGoalVelocity</text>
+<rect x="274.3" y="425.4" width="190.4" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
+<text x="282.3" y="443.5" font-size="16" font-weight="700" fill="#3730A3">Device::SetGoalPwm</text>
+<rect x="472.7" y="425.4" width="193.6" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
+<text x="480.7" y="443.5" font-size="16" font-weight="700" fill="#3730A3">Device::ReadPosition</text>
+<rect x="674.2" y="425.4" width="211.3" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
+<text x="682.2" y="443.5" font-size="16" font-weight="700" fill="#3730A3">Device::ReadTelemetry</text>
+<rect x="893.6" y="425.4" width="195.6" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
+<text x="901.6" y="443.5" font-size="16" font-weight="700" fill="#3730A3">Device::ReadRegister</text>
+<rect x="48" y="459.4" width="199.2" height="26" rx="13" fill="#EEF0FF" stroke="#C7CBF8" stroke-width="1"/>
+<text x="56" y="477.5" font-size="16" font-weight="700" fill="#3730A3">Device::WriteRegister</text>
+<text x="48" y="307.4" font-size="17" font-weight="700" fill="#3730A3">HARDWARE-AGNOSTIC CORE</text>
+<text x="326.2" y="307.4" font-size="16" fill="#3730A3">Bus and Device, inc/dynamixel_bus.hpp, inc/dynamixel_device.hpp</text>
+<text x="56" y="578.4" font-size="20" font-weight="700" fill="#3730A3">Protocol engine and transport interface</text>
+<text x="56" y="609" font-size="17" fill="#2B3442">ROBOTIS DYNAMIXEL SDK 4.1.0 (Protocol 2.0 packets, CRC) behind a private PortHandler,</text>
+<text x="56" y="633.7" font-size="17" fill="#2B3442">reaching the line through TransportView, the type-erased view of Transport&lt;Derived&gt;</text>
+<text x="56" y="732.4" font-size="20" font-weight="700" fill="#115E59">Platform transport (your class)</text>
+<text x="56" y="761.6" font-size="16" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, monospace" fill="#2B3442">open()  close()  set_baud_rate()  write_some()  finish_transmit()  read_some()  discard_stale_input() </text>
+<text x="56" y="784.8" font-size="16" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, monospace" fill="#2B3442">now_us()</text>
+<text x="56" y="883.4" font-size="20" font-weight="700" fill="#17202C">DYNAMIXEL X-series servos</text>
+<text x="56" y="914" font-size="17" fill="#2B3442">Half-duplex TTL or RS-485, 8N1, 57600 bit/s factory default, IDs 0 to 252</text>
+<rect x="32" y="949.8" width="14" height="14" rx="4" fill="#EEF0FF" stroke="#4F46E5" stroke-width="1.4"/>
+<text x="54" y="964.4" font-size="16" fill="#566070">this library</text>
+<rect x="161.8" y="949.8" width="14" height="14" rx="4" fill="#E6F6F4" stroke="#0F8B80" stroke-width="1.4"/>
+<text x="183.8" y="964.4" font-size="16" fill="#566070">you write</text>
+<rect x="282.1" y="949.8" width="14" height="14" rx="4" fill="#F1F4F8" stroke="#64748B" stroke-width="1.4"/>
+<text x="304.1" y="964.4" font-size="16" fill="#566070">hardware</text>
+</svg>
