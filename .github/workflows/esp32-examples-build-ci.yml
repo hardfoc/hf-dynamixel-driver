@@ -19,8 +19,6 @@ env:
 
 permissions:
   contents: read
-  pull-requests: write
-  actions: read
 
 concurrency:
   group: esp32-build-ci-${{ github.ref }}
@@ -55,8 +53,22 @@ jobs:
 
   build:
     needs: validate
-    uses: hardfoc/hf-espidf-ci-tools/.github/workflows/ru-build.yml@main
+    uses: hardfoc/hf-espidf-ci-tools/.github/workflows/ru-build.yml@v1
+    permissions:
+      contents: read
+      pull-requests: write
     with:
       project_dir: ${{ needs.validate.outputs.project_dir }}
       project_tools_dir: ${{ needs.validate.outputs.tools_dir }}
       clean_build: ${{ github.event.inputs.clean_build == 'true' }}
+
+  # ✅ Single required check: passes only if every job above passed
+  ci-gate:
+    name: CI gate
+    needs: [validate, build]
+    if: always()
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-ci-gate.yml@v1
+    permissions:
+      contents: read
+    with:
+      needs_json: ${{ toJSON(needs) }}
