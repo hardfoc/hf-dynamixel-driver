@@ -42,12 +42,12 @@ menu "HF Dynamixel Example"
 
     config HF_DYNAMIXEL_SERVO_ID
         int "Preferred servo ID (used when scan finds nothing)"
-        range 1 252
+        range 0 252
         default 1
 
     config HF_DYNAMIXEL_SCAN_LAST_ID
         int "Scan last ID (inclusive)"
-        range 1 252
+        range 0 252
         default 20
 
     config HF_DYNAMIXEL_EXPECT_LOCAL_ECHO

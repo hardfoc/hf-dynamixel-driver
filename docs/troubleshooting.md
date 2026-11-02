@@ -10,7 +10,7 @@ Start with the `DriverError` and `detail` of the failing call: `detail.comm_code
 | Cause | Fix |
 | --- | --- |
 | Baud rate differs from the servo's | Try 57600 (factory), then the other seven rates; or scan with ROBOTIS's DYNAMIXEL Wizard |
-| Wrong ID | Factory ID is 1; `Scan()` IDs 1 to 20 |
+| Wrong ID | Factory ID is 1; `Scan()` IDs 0 to 20 |
 | TX and RX swapped, or wired for the wrong board | ESP32-C6 uses GPIO4 / GPIO5, ESP32-S3 GPIO17 / GPIO18 |
 | Direction pin stuck in transmit | Release it in `finish_transmit()`; leave the DIR GPIO at -1 for an auto-direction transceiver |
 | No common ground, or servo unpowered | Join the grounds; the servo needs its own supply (6.5 V to 14.8 V for an XC430-W150) |

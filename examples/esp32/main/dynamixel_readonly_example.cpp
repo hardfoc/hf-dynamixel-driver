@@ -34,7 +34,7 @@ extern "C" void app_main(void) {
     }
 
     uint8_t ids[16]{};
-    const auto scan = bus.Scan(ids, 16, 1, CONFIG_HF_DYNAMIXEL_SCAN_LAST_ID);
+    const auto scan = bus.Scan(ids, 16, 0, CONFIG_HF_DYNAMIXEL_SCAN_LAST_ID);
     ESP_LOGI(TAG, "scan 1..%d found %u device(s)", CONFIG_HF_DYNAMIXEL_SCAN_LAST_ID,
              scan.ok() ? scan.value : 0);
 

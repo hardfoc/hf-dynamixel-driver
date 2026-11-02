@@ -100,7 +100,7 @@ DriverResult<PingInfo> Bus::Ping(uint8_t id) noexcept {
     if (!impl_->open_) {
         return DriverResult<PingInfo>::failure(DriverError::NotInitialized);
     }
-    if (id > kMaxDeviceId) {
+    if (!IsDeviceId(id)) {
         return DriverResult<PingInfo>::failure(DriverError::InvalidId);
     }
     uint16_t model = 0;
@@ -138,7 +138,8 @@ DriverResult<uint8_t> Bus::Scan(uint8_t* out_ids, uint8_t max_ids,
     if (out_ids == nullptr || max_ids == 0) {
         return DriverResult<uint8_t>::failure(DriverError::InvalidParameter);
     }
-    if (first_id < 1 || last_id > kMaxDeviceId || first_id > last_id) {
+    // Protocol 2.0 section 2.3: device IDs are 0 to 252 (0xFC); 254 is broadcast.
+    if (last_id > kMaxDeviceId || first_id > last_id) {
         return DriverResult<uint8_t>::failure(DriverError::InvalidParameter);
     }
     uint8_t found = 0;
@@ -156,7 +157,10 @@ DriverResult<uint16_t> Bus::ReadRegister(uint8_t id, uint16_t address,
     if (!impl_->open_) {
         return DriverResult<uint16_t>::failure(DriverError::NotInitialized);
     }
-    if (id > kMaxDeviceId || data == nullptr || length == 0) {
+    if (!IsDeviceId(id)) {
+        return DriverResult<uint16_t>::failure(DriverError::InvalidId);
+    }
+    if (data == nullptr || length == 0) {
         return DriverResult<uint16_t>::failure(DriverError::InvalidParameter);
     }
     uint8_t error = 0;
@@ -183,7 +187,7 @@ DriverResult<void> Bus::WriteRegister(uint8_t id, uint16_t address,
     if (data == nullptr || length == 0) {
         return DriverResult<void>::failure(DriverError::InvalidParameter);
     }
-    if (id != kBroadcastId && id > kMaxDeviceId) {
+    if (id != kBroadcastId && !IsDeviceId(id)) {
         return DriverResult<void>::failure(DriverError::InvalidId);
     }
     if (id == kBroadcastId && policy != WritePolicy::TxOnly) {
@@ -246,6 +250,11 @@ DriverResult<uint8_t> Bus::SyncWrite(uint16_t address, uint16_t length,
     if (ids == nullptr || payloads == nullptr || count == 0 || length == 0) {
         return DriverResult<uint8_t>::failure(DriverError::InvalidParameter);
     }
+    for (uint8_t i = 0; i < count; ++i) {
+        if (!IsDeviceId(ids[i])) {
+            return DriverResult<uint8_t>::failure(DriverError::InvalidId);
+        }
+    }
     ::dynamixel::GroupSyncWrite group(&impl_->adapter_, impl_->ph_, address, length);
     uint8_t added = 0;
     for (uint8_t i = 0; i < count; ++i) {
@@ -282,6 +291,9 @@ DriverResult<uint8_t> Bus::SyncRead(uint16_t address, uint16_t length,
     // The stock GroupSyncRead treats the first missing servo as a total failure.
     std::vector<uint8_t> param(count);
     for (uint8_t i = 0; i < count; ++i) {
+        if (!IsDeviceId(ids[i])) {
+            return DriverResult<uint8_t>::failure(DriverError::InvalidId);
+        }
         param[i] = ids[i];
         items[i] = SyncReadItem{};
         items[i].id = ids[i];

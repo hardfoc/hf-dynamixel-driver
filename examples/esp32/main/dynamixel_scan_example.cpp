@@ -32,7 +32,7 @@ extern "C" void app_main(void) {
 
     uint8_t ids[32]{};
     const auto scan =
-        bus.Scan(ids, 32, 1, static_cast<uint8_t>(CONFIG_HF_DYNAMIXEL_SCAN_LAST_ID));
+        bus.Scan(ids, 32, 0, static_cast<uint8_t>(CONFIG_HF_DYNAMIXEL_SCAN_LAST_ID));
     if (!scan.ok() || scan.value == 0) {
         ESP_LOGW(TAG, "no devices on 1..%d: %s", CONFIG_HF_DYNAMIXEL_SCAN_LAST_ID,
                  scan.ok() ? "empty" : dynamixel::ToString(scan.error).data());

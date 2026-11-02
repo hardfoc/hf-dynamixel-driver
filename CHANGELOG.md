@@ -10,6 +10,13 @@ All notable changes to this driver are listed here. Versions follow
   Jekyll site and its files are gone.
 - README rewritten to the HardFOC README standard.
 
+### Fixed
+
+- `Bus::Scan()` accepts ID 0, and its default range now starts at 0: Protocol 2.0 device IDs are 0 to 252
+  (e-Manual, Protocol 2.0, section 2.3). `ReadRegister()` returns `InvalidId` (was `InvalidParameter`) for an
+  ID above 252, and `SyncRead()` / `SyncWrite()` now reject such IDs with `InvalidId`. New `IsDeviceId()` and
+  `kMinDeviceId`.
+
 ## 0.4.0
 
 - X-series catalog (XC430, XL430, XM430, XH430) plus `BindModel` /

@@ -37,8 +37,9 @@ as the bus. `Open()` calls your transport's `open()`; it sends nothing.
 --8<-- "tests/docs/api_tasks.cpp:scan"
 ```
 
-`Scan()` pings each ID in turn and costs one reply timeout per absent ID, so keep the range short. It starts at
-ID 1 at the lowest; ping ID 0 yourself with `Ping(0)`.
+`Scan()` pings each ID in turn and costs one reply timeout per absent ID, so keep the range short. Any device ID
+from 0 to 252 is valid (Protocol 2.0, section 2.3); the default range is all of them. ID 253 is not a device ID
+and 254 is the broadcast ID, so `Scan()`, `Ping()`, `ReadRegister()` and the sync calls reject them.
 
 ## Identify a servo
 

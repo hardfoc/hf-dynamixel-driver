@@ -209,6 +209,44 @@ void TestBroadcastWriteIsTxOnly() {
                             dynamixel::WritePolicy::TxOnly).ok());
 }
 
+// Protocol 2.0 section 2.3: ID 0 is a valid device ID (0 to 252); 253 is not.
+void TestScanIncludesIdZero() {
+    FakeTransport uart;
+    dynamixel::Bus bus{dynamixel::TransportView{uart}};
+    CHECK(bus.Open({}).ok());
+    uint8_t found[4] = {0xAA, 0xAA, 0xAA, 0xAA};
+    const auto scan = bus.Scan(found, 4, 0, 3);
+    CHECK(scan.ok());
+    CHECK(scan.value == 4);
+    CHECK(found[0] == 0);
+    CHECK(found[3] == 3);
+
+    uint8_t first = 0xAA;
+    const auto def = bus.Scan(&first, 1);  // default range starts at ID 0
+    CHECK(def.ok());
+    CHECK(def.value == 1);
+    CHECK(first == 0);
+
+    CHECK(!bus.Scan(found, 4, 0, 253).ok());
+    CHECK(bus.Ping(0).ok());
+    uint8_t mode = 0;
+    CHECK(bus.ReadRegister(0, 11, &mode, 1).ok());
+    CHECK(bus.ReadRegister(253, 11, &mode, 1).error == dynamixel::DriverError::InvalidId);
+
+    const uint8_t ids[2] = {0, 1};
+    uint8_t a[1] = {0};
+    uint8_t b[1] = {0};
+    uint8_t* outs[2] = {a, b};
+    dynamixel::SyncReadItem items[2];
+    const auto sr = bus.SyncRead(11, 1, ids, 2, outs, items);
+    CHECK(sr.ok());
+    CHECK(sr.value == 2);
+    const uint8_t bad_ids[1] = {253};
+    CHECK(bus.SyncRead(11, 1, bad_ids, 1, outs, items).error == dynamixel::DriverError::InvalidId);
+    const uint8_t* ins[1] = {a};
+    CHECK(bus.SyncWrite(64, 1, bad_ids, ins, 1).error == dynamixel::DriverError::InvalidId);
+}
+
 }  // namespace
 
 int main() {
@@ -225,6 +263,7 @@ int main() {
     TestKnownLargerXSeries();
     TestSyncWriteRead();
     TestBroadcastWriteIsTxOnly();
+    TestScanIncludesIdZero();
     if (g_failures != 0) {
         std::printf("%d check(s) failed\n", g_failures);
         return 1;

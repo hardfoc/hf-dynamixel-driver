@@ -123,8 +123,13 @@ struct TransportIo {
     DriverError error{DriverError::None};
 };
 
+/// Protocol 2.0 section 2.3: unicast device IDs are 0 to 252 (0xFC), 254 (0xFE) is broadcast.
 inline constexpr uint8_t kBroadcastId = 0xFE;
+inline constexpr uint8_t kMinDeviceId = 0x00;
 inline constexpr uint8_t kMaxDeviceId = 0xFC;
+
+/// True for a unicast device ID (0 to 252). Excludes 253 and the broadcast ID 254.
+constexpr bool IsDeviceId(uint8_t id) noexcept { return id <= kMaxDeviceId; }
 inline constexpr uint32_t kDefaultBaud = 57600;
 inline constexpr std::size_t kMaxPacketBytes = 256;
 

@@ -41,8 +41,9 @@ public:
     DriverResult<void> SetHostBaudRate(uint32_t baud) noexcept;
 
     DriverResult<PingInfo> Ping(uint8_t id) noexcept;
+    /// Ping first_id..last_id (inclusive). The default covers every device ID, 0 to 252.
     DriverResult<uint8_t> Scan(uint8_t* out_ids, uint8_t max_ids,
-                               uint8_t first_id = 1,
+                               uint8_t first_id = kMinDeviceId,
                                uint8_t last_id = kMaxDeviceId) noexcept;
 
     DriverResult<uint16_t> ReadRegister(uint8_t id, uint16_t address,

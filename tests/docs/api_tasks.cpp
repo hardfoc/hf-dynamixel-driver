@@ -26,7 +26,7 @@ bool open_bus(dynamixel::Bus& bus) {
 void scan(dynamixel::Bus& bus) {
   // --8<-- [start:scan]
   uint8_t ids[16];
-  const auto found = bus.Scan(ids, 16, 1, 20);          // ping IDs 1..20, keep up to 16 answers
+  const auto found = bus.Scan(ids, 16, 0, 20);          // ping IDs 0..20, keep up to 16 answers
   for (uint8_t i = 0; found && i < found.value; ++i) {
     const auto ping = bus.Ping(ids[i]);
     if (ping) {
