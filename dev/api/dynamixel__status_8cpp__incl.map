@@ -1,0 +1,13 @@
+<map id="src/dynamixel_status.cpp" name="src/dynamixel_status.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="124,5,311,31"/>
+<area shape="rect" id="Node000002" href="$dynamixel__types_8hpp.html" title="Public result and status types for the Dynamixel driver." alt="" coords="51,79,213,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="205,33,158,72,155,68,202,29"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="237,79,369,104"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="233,29,280,68,277,72,229,33"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,152,72,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="119,106,66,146,63,141,115,102"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="97,152,167,177"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="135,104,135,138,129,138,129,104"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="191,152,289,177"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="151,102,212,142,209,147,148,106"/>
+</map>
