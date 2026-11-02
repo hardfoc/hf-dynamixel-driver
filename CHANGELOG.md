@@ -1,5 +1,15 @@
 # Changelog
 
+All notable changes to this driver are listed here. Versions follow
+[Semantic Versioning](https://semver.org/).
+
+## Unreleased
+
+- Documentation moved to the HardFOC MkDocs platform: rewritten pages, the code on the site compiled by the host
+  build from `tests/docs/`, a layer figure drawn from the headers, the Doxygen reference under `api/`. The
+  Jekyll site and its files are gone.
+- README rewritten to the HardFOC README standard.
+
 ## 0.4.0
 
 - X-series catalog (XC430, XL430, XM430, XH430) plus `BindModel` /
