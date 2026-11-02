@@ -25,6 +25,10 @@ public:
     TransportConfig config_{};
     bool open_{false};
     CommDetail last_{};
+    std::size_t packet_limit_{kMaxPacketBytes};
+
+    /// True when a packet of `bytes` (before byte stuffing) fits max_packet_bytes.
+    bool Fits(std::size_t bytes) const noexcept { return bytes <= packet_limit_; }
 };
 
 Bus::Bus(TransportView transport) noexcept
@@ -61,6 +65,10 @@ DriverResult<void> Bus::Open(const TransportConfig& config) noexcept {
     if (!impl_->adapter_.transport().valid()) {
         return DriverResult<void>::failure(DriverError::InvalidParameter);
     }
+    if (config.max_packet_bytes < kMinPacketBytes) {
+        return DriverResult<void>::failure(DriverError::InvalidParameter);
+    }
+    impl_->packet_limit_ = std::min(config.max_packet_bytes, kSdkMaxPacketBytes);
     impl_->config_ = config;
     impl_->adapter_.set_config(config);
     if (!impl_->adapter_.openPort()) {
@@ -195,6 +203,9 @@ DriverResult<uint16_t> Bus::ReadRegister(uint8_t id, uint16_t address,
     if (data == nullptr || length == 0) {
         return DriverResult<uint16_t>::failure(DriverError::InvalidParameter);
     }
+    if (!impl_->Fits(StatusPacketBytes(length))) {
+        return DriverResult<uint16_t>::failure(DriverError::BufferTooSmall);
+    }
     uint8_t error = 0;
     const int comm = impl_->ph_->readTxRx(&impl_->adapter_, id, address, length, data, &error);
     impl_->last_ = MakeDetail(id, comm, error, length,
@@ -224,6 +235,10 @@ DriverResult<void> Bus::WriteRegister(uint8_t id, uint16_t address,
     }
     if (id == kBroadcastId && policy != WritePolicy::TxOnly) {
         return DriverResult<void>::failure(DriverError::InvalidParameter);
+    }
+    // Write (0x03, section 5.3): 2 address bytes + data.
+    if (!impl_->Fits(InstructionPacketBytes(2U + length))) {
+        return DriverResult<void>::failure(DriverError::BufferTooSmall);
     }
 
     uint8_t* writable = const_cast<uint8_t*>(data);
@@ -287,6 +302,16 @@ DriverResult<uint8_t> Bus::SyncWrite(uint16_t address, uint16_t length,
             return DriverResult<uint8_t>::failure(DriverError::InvalidId);
         }
     }
+    // Sync Write (0x83, section 5.11): address (2) + length (2), then ID + data per servo.
+    std::size_t with_payload = 0;
+    for (uint8_t i = 0; i < count; ++i) {
+        if (payloads[i] != nullptr) {
+            ++with_payload;
+        }
+    }
+    if (!impl_->Fits(InstructionPacketBytes(4U + with_payload * (1U + length)))) {
+        return DriverResult<uint8_t>::failure(DriverError::BufferTooSmall);
+    }
     ::dynamixel::GroupSyncWrite group(&impl_->adapter_, impl_->ph_, address, length);
     uint8_t added = 0;
     for (uint8_t i = 0; i < count; ++i) {
@@ -318,6 +343,12 @@ DriverResult<uint8_t> Bus::SyncRead(uint16_t address, uint16_t length,
     if (ids == nullptr || payloads == nullptr || items == nullptr ||
         count == 0 || length == 0) {
         return DriverResult<uint8_t>::failure(DriverError::InvalidParameter);
+    }
+    // Sync Read (0x82, section 5.10): address (2) + length (2) + one ID per
+    // servo out, a status packet with `length` data bytes back from each.
+    if (!impl_->Fits(InstructionPacketBytes(4U + count)) ||
+        !impl_->Fits(StatusPacketBytes(length))) {
+        return DriverResult<uint8_t>::failure(DriverError::BufferTooSmall);
     }
     // Drive sync-read TX once, then collect each status packet independently.
     // The stock GroupSyncRead treats the first missing servo as a total failure.

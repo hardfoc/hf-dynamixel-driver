@@ -351,6 +351,67 @@ void TestGoalPwmChecksMode() {
     CHECK(ok_dev.SetGoalPwm(100).error == dynamixel::DriverError::UnsupportedRequest);
 }
 
+void TestMaxPacketBytesBoundsPackets() {
+    // Protocol 2.0 section 2.4: Length = parameters + 3, so an instruction is
+    // 10 + parameters bytes and a status packet 11 + parameters bytes.
+    {
+        FakeTransport uart;
+        dynamixel::Bus bus{dynamixel::TransportView{uart}};
+        dynamixel::TransportConfig cfg{};
+        cfg.max_packet_bytes = dynamixel::kMinPacketBytes - 1;  // a ping reply cannot fit
+        CHECK(bus.Open(cfg).error == dynamixel::DriverError::InvalidParameter);
+        CHECK(!bus.IsOpen());
+    }
+
+    FakeTransport uart;
+    dynamixel::Bus bus{dynamixel::TransportView{uart}};
+    dynamixel::TransportConfig cfg{};
+    cfg.max_packet_bytes = 64;
+    CHECK(bus.Open(cfg).ok());
+    uint8_t buf[300] = {};
+
+    std::size_t sent = uart.tx_log.size();
+    CHECK(bus.ReadRegister(1, 0, buf, 53).ok());  // 11 + 53 = 64
+    CHECK(uart.tx_log.size() == sent + 1);
+    sent = uart.tx_log.size();
+    CHECK(bus.ReadRegister(1, 0, buf, 54).error == dynamixel::DriverError::BufferTooSmall);
+    CHECK(uart.tx_log.size() == sent);
+
+    CHECK(bus.WriteRegister(1, 150, buf, 52).ok());  // 12 + 52 = 64
+    sent = uart.tx_log.size();
+    CHECK(bus.WriteRegister(1, 150, buf, 53).error == dynamixel::DriverError::BufferTooSmall);
+    CHECK(bus.WriteRegister(dynamixel::kBroadcastId, 150, buf, 53,
+                            dynamixel::WritePolicy::TxOnly)
+              .error == dynamixel::DriverError::BufferTooSmall);
+    CHECK(uart.tx_log.size() == sent);
+
+    // Sync write: 14 + count * (1 + length). Two servos, 24 bytes each = 64.
+    const uint8_t ids[3] = {1, 2, 3};
+    const uint8_t* payloads[3] = {buf, buf, buf};
+    CHECK(bus.SyncWrite(150, 24, ids, payloads, 2).ok());
+    sent = uart.tx_log.size();
+    CHECK(bus.SyncWrite(150, 24, ids, payloads, 3).error == dynamixel::DriverError::BufferTooSmall);
+    CHECK(uart.tx_log.size() == sent);
+
+    // Sync read: each status is 11 + length.
+    uint8_t a[64] = {};
+    uint8_t* outs[1] = {a};
+    dynamixel::SyncReadItem items[1];
+    CHECK(bus.SyncRead(0, 54, ids, 1, outs, items).error == dynamixel::DriverError::BufferTooSmall);
+    CHECK(uart.tx_log.size() == sent);
+    CHECK(bus.SyncRead(0, 53, ids, 1, outs, items).ok());
+
+    // The default (256) bounds a plain read at 245 bytes.
+    FakeTransport uart2;
+    dynamixel::Bus bus2{dynamixel::TransportView{uart2}};
+    CHECK(bus2.Open({}).ok());
+    CHECK(bus2.config().max_packet_bytes == dynamixel::kMaxPacketBytes);
+    CHECK(bus2.ReadRegister(1, 0, buf, 245).ok());
+    sent = uart2.tx_log.size();
+    CHECK(bus2.ReadRegister(1, 0, buf, 246).error == dynamixel::DriverError::BufferTooSmall);
+    CHECK(uart2.tx_log.size() == sent);
+}
+
 }  // namespace
 
 int main() {
@@ -371,6 +432,7 @@ int main() {
     TestRebootClearsHardwareError();
     TestUnknownOperatingMode();
     TestGoalPwmChecksMode();
+    TestMaxPacketBytesBoundsPackets();
     if (g_failures != 0) {
         std::printf("%d check(s) failed\n", g_failures);
         return 1;

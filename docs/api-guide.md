@@ -137,6 +137,7 @@ left behind.
 | `DeviceError` | The servo answered with an error byte | `detail.device_error`: bit 7 hardware alert, bits 0 to 6 the error number |
 | `UnsupportedRequest` | No model bound, or wrong mode for the call | `Identify()` or bind a model; change mode |
 | `Busy` | Torque on during a mode change, or the bus is mid-transaction | Torque off first |
+| `BufferTooSmall` | The request's packet is longer than `max_packet_bytes`; nothing was sent | Split it, or raise the limit ([Configuration](configuration.md#transport-configuration)) |
 | `NotInitialized`, `InvalidParameter`, `InvalidId` | Bus not open, a null buffer or zero length, ID above 252 | Fix the call |
 
 When bit 7 of the error byte is set, read Hardware Error Status (address 70, also in `Telemetry::hardware_error`):

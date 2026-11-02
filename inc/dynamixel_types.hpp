@@ -154,6 +154,23 @@ inline constexpr uint8_t kStatusAlertBit = 0x80;
 inline constexpr uint8_t kStatusErrorNumberMask = 0x7F;
 
 inline constexpr uint32_t kDefaultBaud = 57600;
+/// Default `TransportConfig::max_packet_bytes`: the largest instruction or
+/// status packet (before byte stuffing) the bus builds or asks a servo for.
 inline constexpr std::size_t kMaxPacketBytes = 256;
+/// Smallest accepted `max_packet_bytes`: a Ping status packet (14 bytes).
+inline constexpr std::size_t kMinPacketBytes = 14;
+/// The bundled ROBOTIS SDK packet buffers (1024 bytes); a larger
+/// `max_packet_bytes` is capped to this.
+inline constexpr std::size_t kSdkMaxPacketBytes = 1024;
+
+/// Protocol 2.0 section 2.4: Length = parameters + 3. An instruction packet is
+/// header (4) + ID + Length (2) + Instruction + parameters + CRC (2) bytes.
+constexpr std::size_t InstructionPacketBytes(std::size_t parameters) noexcept {
+    return 10 + parameters;
+}
+/// A status packet adds the Error byte (section 3.2) to the same layout.
+constexpr std::size_t StatusPacketBytes(std::size_t parameters) noexcept {
+    return 11 + parameters;
+}
 
 }  // namespace dynamixel

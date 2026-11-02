@@ -18,6 +18,12 @@ All notable changes to this driver are listed here. Versions follow
 
 ### Fixed
 
+- `TransportConfig::max_packet_bytes` now bounds packet sizes; before, nothing read it. `ReadRegister()`,
+  `WriteRegister()`, `SyncRead()` and `SyncWrite()` return `BufferTooSmall` without sending when the instruction
+  or status packet (10 or 11 bytes plus parameters, e-Manual Protocol 2.0 section 2.4) would be longer.
+  `Bus::Open()` returns `InvalidParameter` below `kMinPacketBytes` (14) and caps the limit at
+  `kSdkMaxPacketBytes` (1024, the SDK's buffers). New `InstructionPacketBytes()` and `StatusPacketBytes()`.
+
 - `Device::SetGoalPwm()` runs the same checks as the other goal setters: it needs a model whose descriptor
   supports PWM Control Mode (Operating Mode 16) as well as a cached mode of PWM, and refuses before sending.
 
@@ -31,6 +37,15 @@ All notable changes to this driver are listed here. Versions follow
   (e-Manual, Protocol 2.0, section 2.3). `ReadRegister()` returns `InvalidId` (was `InvalidParameter`) for an
   ID above 252, and `SyncRead()` / `SyncWrite()` now reject such IDs with `InvalidId`. New `IsDeviceId()` and
   `kMinDeviceId`.
+
+### Breaking changes
+
+- With the default `max_packet_bytes` of 256, a single read above 245 bytes, a write above 244 bytes or a sync
+  write above 242 bytes of IDs and data now returns `BufferTooSmall` instead of being sent. Raise
+  `max_packet_bytes` (up to 1024) for longer transfers. `Bus::Open()` fails for a `max_packet_bytes` below 14.
+- `Bus::ReadRegister()` returns `InvalidId` (was `InvalidParameter`) for an ID above 252; `SyncRead()` and
+  `SyncWrite()` reject such IDs.
+- `Bus::Scan()` with default arguments now pings ID 0 too (253 IDs instead of 252).
 
 ## 0.4.0
 

@@ -12,7 +12,14 @@ model descriptors, and the Kconfig options of the ESP32 examples.
 | `baud_rate` | `57600` (`kDefaultBaud`) | Host rate in bit/s; must match the servos' Baud Rate register |
 | `echo_policy` | `EchoPolicy::None` | `ExpectedLocalEcho` when RX hears every TX byte (single-wire link) |
 | `latency_ms` | `2` | Slack added to every reply timeout, twice, on top of 2 ms and the packet's byte time |
-| `max_packet_bytes` | `256` (`kMaxPacketBytes`) | Passed to your transport; the driver itself does not read it |
+| `max_packet_bytes` | `256` (`kMaxPacketBytes`) | Largest packet the bus sends or asks a servo for; see below |
+
+`max_packet_bytes` bounds every packet before byte stuffing. Protocol 2.0 (e-Manual section 2.4) makes an
+instruction packet 10 bytes plus its parameters and a status packet 11 bytes plus its data, so with the default of
+256 a `ReadRegister()` or `SyncRead()` returns at most 245 bytes per servo, a `WriteRegister()` writes at most
+244, and a `SyncWrite()` carries at most 242 bytes of ID plus data. A request that would not fit returns
+`BufferTooSmall` without sending. `Open()` refuses a value below 14 (`kMinPacketBytes`, a ping reply) with
+`InvalidParameter` and caps a value above 1024 (`kSdkMaxPacketBytes`, the SDK's packet buffers).
 
 For reads, writes and pings of one servo, the reply timeout for n expected bytes is n × byte time +
 2 × `latency_ms` + 2 ms, measured with your transport's `now_us()`. Raise `latency_ms` when the transport adds
@@ -60,7 +67,9 @@ A servo with a different control table needs a `ModelDescriptor` written field b
 | `kBroadcastId` | `0xFE` | Broadcast, `TxOnly` writes |
 | `kMaxDeviceId` | `0xFC` | Highest ID, 252 |
 | `kDefaultBaud` | `57600` | Factory rate |
-| `kMaxPacketBytes` | `256` | Default packet limit |
+| `kMaxPacketBytes` | `256` | Default `max_packet_bytes` |
+| `kMinPacketBytes` | `14` | Smallest `max_packet_bytes` `Open()` accepts |
+| `kSdkMaxPacketBytes` | `1024` | Cap on `max_packet_bytes` (SDK buffers) |
 
 ## ESP32 example options
 
