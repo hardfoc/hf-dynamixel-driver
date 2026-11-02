@@ -18,6 +18,11 @@ All notable changes to this driver are listed here. Versions follow
 
 ### Fixed
 
+- `Device::ReadTelemetry()` reads Present PWM (124) to Present Temperature (146), contiguous in the X-series RAM
+  control table, in one Read instead of six, then Hardware Error Status (70): two packets instead of seven, same
+  values. It falls back to per-register reads when the block does not fit `max_packet_bytes` or the servo refuses
+  the range. The returned `detail` is now the block read's.
+
 - `TransportConfig::max_packet_bytes` now bounds packet sizes; before, nothing read it. `ReadRegister()`,
   `WriteRegister()`, `SyncRead()` and `SyncWrite()` return `BufferTooSmall` without sending when the instruction
   or status packet (10 or 11 bytes plus parameters, e-Manual Protocol 2.0 section 2.4) would be longer.

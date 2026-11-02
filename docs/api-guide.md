@@ -82,8 +82,11 @@ which shape every position move; 0 means unlimited.
 --8<-- "tests/docs/api_tasks.cpp:read"
 ```
 
-`ReadTelemetry()` makes seven register reads. It fails only when the position read fails; the other fields stay
-0 when their read fails. For one value, `ReadPosition()` is a single read. For several servos at once, use a sync
+`ReadTelemetry()` makes two reads: one of the contiguous Present block, Present PWM (124) to Present Temperature
+(146), 23 bytes, and one of Hardware Error Status (70). It fails when the block read fails; `hardware_error` stays
+0 when its own read fails, and `detail` is the block read's. When the block reply would not fit `max_packet_bytes`
+or the servo refuses the range with an error number, it falls back to one read per register, which fails only when
+the position read fails. For one value, `ReadPosition()` is a single read. For several servos at once, use a sync
 read.
 
 ## Read or write several servos at once

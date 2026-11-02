@@ -50,6 +50,10 @@ public:
     DriverResult<void> SetGoalPwm(int16_t pwm) noexcept;
 
     DriverResult<int32_t> ReadPosition() noexcept;
+    /// Present PWM, load/current, velocity, position, input voltage and
+    /// temperature in one Read of the contiguous block 124..146, then Hardware
+    /// Error Status (70). Falls back to one read per register when the block
+    /// does not fit `max_packet_bytes` or the servo refuses the range.
     DriverResult<Telemetry> ReadTelemetry() noexcept;
 
     DriverResult<uint16_t> ReadRegister(uint16_t address, uint8_t* data,
@@ -62,6 +66,7 @@ private:
     DriverResult<void> RequireModel() const noexcept;
     DriverResult<void> RequireMode(OperatingMode mode) const noexcept;
     DriverResult<int32_t> ReadSigned(const RegisterDesc& reg) noexcept;
+    DriverResult<Telemetry> ReadTelemetryPerRegister() noexcept;
     DriverResult<void> WriteSigned(const RegisterDesc& reg, int32_t value,
                                    WritePolicy policy) noexcept;
 

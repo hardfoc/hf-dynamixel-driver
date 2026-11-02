@@ -412,6 +412,81 @@ void TestMaxPacketBytesBoundsPackets() {
     CHECK(uart2.tx_log.size() == sent);
 }
 
+void SetTelemetryRegisters(FakeTransport& uart) {
+    uart.registers[70] = 0x00;                                   // Hardware Error Status
+    uart.registers[124] = 0x9C; uart.registers[125] = 0xFF;      // Present PWM -100
+    uart.registers[126] = 0x2C; uart.registers[127] = 0x01;      // Present Load/Current 300
+    uart.registers[128] = 0xF6; uart.registers[129] = 0xFF;      // Present Velocity -10
+    uart.registers[130] = 0xFF; uart.registers[131] = 0xFF;
+    uart.registers[132] = 0x00; uart.registers[133] = 0x08;      // Present Position 2048
+    uart.registers[134] = 0x00; uart.registers[135] = 0x00;
+    uart.registers[144] = 0x78; uart.registers[145] = 0x00;      // Present Input Voltage 12.0 V
+    uart.registers[146] = 37;                                    // Present Temperature
+}
+
+void CheckTelemetryValues(const dynamixel::Telemetry& tel) {
+    CHECK(tel.position == 2048);
+    CHECK(tel.velocity == -10);
+    CHECK(tel.load == 300);
+    CHECK(tel.pwm == -100);
+    CHECK(tel.voltage_0p1_v == 120);
+    CHECK(tel.temperature_c == 37);
+    CHECK(tel.hardware_error == 0);
+}
+
+void TestReadTelemetrySingleRead() {
+    // X-series control table, RAM area: Present PWM (124) through Present
+    // Temperature (146) is one contiguous range of registers.
+    FakeTransport uart;
+    SetTelemetryRegisters(uart);
+    dynamixel::Bus bus{dynamixel::TransportView{uart}};
+    CHECK(bus.Open({}).ok());
+    dynamixel::Device dev(bus, 1);
+    CHECK(dev.Identify().ok());
+
+    const std::size_t sent = uart.tx_log.size();
+    const auto tel = dev.ReadTelemetry();
+    CHECK(tel.ok());
+    CheckTelemetryValues(tel.value);
+    // One Read of Present PWM (124) .. Present Temperature (146), 23 bytes,
+    // and one of Hardware Error Status (70): two packets, not seven.
+    CHECK(uart.tx_log.size() == sent + 2);
+    if (uart.tx_log.size() == sent + 2) {
+        const auto& block = uart.tx_log[sent];
+        CHECK(block.size() == 14);
+        CHECK(hf_dxl_test::TxInstruction(block.data(), block.size()) == 0x02);
+        CHECK(block.size() >= 12 && (block[8] | (block[9] << 8)) == 124);
+        CHECK(block.size() >= 12 && (block[10] | (block[11] << 8)) == 23);
+        const auto& hw = uart.tx_log[sent + 1];
+        CHECK(hw.size() >= 12 && (hw[8] | (hw[9] << 8)) == 70);
+        CHECK(hw.size() >= 12 && (hw[10] | (hw[11] << 8)) == 1);
+    }
+
+    // When the block does not fit max_packet_bytes, the per-register reads
+    // give the same values.
+    FakeTransport small_uart;
+    SetTelemetryRegisters(small_uart);
+    dynamixel::Bus small_bus{dynamixel::TransportView{small_uart}};
+    dynamixel::TransportConfig cfg{};
+    cfg.max_packet_bytes = 32;  // the 34-byte block reply does not fit
+    CHECK(small_bus.Open(cfg).ok());
+    dynamixel::Device small_dev(small_bus, 1);
+    CHECK(small_dev.Identify().ok());
+    const auto tel2 = small_dev.ReadTelemetry();
+    CHECK(tel2.ok());
+    CheckTelemetryValues(tel2.value);
+
+    // A latched hardware fault sets the Alert bit in every status packet, so
+    // the block read fails and ReadTelemetry() fails as before.
+    uart.hardware_error = 0x20;
+    CHECK(dev.ReadTelemetry().error == dynamixel::DriverError::DeviceError);
+    uart.hardware_error = 0;
+
+    // No reply: the call still fails with the read's error.
+    uart.auto_reply = false;
+    CHECK(dev.ReadTelemetry().error == dynamixel::DriverError::Timeout);
+}
+
 }  // namespace
 
 int main() {
@@ -433,6 +508,7 @@ int main() {
     TestUnknownOperatingMode();
     TestGoalPwmChecksMode();
     TestMaxPacketBytesBoundsPackets();
+    TestReadTelemetrySingleRead();
     if (g_failures != 0) {
         std::printf("%d check(s) failed\n", g_failures);
         return 1;
