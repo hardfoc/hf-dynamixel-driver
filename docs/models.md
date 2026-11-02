@@ -35,8 +35,11 @@ work. With one:
 | `SetGoalVelocity()` | Mode Velocity |
 | `SetGoalPwm()` | Mode PWM |
 
-`Identify()` also reads the servo's Operating Mode and caches it; `SetOperatingMode()` updates the cache. A goal
-for another mode is refused before anything is sent.
+`Identify()` also reads the servo's Operating Mode and caches it; `SetOperatingMode()` updates the cache, and
+`operating_mode()` returns it. A register value without a typed mode (current 0, current-based position 5, or a
+value the control table does not define) is cached as `OperatingMode::Unknown`, with the raw byte in
+`operating_mode_raw()`. A goal for another mode, or any goal while the mode is `Unknown`, is refused before
+anything is sent.
 
 ## A servo the catalog does not list
 

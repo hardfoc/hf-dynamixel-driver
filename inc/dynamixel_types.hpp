@@ -104,12 +104,30 @@ enum class WritePolicy : uint8_t {
     ReadbackVerify,   ///< TxRx, then read the same register back.
 };
 
+/// Operating Mode (address 11) values with typed support. X-series e-Manual,
+/// section 2.4 Operating Mode (11): 0 current, 1 velocity, 3 position,
+/// 4 extended position, 5 current-based position, 16 PWM.
 enum class OperatingMode : uint8_t {
     Velocity = 1,
     Position = 3,
     ExtendedPosition = 4,
     Pwm = 16,
+    /// Not read yet, or a register value this driver has no typed mode for
+    /// (current 0, current-based position 5, or an undefined value).
+    Unknown = 0xFF,
 };
+
+/// Map a raw Operating Mode register value; anything without a typed mode
+/// becomes `OperatingMode::Unknown` instead of an out-of-range enum value.
+constexpr OperatingMode OperatingModeFromRaw(uint8_t raw) noexcept {
+    switch (raw) {
+        case 1:  return OperatingMode::Velocity;
+        case 3:  return OperatingMode::Position;
+        case 4:  return OperatingMode::ExtendedPosition;
+        case 16: return OperatingMode::Pwm;
+        default: return OperatingMode::Unknown;
+    }
+}
 
 struct PingInfo {
     uint8_t  id{0};

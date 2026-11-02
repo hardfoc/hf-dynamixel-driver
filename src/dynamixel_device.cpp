@@ -54,7 +54,8 @@ DriverResult<PingInfo> Device::Identify() noexcept {
     uint8_t mode = 0;
     const auto rd = bus_.ReadRegister(id_, model_->operating_mode_reg.address, &mode, 1);
     if (rd.ok()) {
-        cached_mode_ = static_cast<OperatingMode>(mode);
+        mode_raw_ = mode;
+        cached_mode_ = OperatingModeFromRaw(mode);
         mode_known_ = true;
     }
     return ping;
@@ -108,6 +109,9 @@ DriverResult<void> Device::SetOperatingMode(OperatingMode mode) noexcept {
     if (!m.ok()) {
         return m;
     }
+    if (mode == OperatingMode::Unknown) {
+        return DriverResult<void>::failure(DriverError::InvalidParameter);
+    }
     if (!ModeSupported(*model_, mode)) {
         return DriverResult<void>::failure(DriverError::UnsupportedRequest);
     }
@@ -122,6 +126,7 @@ DriverResult<void> Device::SetOperatingMode(OperatingMode mode) noexcept {
     const uint8_t v = static_cast<uint8_t>(mode);
     auto wr = bus_.WriteRegister(id_, model_->operating_mode_reg.address, &v, 1);
     if (wr.ok()) {
+        mode_raw_ = v;
         cached_mode_ = mode;
         mode_known_ = true;
     }

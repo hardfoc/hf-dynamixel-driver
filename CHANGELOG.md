@@ -18,6 +18,12 @@ All notable changes to this driver are listed here. Versions follow
 
 ### Fixed
 
+- `Device::Identify()` no longer casts an Operating Mode register value without a typed mode (0, 5 or an
+  undefined value; X-series e-Manual section 2.4, Operating Mode (11)) into `OperatingMode`. It maps it to the
+  new `OperatingMode::Unknown`, which every typed goal refuses. New `OperatingModeFromRaw()`,
+  `Device::operating_mode()` and `Device::operating_mode_raw()`; `SetOperatingMode(Unknown)` returns
+  `InvalidParameter`.
+
 - `Bus::Scan()` accepts ID 0, and its default range now starts at 0: Protocol 2.0 device IDs are 0 to 252
   (e-Manual, Protocol 2.0, section 2.3). `ReadRegister()` returns `InvalidId` (was `InvalidParameter`) for an
   ID above 252, and `SyncRead()` / `SyncWrite()` now reject such IDs with `InvalidId`. New `IsDeviceId()` and

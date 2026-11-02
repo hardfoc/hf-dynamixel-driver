@@ -282,6 +282,38 @@ void TestRebootClearsHardwareError() {
     CHECK(uart.reboots == 3);  // the 0x02 reply above still rebooted in the fake
 }
 
+// X-series section 2.4 Operating Mode (11): only 0, 1, 3, 4, 5, 16 are defined.
+void TestUnknownOperatingMode() {
+    CHECK(dynamixel::OperatingModeFromRaw(3) == dynamixel::OperatingMode::Position);
+    CHECK(dynamixel::OperatingModeFromRaw(16) == dynamixel::OperatingMode::Pwm);
+    CHECK(dynamixel::OperatingModeFromRaw(0) == dynamixel::OperatingMode::Unknown);
+    CHECK(dynamixel::OperatingModeFromRaw(5) == dynamixel::OperatingMode::Unknown);
+    CHECK(dynamixel::OperatingModeFromRaw(2) == dynamixel::OperatingMode::Unknown);
+
+    const uint8_t raws[3] = {2, 5, 200};
+    for (const uint8_t raw : raws) {
+        FakeTransport uart;
+        uart.registers[11] = raw;
+        dynamixel::Bus bus{dynamixel::TransportView{uart}};
+        CHECK(bus.Open({}).ok());
+        dynamixel::Device dev(bus, 1);
+        CHECK(dev.operating_mode() == dynamixel::OperatingMode::Unknown);
+        CHECK(dev.Identify().ok());
+        CHECK(dev.operating_mode() == dynamixel::OperatingMode::Unknown);
+        CHECK(dev.operating_mode_raw() == raw);
+        const std::size_t sent = uart.tx_log.size();
+        CHECK(dev.SetGoalPosition(0).error == dynamixel::DriverError::UnsupportedRequest);
+        CHECK(dev.SetGoalVelocity(0).error == dynamixel::DriverError::UnsupportedRequest);
+        CHECK(dev.SetGoalPwm(0).error == dynamixel::DriverError::UnsupportedRequest);
+        CHECK(uart.tx_log.size() == sent);  // nothing sent
+        CHECK(dev.SetOperatingMode(dynamixel::OperatingMode::Unknown).error ==
+              dynamixel::DriverError::InvalidParameter);
+        CHECK(dev.SetOperatingMode(dynamixel::OperatingMode::Position).ok());
+        CHECK(dev.operating_mode() == dynamixel::OperatingMode::Position);
+        CHECK(dev.operating_mode_raw() == 3);
+    }
+}
+
 }  // namespace
 
 int main() {
@@ -300,6 +332,7 @@ int main() {
     TestBroadcastWriteIsTxOnly();
     TestScanIncludesIdZero();
     TestRebootClearsHardwareError();
+    TestUnknownOperatingMode();
     if (g_failures != 0) {
         std::printf("%d check(s) failed\n", g_failures);
         return 1;

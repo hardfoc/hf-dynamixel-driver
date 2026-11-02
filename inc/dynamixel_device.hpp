@@ -21,6 +21,15 @@ public:
     const ModelDescriptor* model() const noexcept { return model_; }
     bool identified() const noexcept { return model_ != nullptr; }
 
+    /// Cached Operating Mode: `Unknown` before `Identify()` read it, or when
+    /// the servo is in a mode without typed support. Every typed goal call
+    /// returns `UnsupportedRequest` while the mode is `Unknown` after a read.
+    OperatingMode operating_mode() const noexcept {
+        return mode_known_ ? cached_mode_ : OperatingMode::Unknown;
+    }
+    /// Raw Operating Mode register value from the last read or write.
+    uint8_t operating_mode_raw() const noexcept { return mode_raw_; }
+
     DriverResult<PingInfo> Identify() noexcept;
 
     /// Bind a hand-authored table. Survives `Identify()` when the ping
@@ -61,6 +70,7 @@ private:
     const ModelDescriptor* model_{nullptr};
     OperatingMode cached_mode_{OperatingMode::Position};
     bool mode_known_{false};
+    uint8_t mode_raw_{0};
 };
 
 }  // namespace dynamixel

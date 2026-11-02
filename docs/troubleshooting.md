@@ -37,7 +37,8 @@ The ping worked and the model number is not in the catalog. `ping.value.model_nu
 
 The servo is in another operating mode (`SetGoalVelocity()` in Position mode, for example), or no model is bound.
 Change the mode with torque off, or call `Identify()` first. A servo left in current mode (0) or current-based
-position mode (5) by another tool refuses every typed goal: set a supported mode first.
+position mode (5) by another tool refuses every typed goal: `operating_mode()` is `Unknown` and
+`operating_mode_raw()` has the register value. Set a supported mode first.
 
 ## `SetOperatingMode()` returns `Busy`
 
