@@ -44,7 +44,8 @@ The `hf::dynamixel` target (`hf_dynamixel`) carries the include directories, the
 
 Link one copy of the SDK per firmware image. Do not also link a separate upstream `dynamixel_sdk` target.
 
-`cmake --install` exports the same target as `hf::dynamixel` (`lib/cmake/hf_dynamixel`) with the public headers.
+`cmake --install` exports the same target as `hf::dynamixel` (`lib/cmake/hf_dynamixel`) with the public headers;
+a consumer calls `find_package(hf_dynamixel REQUIRED)` and links `hf::dynamixel`.
 
 ## ESP-IDF
 

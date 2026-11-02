@@ -30,6 +30,8 @@ target_compile_definitions(${HF_DYNAMIXEL_TARGET_NAME}
 )
 set_target_properties(${HF_DYNAMIXEL_TARGET_NAME} PROPERTIES
     POSITION_INDEPENDENT_CODE ON
+    # Installed package exports hf::dynamixel, the same name as the in-tree alias.
+    EXPORT_NAME dynamixel
 )
 
 add_library(hf::dynamixel ALIAS ${HF_DYNAMIXEL_TARGET_NAME})

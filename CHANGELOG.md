@@ -18,6 +18,10 @@ All notable changes to this driver are listed here. Versions follow
 
 ### Fixed
 
+- The installed CMake package exports the target as `hf::dynamixel`, as documented; it was `hf::hf_dynamixel`, so
+  `find_package(hf_dynamixel)` consumers could not link the documented name. `hf::hf_dynamixel` stays as a
+  compatibility target. CI builds a consumer of the install.
+
 - `Device::ReadTelemetry()` reads Present PWM (124) to Present Temperature (146), contiguous in the X-series RAM
   control table, in one Read instead of six, then Hardware Error Status (70): two packets instead of seven, same
   values. It falls back to per-register reads when the block does not fit `max_packet_bytes` or the servo refuses
