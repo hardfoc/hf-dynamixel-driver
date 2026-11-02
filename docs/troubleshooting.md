@@ -1,58 +1,66 @@
 # Troubleshooting
 
-## `Timeout` on every ping
+Symptoms you may see while bringing up a DYNAMIXEL bus, their causes and the fix for each.
 
-- Baud mismatch (servo EEPROM vs `CONFIG_HF_DYNAMIXEL_BAUD`). Factory XC430
-  is often 57600.
-- TX/RX swapped for the chip you actually flashed (C6 4/5 vs S3 17/18).
-- No common ground, or the servo is unpowered.
-- Half-duplex DIR stuck in TX. Leave DIR at `-1` unless the buffer needs it.
-- Single-wire open-drain without `CONFIG_HF_DYNAMIXEL_EXPECT_LOCAL_ECHO`.
+Start with the `DriverError` and `detail` of the failing call: `detail.comm_code` is the SDK's result,
+`detail.device_error` the servo's error byte. `Timeout` is a link problem; `DeviceError` means the servo heard you.
+
+## Every ping times out
+
+| Cause | Fix |
+| --- | --- |
+| Baud rate differs from the servo's | Try 57600 (factory), then the other seven rates; or scan with ROBOTIS's DYNAMIXEL Wizard |
+| Wrong ID | Factory ID is 1; `Scan()` IDs 1 to 20 |
+| TX and RX swapped, or wired for the wrong board | ESP32-C6 uses GPIO4 / GPIO5, ESP32-S3 GPIO17 / GPIO18 |
+| Direction pin stuck in transmit | Release it in `finish_transmit()`; leave the DIR GPIO at -1 for an auto-direction transceiver |
+| No common ground, or servo unpowered | Join the grounds; the servo needs its own supply (6.5 V to 14.8 V for an XC430-W150) |
+| 3.3 V MCU straight on a 5 V TTL line | Use a buffer or level shifter ([Hardware](hardware.md#half-duplex-wiring)) |
 
 ## `EchoMismatch`
 
-The UART heard its own TX but the bytes did not match, or echo was expected
-and none arrived. Flip `CONFIG_HF_DYNAMIXEL_EXPECT_LOCAL_ECHO` to match the
-electrical mode.
+The transport heard its own transmission when it should not have, or did not hear it when it should. Set
+`EchoPolicy::ExpectedLocalEcho` exactly when TX and RX are joined on one wire
+(`CONFIG_HF_DYNAMIXEL_EXPECT_LOCAL_ECHO` in the examples).
 
-## `UnsupportedRequest` from `Identify()`
+## Replies are sometimes corrupt
 
-Ping succeeded; the model number is not in `kKnownModels`. The result still
-carries `ping.value.model_number`. Enable the Kconfig fallback or call
-`BindXSeriesFallback()` / `BindModel(kXm430W350)` as appropriate.
+`ChecksumError` or `MalformedResponse` now and then: the cable is too long or too noisy for the rate, the circuit
+is too slow for it, or `finish_transmit()` releases the line too early and clips the last byte. Drop to 57600 to
+confirm, then fix the circuit before raising the rate again.
 
-## `Busy` from `SetOperatingMode`
+## `Identify()` returns `UnsupportedRequest`
 
-Torque is on. Disable torque, then change mode. The driver will not do that
-implicitly.
+The ping worked and the model number is not in the catalog. `ping.value.model_number` has it. Bind
+`BindXSeriesFallback()` for an X-series servo, or a descriptor of your own ([Model support](models.md)).
 
-## Motion jumps or slams
+## A goal call returns `UnsupportedRequest`
 
-The motion example is supposed to add 64 ticks to **present** position. If
-you see a dash to 0 / 2048, the read failed or you wrote a raw goal without
-reading first. Stop and go back to the read-only example.
+The servo is in another operating mode (`SetGoalVelocity()` in Position mode, for example), or no model is bound.
+Change the mode with torque off, or call `Identify()` first. A servo left in current mode (0) or current-based
+position mode (5) by another tool refuses every typed goal: set a supported mode first.
 
-## Examples will not configure
+## `SetOperatingMode()` returns `Busy`
 
-```
-APP_TYPE not defined. Use build_app.sh
-```
+Torque is on. Call `SetTorqueEnabled(false)` first; the driver will not do it for you.
 
-You invoked CMake or `idf.py` without the scripts. From `examples/esp32`:
+## A write returns `UncertainOutcome`
 
-```bash
-./scripts/build_app.sh list
-./scripts/build_app.sh dynamixel_readonly_example Debug
-```
+The write went out and no status packet came back. The servo may have applied it. Read the register back before
+you retry; for an EEPROM change of ID or baud rate, the servo may now answer at the new value.
 
-If `scripts/` is empty: `git submodule update --init --recursive`.
+## Torque turns itself off
 
-## S3 build still uses C6 pins
+The servo hit a fault enabled in Shutdown (address 63): input voltage, overheating, encoder, electrical shock or
+overload. `Telemetry::hardware_error` has the bits ([API guide](api-guide.md#handle-errors)). Fix the cause, then
+power-cycle the servo: only a reboot restores torque, and this driver does not send the Reboot instruction.
 
-`CONFIG_TARGET` was not set, so `metadata.target` (esp32c6) won. Use:
+## The motion example jumps
 
-```bash
-CONFIG_TARGET=esp32s3 ./scripts/build_app.sh dynamixel_readonly_example Debug
-```
+`dynamixel_motion_example` moves 64 ticks from the present position. A dash towards 0 or 2048 means the position
+read failed and a raw goal was written anyway. Go back to the read-only example until reads are clean.
 
-Confirm the log line `uart1 tx=17 rx=18`.
+## The examples do not configure
+
+`APP_TYPE not defined` means CMake or `idf.py` ran without the scripts. Build from `examples/esp32` with
+`./scripts/build_app.sh <app> Debug`; if `scripts/` is empty, run `git submodule update --init --recursive`. An S3
+build that still uses C6 pins was started without `CONFIG_TARGET=esp32s3`.
