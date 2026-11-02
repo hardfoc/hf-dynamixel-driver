@@ -1,11 +1,3 @@
----
-layout: home
-title: "HardFOC Dynamixel Driver"
-nav_order: 1
-description: "Protocol 2.0 Dynamixel wrapper around ROBOTIS SDK 4.1.0"
-permalink: /
----
-
 # hf-dynamixel-driver
 
 [![Host tests](https://github.com/hardfoc/hf-dynamixel-driver/actions/workflows/host-tests.yml/badge.svg)](https://github.com/hardfoc/hf-dynamixel-driver/actions/workflows/host-tests.yml)

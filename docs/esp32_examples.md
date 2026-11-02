@@ -1,12 +1,3 @@
----
-layout: default
-title: "ESP32 examples"
-description: "Build and flash with hf-espidf-project-tools on ESP32-C6 or ESP32-S3"
-parent: "Documentation"
-nav_order: 3
-permalink: /docs/esp32_examples/
----
-
 # ESP32 examples
 
 The examples live in `examples/esp32/` and **must** be built with the

@@ -1,12 +1,3 @@
----
-layout: default
-title: "GitHub Pages"
-description: "Publish Jekyll + Doxygen with hf-general-ci-tools"
-parent: "Documentation"
-nav_order: 10
-permalink: /docs/github_pages/
----
-
 # Publishing GitHub Pages
 
 Documentation is built by `.github/workflows/ci-docs-publish.yml`, which

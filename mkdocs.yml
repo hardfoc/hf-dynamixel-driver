@@ -1,0 +1,22 @@
+# Documentation site on the HardFOC MkDocs platform: theme, plugin and toolchain come from the hardfoc-mkdocs-theme
+# package in hardfoc/hf-general-ci-tools. Preview locally:
+#
+#   pip install "git+https://github.com/hardfoc/hf-general-ci-tools@v1\
+#   #subdirectory=packages/hardfoc-mkdocs-theme"      (one line, without the backslash)
+#   mkdocs serve                                     http://127.0.0.1:8000
+#   mkdocs build --strict                            what CI runs
+#   hardfoc-docs figures && hardfoc-docs gen         refresh figures and generated tables
+#
+# Pages: docs/, order: docs/.nav.yml, rules: docs/DOCS-STYLE-GUIDE.md in hf-general-ci-tools.
+site_name: DYNAMIXEL Driver
+site_description: >-
+  C++17 wrapper around the ROBOTIS DYNAMIXEL SDK for DYNAMIXEL X-series smart servos (Protocol 2.0, half-duplex UART). Part of the HardFOC ecosystem.
+repo_url: https://github.com/hardfoc/hf-dynamixel-driver
+
+theme:
+  name: hardfoc
+
+plugins:
+  - hardfoc
+  - search
+  - awesome-nav

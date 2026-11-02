@@ -1,9 +1,3 @@
----
-layout: default
-title: "ESP32 README"
-nav_exclude: true
----
-
 # ESP32 examples
 
 Native ESP-IDF adapters live in `main/include/hf_dynamixel_esp_uart.hpp`.

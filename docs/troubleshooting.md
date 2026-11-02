@@ -1,12 +1,3 @@
----
-layout: default
-title: "Troubleshooting"
-description: "Timeouts, echo, unknown models, torque, and build scripts"
-parent: "Documentation"
-nav_order: 11
-permalink: /docs/troubleshooting/
----
-
 # Troubleshooting
 
 ## `Timeout` on every ping

@@ -1,12 +1,3 @@
----
-layout: default
-title: "SDK integration"
-description: "Pinned DynamixelSDK 4.1.0 and known engine limits"
-parent: "Documentation"
-nav_order: 7
-permalink: /docs/sdk_integration/
----
-
 # SDK integration
 
 Pinned engine: ROBOTIS DynamixelSDK **4.1.0** /

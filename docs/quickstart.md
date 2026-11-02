@@ -1,12 +1,3 @@
----
-layout: default
-title: "Quick start"
-description: "Minimal portable ping and XC430 typed position path"
-parent: "Documentation"
-nav_order: 2
-permalink: /docs/quickstart/
----
-
 # Quick start
 
 The driver never opens UART, enables torque, or moves a servo from a constructor.

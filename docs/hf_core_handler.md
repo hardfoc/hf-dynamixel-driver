@@ -1,12 +1,3 @@
----
-layout: default
-title: "hf-core handler"
-description: "HF_CORE_ENABLE_DYNAMIXEL and DynamixelHandler over BaseUart"
-parent: "Documentation"
-nav_order: 9
-permalink: /docs/hf_core_handler/
----
-
 # hf-core handler
 
 This repository stays portable. The HAL-facing wrapper lives in

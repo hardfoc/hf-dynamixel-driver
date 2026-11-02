@@ -1,12 +1,3 @@
----
-layout: default
-title: "Porting"
-description: "Implement dynamixel::Transport for a new UART"
-parent: "Documentation"
-nav_order: 8
-permalink: /docs/porting/
----
-
 # Porting
 
 Implement `dynamixel::Transport<Derived>`:

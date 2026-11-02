@@ -1,12 +1,3 @@
----
-layout: default
-title: "Wiring"
-description: "ESP32-C6 / S3 pins, baud, supplies, half-duplex"
-parent: "Documentation"
-nav_order: 4
-permalink: /docs/wiring/
----
-
 # Wiring
 
 Initial bring-up: **57600** bit/s, 8N1, short cable.

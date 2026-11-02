@@ -1,12 +1,3 @@
----
-layout: default
-title: "Installation"
-description: "CMake, submodules, and hf::dynamixel export"
-parent: "Documentation"
-nav_order: 1
-permalink: /docs/installation/
----
-
 # Installation
 
 C++17, CMake 3.16+. The library is **static** (SDK sources + HF wrapper).

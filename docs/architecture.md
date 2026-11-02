@@ -1,12 +1,3 @@
----
-layout: default
-title: "Architecture"
-description: "Bus, Device, TransportView, and SDK boundary"
-parent: "Documentation"
-nav_order: 6
-permalink: /docs/architecture/
----
-
 # Architecture
 
 HF owns the public API, transport contract, X-series descriptors, and tests.

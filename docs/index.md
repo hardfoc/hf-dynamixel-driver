@@ -1,13 +1,3 @@
----
-layout: default
-title: "Documentation"
-description: "HardFOC Dynamixel Protocol 2.0 driver — architecture, models, ESP32-C6/S3 examples, and GitHub Pages"
-nav_order: 2
-parent: "HardFOC Dynamixel Driver"
-permalink: /docs/
-has_children: true
----
-
 # HF-Dynamixel documentation
 
 This site documents the portable **hf-dynamixel-driver**: a C++17 wrapper around

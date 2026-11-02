@@ -1,0 +1,15 @@
+---
+# Site navigation (mkdocs-awesome-nav): the tabs and sidebar, in this order.
+nav:
+  - Home: index.md
+  - "Installation": installation.md
+  - "Quick start": quickstart.md
+  - "ESP32 examples": esp32_examples.md
+  - "Wiring": wiring.md
+  - "Model support": model_support.md
+  - "Architecture": architecture.md
+  - "SDK integration": sdk_integration.md
+  - "Porting": porting.md
+  - "hf-core handler": hf_core_handler.md
+  - "GitHub Pages": github_pages.md
+  - "Troubleshooting": troubleshooting.md

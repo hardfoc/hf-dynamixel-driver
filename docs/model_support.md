@@ -1,12 +1,3 @@
----
-layout: default
-title: "Model support"
-description: "XC430-W150, larger X-series catalog, and BindXSeriesFallback"
-parent: "Documentation"
-nav_order: 5
-permalink: /docs/model_support/
----
-
 # Model support
 
 The first validated bench servo is **XC430-W150**, model number **1070**.
